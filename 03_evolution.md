@@ -1,3 +1,9 @@
+---
+version: 1.0.0
+project: agent-manifest
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_evolution.md
+---
+
 # 03_evolution.md — Instruction System Evolution
 
 ## Context Required

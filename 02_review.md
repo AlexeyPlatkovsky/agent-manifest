@@ -1,3 +1,9 @@
+---
+version: 1.0.0
+project: agent-manifest
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
+---
+
 # 02_review.md — Instruction System Review
 
 ## Context Required

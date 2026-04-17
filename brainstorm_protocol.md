@@ -1,3 +1,9 @@
+---
+version: 1.0.0
+project: agent-manifest
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/brainstorm_protocol.md
+---
+
 # brainstorm_protocol.md
 
 ## Purpose

@@ -1,3 +1,9 @@
+---
+version: 1.0.0
+project: agent-manifest
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
+---
+
 # AI Instruction Framework
 
 A portable, reusable system for designing, building, and auditing AI instruction architectures across any project.
