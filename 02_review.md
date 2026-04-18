@@ -1,5 +1,5 @@
 ---
-version: 1.0.0
+version: 1.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -168,7 +168,20 @@ If the brainstorm skill is missing → this is a **Critical violation**.
 
 ---
 
-### 10. Routing Capability Requirements
+### 10. Task-Complete Skill (Mandatory for Non-Trivial Tasks)
+
+- [ ] `.claude/skills/task-complete/SKILL.md` exists in the project's skills directory
+- [ ] The skill is registered in `AGENTS.md` with correct scope (non-trivial tasks only)
+- [ ] The manager skill contains an explicit rule appending `task-complete` as the final step for non-trivial pipelines
+- [ ] The report table format is correct: at least three columns — `Step | Skill / Agent | Comment`
+- [ ] No individual pipeline declares `task-complete` as its own step; enforcement is centralized in the manager
+- [ ] The skill correctly exempts trivial tasks
+
+If any check fails, the review must flag it as a **blocking issue** before the project can be considered complete.
+
+---
+
+### 11. Routing Capability Requirements
 
 First, determine the project size from context (contributor count, domain count, workflow complexity).
 
@@ -189,7 +202,7 @@ If the project is **small**:
 
 ---
 
-### 11. Execution Matrix Application
+### 12. Execution Matrix Application
 
 - Is the execution matrix from MANIFEST translated into mandatory gate language rather than left as a table?
 - Are trivial tasks explicitly allowed to proceed directly?
@@ -348,6 +361,9 @@ Confirm or deny each of the following:
 - [ ] Completion gates (validation, review) are mandatory, not optional
 - [ ] Brainstorm skill is present, correctly scoped, and registered
 - [ ] Brainstorm protocol is referenced, not duplicated
+- [ ] Task-complete skill is present, correctly scoped to non-trivial tasks, and registered
+- [ ] Manager appends task-complete as the final step for non-trivial pipelines
+- [ ] No individual pipeline redundantly declares task-complete
 - [ ] Large and medium projects include a manager skill or name an explicit routing capability for non-trivial work
 - [ ] Execution matrix is applied through mandatory routing and completion gates
 
@@ -416,6 +432,7 @@ The system is valid ONLY if:
 - Routing gates use imperative blocking language and appear before capability registry
 - Non-trivial routing is explicit, blocking, and unambiguous
 - Brainstorm skill is correctly implemented
+- Task-complete skill is correctly implemented and manager-enforced for non-trivial tasks
 - Manager skill is correctly implemented where project size requires it
 - System behavior is understandable from `AGENTS.md` alone
 

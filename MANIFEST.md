@@ -1,5 +1,5 @@
 ---
-version: 1.0.0
+version: 1.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -24,6 +24,31 @@ This document is the **single source of truth** for:
 - designing instruction systems
 - evolving orchestration
 - validating architectural decisions
+
+---
+
+# Framework Versioning
+
+This framework is versioned as a single unit.
+
+The following files must always share the same frontmatter version value:
+- `MANIFEST.md`
+- `01_initial.md`
+- `02_review.md`
+- `03_evolution.md`
+- `brainstorm_protocol.md`
+
+Rules:
+- all five files must have identical `version` values at all times
+- every framework refactor must increment the version in all five files simultaneously
+- semantic versioning is mandatory: `MAJOR.MINOR.PATCH`
+
+Version meaning:
+- PATCH: wording fixes and clarifications
+- MINOR: new skills, new rules, or structural additions
+- MAJOR: breaking changes to the framework contract
+
+This repository includes a maintenance skill at `.claude/skills/maintain-version-frontmatter/SKILL.md` to enforce this rule during future refactors.
 
 ---
 
@@ -221,6 +246,9 @@ These are descriptions of intent, not enforcement mechanisms.
 ### `.claude/skills/`
 Atomic, reusable procedures.
 
+Claude skills use the current directory format:
+- `.claude/skills/<skill-name>/SKILL.md`
+
 Examples:
 - implement feature
 - validate
@@ -259,7 +287,7 @@ Examples:
 
 ---
 
-### `.claude/skills/manager` (or equivalent)
+### `.claude/skills/manager/` (or equivalent)
 Routing and orchestration logic.
 
 Responsibilities:
@@ -303,7 +331,7 @@ It must:
 
 ### Where it lives
 
-`.claude/skills/brainstorm.md`
+`.claude/skills/brainstorm/SKILL.md`
 
 It must reference `brainstorm_protocol.md` as its canonical behavior source.
 It must NOT redefine the protocol inline.
@@ -315,6 +343,66 @@ It must be registered in `AGENTS.md` like any other skill:
 - purpose: structured discussion and design decision support
 - when to use: any time a design, architecture, or workflow decision must be made
 - when not to use: during execution phases; after a decision is already made
+
+## Task-Complete Skill (Required for Non-Trivial Tasks)
+
+Every project built with this framework **must** include a task-complete skill.
+
+This skill is mandatory for every non-trivial task and exempt for trivial tasks.
+
+### Why it is mandatory
+
+Non-trivial execution needs an explicit exit gate.
+Without a canonical task-complete skill:
+- pipelines can terminate without a verifiable closure step
+- skipped or deviated steps can go undocumented
+- users cannot reliably confirm that the planned work actually finished
+
+### Purpose
+
+Mandatory exit gate for every non-trivial task.
+Produces a structured closure report so the user can verify that work was completed correctly and no steps were silently skipped.
+
+### Scope
+
+Non-trivial tasks only.
+Trivial tasks (isolated, low-risk, single-step) are exempt.
+
+### Enforcement Model
+
+The manager skill is responsible for appending task-complete as the final step of any non-trivial pipeline at routing time.
+Individual pipelines do not need to declare it.
+Enforcement is centralized in the manager, not distributed across pipelines.
+
+### Report Format
+
+The skill must produce a markdown table with exactly these columns:
+
+| Step | Skill / Agent | Comment |
+|------|---------------|---------|
+| ... | ... | ... |
+
+Rules:
+- every executed step must appear as a row
+- the `Comment` column must be left blank unless a step deviated from plan, was skipped, or warrants user attention
+- skipped steps must always include a comment explaining why
+
+### When NOT to use
+
+Do not invoke for trivial tasks.
+Do not invoke for single-step, low-risk, or purely cosmetic changes.
+
+### Where it lives
+
+`.claude/skills/task-complete/SKILL.md`
+
+### Registration
+
+It must be registered in `AGENTS.md` like any other skill:
+- name: task-complete
+- purpose: mandatory closure reporting for non-trivial tasks
+- when to use: final step of any non-trivial pipeline, appended by the manager
+- when not to use: trivial, single-step, low-risk, or purely cosmetic tasks
 
 ---
 
@@ -451,6 +539,7 @@ Use:
 - AGENTS.md
 - minimal skills
 - brainstorm skill (mandatory)
+- task-complete skill (mandatory for non-trivial work)
 
 ---
 
@@ -460,12 +549,11 @@ Must have:
 - skills
 - basic workflows
 - explicit routing gates that name the next capability
-
-Optional:
-- dedicated manager skill
+- manager skill for centralized non-trivial routing and completion enforcement
 
 Always include:
 - brainstorm skill
+- task-complete skill
 
 ---
 
@@ -477,6 +565,7 @@ Must have:
 - risk-based routing
 - subagents (selectively)
 - brainstorm skill
+- task-complete skill
 
 Must avoid:
 - duplication

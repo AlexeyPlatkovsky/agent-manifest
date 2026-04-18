@@ -1,5 +1,5 @@
 ---
-version: 1.0.0
+version: 1.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -179,10 +179,24 @@ Replace them with the concrete capability the generated system requires.
 ### Required: Brainstorm Skill
 This is mandatory per `MANIFEST.md`.
 
-Create `.claude/skills/brainstorm.md` that:
+Create `.claude/skills/brainstorm/SKILL.md` that:
 - references `brainstorm_protocol.md` as its behavior source
 - does not redefine the protocol inline
 - is registered in `AGENTS.md`
+
+### Required: Task-Complete Skill
+This is mandatory per `MANIFEST.md`.
+
+Create `.claude/skills/task-complete/SKILL.md` in the project's skills directory and ensure it is registered in `AGENTS.md` under the capability registry.
+
+The task-complete skill must:
+- define its purpose and scope as non-trivial tasks only
+- produce a markdown table with at least these columns: `Step | Skill / Agent | Comment`
+- state explicitly that comments are required when a step is skipped or deviates from plan, and optional otherwise
+- state explicitly that the manager enforces task-complete, not individual pipelines
+
+Wire it into the manager skill: the manager must append `task-complete` as the final step for all non-trivial pipelines at routing time.
+Do not make individual pipelines declare `task-complete` themselves.
 
 ### Composition Steps
 
@@ -196,15 +210,16 @@ Create `.claude/skills/brainstorm.md` that:
 
 **Small project:**
 - `AGENTS.md`
-- 2–4 skills including brainstorm
+- 3–5 skills including brainstorm and task-complete
 - No workflows, no subagents unless clearly justified
 
 **Medium project:**
 - `AGENTS.md`
 - Skills for each repeated task type
 - 1–2 workflows for non-trivial tasks
-- Optional manager skill
+- Manager skill for routing and task-complete enforcement
 - Brainstorm skill
+- Task-complete skill
 
 **Large project:**
 - `AGENTS.md`
@@ -213,6 +228,7 @@ Create `.claude/skills/brainstorm.md` that:
 - Selective subagents
 - Reference docs for architecture and conventions
 - Brainstorm skill
+- Task-complete skill
 
 Do not force a large-project architecture onto a small repo.
 
@@ -251,6 +267,8 @@ The final system must:
 - avoid unnecessary abstraction
 - avoid duplicated rules
 - include the brainstorm skill
+- include the task-complete skill
+- wire task-complete into the manager for non-trivial pipelines
 - be understandable from `AGENTS.md` alone
 
 If the project does not justify complexity → explicitly keep it simple.
