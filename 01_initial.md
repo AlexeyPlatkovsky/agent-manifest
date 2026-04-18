@@ -105,6 +105,12 @@ Stop after inventory and provide:
 4. **Main risks / gaps / ambiguities** — what needs clarification before proceeding
 5. **Proposed discussion agenda** — the decisions that must be resolved
 
+End Phase 1 with an explicit handoff checkpoint:
+- tell the user Phase 1 is complete
+- ask the user to confirm the inventory or correct anything inaccurate
+- state that Phase 2 will begin only after that confirmation
+- do NOT ask the first Discussion question in the same message
+
 Do NOT start editing or creating files yet.
 Do NOT propose solutions yet.
 
