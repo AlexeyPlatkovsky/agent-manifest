@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -320,14 +320,7 @@ Without a canonical brainstorm skill:
 ### What it must implement
 
 The brainstorm skill must follow the protocol defined in `brainstorm_protocol.md`.
-
-It must:
-- ask exactly one question at a time
-- provide 2–3 concrete, comparable options per question
-- highlight risks, trade-offs, and edge cases
-- stop and wait for user input after presenting options
-- never mix brainstorming with execution
-- defer final decisions to the user
+It must NOT redefine the protocol inline.
 
 ### Where it lives
 
@@ -365,8 +358,7 @@ Produces a structured closure report so the user can verify that work was comple
 
 ### Scope
 
-Non-trivial tasks only.
-Trivial tasks (isolated, low-risk, single-step) are exempt.
+This skill is mandatory for every non-trivial task and exempt for trivial tasks.
 
 ### Enforcement Model
 
@@ -376,7 +368,7 @@ Enforcement is centralized in the manager, not distributed across pipelines.
 
 ### Report Format
 
-The skill must produce a markdown table with exactly these columns:
+The skill must produce a markdown table with at least 3 columns:
 
 | Step | Skill / Agent | Comment |
 |------|---------------|---------|

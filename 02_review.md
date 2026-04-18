@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -173,7 +173,7 @@ If the brainstorm skill is missing → this is a **Critical violation**.
 - [ ] `.claude/skills/task-complete/SKILL.md` exists in the project's skills directory
 - [ ] The skill is registered in `AGENTS.md` with correct scope (non-trivial tasks only)
 - [ ] The manager skill contains an explicit rule appending `task-complete` as the final step for non-trivial pipelines
-- [ ] The report table format is correct: at least three columns — `Step | Skill / Agent | Comment`
+- [ ] The report table format is correct: at least 3 columns — `Step | Skill / Agent | Comment`
 - [ ] No individual pipeline declares `task-complete` as its own step; enforcement is centralized in the manager
 - [ ] The skill correctly exempts trivial tasks
 
@@ -420,30 +420,12 @@ Do NOT declare implementation complete until all checks pass.
 
 ---
 
-## Quality Bar
-
-The system is valid ONLY if:
-
-- MANIFEST principles are fully respected
-- `AGENTS.md` remains the root operational contract
-- No duplicated logic exists
-- Context is minimal
-- Complexity matches project scale
-- Routing gates use imperative blocking language and appear before capability registry
-- Non-trivial routing is explicit, blocking, and unambiguous
-- Brainstorm skill is correctly implemented
-- Task-complete skill is correctly implemented and manager-enforced for non-trivial tasks
-- Manager skill is correctly implemented where project size requires it
-- System behavior is understandable from `AGENTS.md` alone
-
-If any of these fail → system is NOT compliant.
-
----
-
 ## Critical Rule
 
-If unsure about anything:
+If unsure about any audit finding:
 - do not assume
-- ask in Phase 2
+- do not guess
+- raise it in Phase 2
 
 Validation without certainty is invalid.
+A passing audit is only valid if every checklist item in the Structural Correctness Summary is explicitly confirmed.

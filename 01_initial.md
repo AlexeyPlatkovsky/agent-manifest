@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -191,7 +191,7 @@ Create `.claude/skills/task-complete/SKILL.md` in the project's skills directory
 
 The task-complete skill must:
 - define its purpose and scope as non-trivial tasks only
-- produce a markdown table with at least these columns: `Step | Skill / Agent | Comment`
+- produce a markdown table with at least 3 columns: `Step | Skill / Agent | Comment`
 - state explicitly that comments are required when a step is skipped or deviates from plan, and optional otherwise
 - state explicitly that the manager enforces task-complete, not individual pipelines
 
@@ -208,28 +208,7 @@ Do not make individual pipelines declare `task-complete` themselves.
 
 ### Output by Project Size
 
-**Small project:**
-- `AGENTS.md`
-- 3–5 skills including brainstorm and task-complete
-- No workflows, no subagents unless clearly justified
-
-**Medium project:**
-- `AGENTS.md`
-- Skills for each repeated task type
-- 1–2 workflows for non-trivial tasks
-- Manager skill for routing and task-complete enforcement
-- Brainstorm skill
-- Task-complete skill
-
-**Large project:**
-- `AGENTS.md`
-- Manager skill for routing
-- Domain-specific skills and workflows
-- Selective subagents
-- Reference docs for architecture and conventions
-- Brainstorm skill
-- Task-complete skill
-
+Follow the project size guidelines defined in `MANIFEST.md` (`# Project Size Guidelines`).
 Do not force a large-project architecture onto a small repo.
 
 ---
@@ -266,9 +245,6 @@ The final system must:
 - be as small as possible, but complete
 - avoid unnecessary abstraction
 - avoid duplicated rules
-- include the brainstorm skill
-- include the task-complete skill
-- wire task-complete into the manager for non-trivial pipelines
 - be understandable from `AGENTS.md` alone
 
 If the project does not justify complexity → explicitly keep it simple.

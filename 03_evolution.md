@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_evolution.md
 ---
@@ -193,6 +193,5 @@ The evolved system must:
 - stay within correct architectural layers
 - be fully registered in `AGENTS.md`
 - remain comprehensible — complexity must be justified, not assumed
-- retain the brainstorm skill unchanged
 
 If a proposed addition cannot be clearly justified by something the user described → do not add it.
