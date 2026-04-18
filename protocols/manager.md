@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/manager.md
 ---

@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -10,9 +10,8 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md` — canonical source of truth
-- `protocols/brainstorm.md` — canonical brainstorming behavior
-- `protocols/task_complete.md` — canonical task completion behavior
-- `protocols/manager.md` — canonical manager behavior for medium and large projects
+- `protocols/README.md` — index of canonical protocols
+- all canonical protocol files under `protocols/` required by this framework version
 
 If any are missing, stop and ask the user to provide them.
 
@@ -25,7 +24,7 @@ Your task is to create a minimal, correct AI instruction system for this project
 You must also:
 - ask the user two mandatory questions during Discussion: intended project size and which AI tools are in use
 - ensure every AI tool entry point routes to `AGENTS.md`
-- derive mandatory skills from the applicable protocols
+- derive mandatory skills from the applicable protocols rather than from memorized protocol names
 
 The goal is the **smallest coherent system that fits the project today**.
 Do not design for a future that does not yet exist.
@@ -87,6 +86,12 @@ Identify whether the project needs reference docs such as:
 - repo structure / commands
 
 Do not decide what to create yet. Only identify likely needs.
+
+### G. Protocol Inventory
+- Which canonical protocol files are present under `protocols/`?
+- Which of them apply to the chosen project size?
+- Which mandatory skills do they imply?
+- Do any protocols declare cross-capability constraints that must be enforced during composition?
 
 ---
 
@@ -154,6 +159,7 @@ Only begin after the user confirms the decision summary.
 - Complexity must be progressively disclosed
 - The system must match the actual project scale
 - mandatory skills must be derived from the applicable protocols
+- do not hardcode the current bundled protocol names as the derivation mechanism
 
 ### Required: Mandatory Gate Language in AGENTS.md
 
@@ -197,44 +203,31 @@ Replace them with the concrete capability the generated system requires.
 
 ---
 
-### Required: Brainstorm Skill
-This is mandatory per `MANIFEST.md`.
+### Required: Protocol-Derived Mandatory Skills
 
-Create `.claude/skills/brainstorm/SKILL.md` that:
-- references `protocols/brainstorm.md` as its behavior source
-- does not redefine the protocol inline
-- is registered in `AGENTS.md`
+Determine the mandatory skills by reading the canonical protocol files under `protocols/`, excluding `protocols/README.md`.
 
-### Required: Task-Complete Skill
-This is mandatory per `MANIFEST.md`.
+For each protocol that is mandatory for the confirmed project size:
+- create the corresponding skill using the protocol filename basename as the default skill name
+- place it in the project's skills directory
+- make it reference the protocol file as its behavior source
+- do not redefine the protocol inline
+- register it in `AGENTS.md`
 
-Create `.claude/skills/task-complete/SKILL.md` in the project's skills directory.
+Preserve each protocol's core rules and output contracts without contradiction.
+If a protocol declares cross-capability enforcement rules, implement them at the responsible layer rather than duplicating them across multiple skills.
 
-The task-complete skill must:
-- reference `protocols/task_complete.md` as its behavior source
-- not redefine the protocol inline
-- be registered in `AGENTS.md` under the capability registry
+In the current bundled framework, this derivation yields:
+- `brainstorm` for all projects
+- `task-complete` for all projects, scoped to non-trivial work
+- `manager` for medium and large projects
 
-Wire it into the manager skill: the manager must append `task-complete` as the final step for all non-trivial pipelines at routing time.
-Do not make individual pipelines declare `task-complete` themselves.
-
-### Required: Manager Skill for Medium and Large Projects
-
-If the project is medium or large, create `.claude/skills/manager/SKILL.md`.
-
-The manager skill must:
-- reference `protocols/manager.md` as its behavior source
-- centralize non-trivial routing
-- append `task-complete` as the final step for every non-trivial pipeline
-- avoid duplicating `AGENTS.md`
-- avoid embedding implementation steps
-
-For small projects, prefer minimal inline routing in `AGENTS.md` unless repository evidence clearly justifies a manager.
+For small projects, prefer minimal inline routing in `AGENTS.md` unless the applicable protocols or repository evidence clearly justify a routing skill.
 
 ### Composition Steps
 
 1. Decide which instruction artifacts are actually needed
-2. Map applicable protocols to mandatory skills for the chosen project size
+2. Inventory canonical protocols and map applicable protocols to mandatory skills for the chosen project size
 3. Propose the minimal coherent target structure
 4. Create or refactor the files
 5. Create or refresh tool-specific adapter files so every supported AI tool points to `AGENTS.md`
@@ -281,5 +274,6 @@ The final system must:
 - avoid unnecessary abstraction
 - avoid duplicated rules
 - be understandable from `AGENTS.md` alone
+- derive mandatory skills from the actual protocol set, not from a hardcoded list
 
 If the project does not justify complexity → explicitly keep it simple.

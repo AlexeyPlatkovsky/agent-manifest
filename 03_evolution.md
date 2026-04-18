@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_evolution.md
 ---
@@ -10,9 +10,8 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_evolution.m
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md` — canonical source of truth
-- `protocols/brainstorm.md` — canonical brainstorming behavior
-- `protocols/task_complete.md` — canonical task completion behavior
-- `protocols/manager.md` — canonical manager behavior for medium and large projects
+- `protocols/README.md` — index of canonical protocols
+- all canonical protocol files under `protocols/` relevant to the current system
 - Your current instruction system: `AGENTS.md`, all skills, workflows, and agents
 
 If any are missing, stop and ask the user to provide them.
@@ -58,6 +57,7 @@ Also note:
 - any MANIFEST violations introduced since initial setup
 - any duplication that crept in
 - any skills that have grown beyond a single responsibility
+- whether the current system still reflects the mandatory capabilities implied by the applicable protocols
 
 ### Phase 1 Output
 

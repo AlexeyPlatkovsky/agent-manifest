@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/README.md
 ---
@@ -14,6 +14,7 @@ They are reference documents, not executable instructions.
 ## How To Treat Protocols
 
 - Treat each protocol file as the canonical source for that behavior.
+- Prompts and audits should derive mandatory skills from the applicable canonical protocol files, not from a hardcoded list.
 - Skills may implement a protocol by reference.
 - Skills must not restate a protocol inline unless a project-specific adaptation is truly required.
 - `MANIFEST.md` remains the governing framework source of truth.

@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -10,9 +10,8 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md` — canonical source of truth
-- `protocols/brainstorm.md` — canonical brainstorming behavior
-- `protocols/task_complete.md` — canonical task completion behavior
-- `protocols/manager.md` — canonical manager behavior for medium and large projects
+- `protocols/README.md` — index of canonical protocols
+- all canonical protocol files under `protocols/` required by this framework version
 - Your full instruction system: `AGENTS.md`, all skills, workflows, agents, and reference docs
 
 If any are missing, stop and ask the user to provide them.
@@ -162,51 +161,46 @@ If completion gates are optional rather than mandatory → **Major violation**.
 
 ---
 
-### 9. Brainstorm Skill (Mandatory)
+### 9. Protocol Inventory and Applicability
 
-- Does a brainstorm skill exist?
-- Is it registered in AGENTS.md?
-- Does it reference `protocols/brainstorm.md` without redefining it inline?
-- Is it correctly scoped (discussion only, not execution)?
+- Read every canonical protocol file under `protocols/`, excluding `protocols/README.md`
+- Determine project size from context (contributor count, domain count, workflow complexity)
+- For each protocol, determine whether it applies to the project's size and whether its `Implementation status` makes it mandatory
+- Derive the expected mandatory skill from the protocol filename basename unless the project's AI tool requires a different but equivalent path convention
 
-If the brainstorm skill is missing → this is a **Critical violation**.
+If protocol applicability is ambiguous because the protocol itself is underspecified → raise it as a framework ambiguity.
 
 ---
 
-### 10. Task-Complete Skill (Mandatory for Non-Trivial Tasks)
+### 10. Protocol Coverage and Skill Derivation
 
-- [ ] `protocols/task_complete.md` exists and is readable
-- [ ] `.claude/skills/task-complete/SKILL.md` exists in the project's skills directory
-- [ ] The skill references `protocols/task_complete.md` without redefining it inline
-- [ ] The skill is registered in `AGENTS.md` with correct scope (non-trivial tasks only)
-- [ ] The manager skill contains an explicit rule appending `task-complete` as the final step for non-trivial pipelines
-- [ ] The report table format is correct: exactly three columns — `Step | Skill / Agent | Comment`
-- [ ] No individual pipeline declares `task-complete` as its own step; enforcement is centralized in the manager
-- [ ] The skill correctly exempts trivial tasks
+For each mandatory protocol:
+- [ ] the corresponding skill exists in the project's skills directory
+- [ ] the skill references the correct protocol file without redefining it inline
+- [ ] the skill is registered in `AGENTS.md`
+- [ ] the skill's scope matches the protocol's applicability and limitations
+- [ ] every `Mandatory` item in the protocol is implemented somewhere in the instruction system
+- [ ] no instruction file contradicts the protocol's core rules or output contract
 
-If any check fails, the review must flag it as a **blocking issue** before the project can be considered complete.
+For protocols that are not mandatory for the project's size:
+- check whether an implementation exists anyway
+- if it exists, decide whether it is justified or an over-engineering signal
+
+If any mandatory protocol is missing or unimplemented → this is a **Critical violation**.
+If a skill exists but duplicates the protocol rather than referencing it → this is a **Major violation**.
 
 ---
 
 ### 11. Routing Capability Requirements
 
-First, determine the project size from context (contributor count, domain count, workflow complexity).
-
-
-If the manager skill is missing on a medium or large project → this is a **Critical violation**.
-
-If the project is **medium or large**:
-- Is there either a dedicated manager skill OR another concrete routing capability named in AGENTS.md?
-- If a manager skill exists, does it reference `protocols/manager.md` without redefining it inline?
+- If a mandatory protocol governs routing or orchestration, is `AGENTS.md` routing to that concrete capability?
 - Is the non-trivial routing target unambiguous?
 - Are non-trivial tasks blocked on routing instead of being executed directly?
-- If a manager skill exists, does it satisfy the large-project checks above except where scale makes extra structure unnecessary?
+- If the current bundled protocol set is in use:
+  - medium and large projects should derive a `manager` skill from `protocols/manager.md`
+  - small projects should not introduce `manager` without clear justification
 
 If project routing is ambiguous or unnamed → **Major violation**.
-
-If the project is **small**:
-- Is the inline routing in AGENTS.md minimal and correctly scoped?
-- Is there a manager skill present that is not needed? (over-engineering signal)
 
 ---
 
@@ -257,6 +251,12 @@ For the main routing contract found in `AGENTS.md`:
 | Location | Status | Named Capability | Notes |
 |----------|--------|------------------|-------|
 | ... | Valid / Ambiguous / Missing | ... | ... |
+
+### Protocol Coverage Report
+
+| Protocol | Mandatory for This Project | Expected Skill | Status | Notes |
+|----------|----------------------------|----------------|--------|-------|
+| ... | Yes / No | ... | Valid / Missing / Ambiguous / Overbuilt | ... |
 
 ### Compliance Score
 A score from 0 to 100 reflecting overall alignment with MANIFEST.
@@ -369,13 +369,11 @@ Confirm or deny each of the following:
 - [ ] Routing gate appears at the top of AGENTS.md before capability registry
 - [ ] Trivial task classification is explicitly defined, not left to AI judgment
 - [ ] Completion gates (validation, review) are mandatory, not optional
-- [ ] Brainstorm skill is present, correctly scoped, and registered
-- [ ] Brainstorm protocol is referenced, not duplicated
-- [ ] Task-complete skill is present, correctly scoped to non-trivial tasks, and registered
-- [ ] Medium and large projects implement a manager skill that references `protocols/manager.md`
-- [ ] Manager appends task-complete as the final step for non-trivial pipelines
-- [ ] No individual pipeline redundantly declares task-complete
-- [ ] Large and medium projects include a manager skill or name an explicit routing capability for non-trivial work
+- [ ] All mandatory protocols have corresponding registered skills
+- [ ] Protocols are referenced, not duplicated inline
+- [ ] All protocol `Mandatory` requirements are implemented
+- [ ] Non-applicable protocols are not implemented without clear justification
+- [ ] Large and medium projects include the routing capability implied by applicable protocols, or name another explicit routing capability for non-trivial work
 - [ ] Execution matrix is applied through mandatory routing and completion gates
 
 If any item cannot be confirmed → it must appear in the fix plan.

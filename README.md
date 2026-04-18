@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -25,6 +25,7 @@ The framework is built around one canonical document (`MANIFEST.md`), one canoni
 | File | Role |
 |------|------|
 | `MANIFEST.md` | The canonical source of truth. Defines all principles, rules, and structural requirements for any AI instruction system. |
+| `protocols/README.md` | Index of canonical protocols and how to treat them. Summary only, never a second source of truth. |
 | `protocols/brainstorm.md` | Canonical definition of brainstorming behavior. Referenced by prompts and skills — never duplicated. |
 | `protocols/task_complete.md` | Canonical definition of task completion behavior. Referenced by the task-complete skill and review logic — never duplicated. |
 | `protocols/manager.md` | Canonical definition of manager behavior for medium and large projects. Referenced by the manager skill — never duplicated. |
@@ -40,7 +41,7 @@ The framework is built around one canonical document (`MANIFEST.md`), one canoni
 
 These prompts are designed to be used inside an AI chat session (Claude, Cursor, Codex, or any capable AI assistant).
 
-All files in this folder must be provided to the AI at the start of each session. The prompts assume `MANIFEST.md` and the applicable protocol files under `protocols/` are available in context.
+All files in this folder must be provided to the AI at the start of each session. The prompts assume `MANIFEST.md`, `protocols/README.md`, and the applicable protocol files under `protocols/` are available in context.
 
 ### The Pipeline
 
@@ -58,6 +59,7 @@ The three prompts are designed to be used **in order**. Each phase builds on the
 - Asks the two mandatory setup questions first: intended project size and AI tools in use
 - Asks any additional targeted gap-filling questions one at a time
 - Produces a minimal, correct instruction set aligned with MANIFEST
+- Derives mandatory skills from the protocol layer rather than from a hardcoded protocol list
 - Wires every supported AI tool to `AGENTS.md`
 - Generates mandatory routing and completion gates in `AGENTS.md`
 
@@ -65,7 +67,7 @@ The three prompts are designed to be used **in order**. Each phase builds on the
 
 **How to run:**
 1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/brainstorm.md`, `protocols/task_complete.md`, `protocols/manager.md`, `01_initial.md`
+2. Provide: `MANIFEST.md`, `protocols/README.md`, all canonical protocol files under `protocols/`, and `01_initial.md`
 3. Provide access to your repository (paste key files or use an IDE integration)
 4. Follow the AI's phases: Inventory → Discussion → Composition
 
@@ -80,6 +82,7 @@ The three prompts are designed to be used **in order**. Each phase builds on the
 - Produces a compliance score and violations list
 - Asks clarifying questions only when genuinely ambiguous
 - Verifies that routing and completion gates are mandatory rather than descriptive
+- Verifies that mandatory skills are derived from the applicable protocols rather than from stale assumptions
 - Verifies that tool-specific AI files still route to `AGENTS.md` and are not stale
 - Produces a minimal fix plan — not a full redesign
 
@@ -87,7 +90,7 @@ The three prompts are designed to be used **in order**. Each phase builds on the
 
 **How to run:**
 1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/brainstorm.md`, `protocols/task_complete.md`, `protocols/manager.md`, `02_review.md`
+2. Provide: `MANIFEST.md`, `protocols/README.md`, all canonical protocol files under `protocols/`, and `02_review.md`
 3. Provide your full instruction system (AGENTS.md, all skills, workflows, agents)
 4. Follow the AI's phases: Audit → Clarification → Final Validation
 
@@ -107,7 +110,7 @@ The three prompts are designed to be used **in order**. Each phase builds on the
 
 **How to run:**
 1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/brainstorm.md`, `protocols/task_complete.md`, `protocols/manager.md`, `03_evolution.md`
+2. Provide: `MANIFEST.md`, `protocols/README.md`, all canonical protocol files under `protocols/`, and `03_evolution.md`
 3. Provide your current instruction files (AGENTS.md, skills, workflows)
 4. Be ready to describe your team's actual daily routines in conversation
 
@@ -122,6 +125,7 @@ The full philosophy is in `MANIFEST.md`. The short version:
 - **Separation of concerns** — policy in AGENTS.md, execution in skills/workflows
 - **Single canonical root** — every AI tool must ultimately defer to `AGENTS.md`
 - **Progressive complexity** — don't start with subagents if a skill will do
+- **Protocol-driven capability derivation** — mandatory skills come from applicable protocols, not from a hardcoded prompt list
 - **Mandatory routing gates** — non-trivial work must be blocked until the named routing capability is loaded
 - **Brainstorm skill is mandatory** — every project must have one, following `protocols/brainstorm.md`
 - **Task-complete skill is mandatory for non-trivial work** — every project must have one, following `protocols/task_complete.md`
@@ -133,7 +137,8 @@ The full philosophy is in `MANIFEST.md`. The short version:
 
 **Small project (solo or 2–3 contributors):**
 - `AGENTS.md`
-- 2–4 skills including brainstorm and task-complete
+- 2–4 skills, including the ones implied by small-project protocols
+- In the current bundled framework: `brainstorm` and `task-complete`
 - No workflows, no subagents
 
 **Medium project (active team, multiple domains):**
@@ -141,17 +146,17 @@ The full philosophy is in `MANIFEST.md`. The short version:
 - Skills for each repeated workflow
 - 1–2 workflows for non-trivial tasks
 - Explicit routing gate for non-trivial tasks
-- Manager skill for centralized routing and task-complete enforcement
-- Brainstorm and task-complete skills
+- Protocol-derived mandatory skills for medium projects
+- In the current bundled framework: `brainstorm`, `task-complete`, and `manager`
 
 **Large project (complex, multi-domain, many contributors):**
 - `AGENTS.md`
-- Manager skill for routing
+- Protocol-derived mandatory skills for large projects
+- In the current bundled framework: `brainstorm`, `task-complete`, and `manager`
 - Explicit routing gate for non-trivial tasks
 - Domain-specific skills and workflows
 - Selective subagents
 - Reference docs for architecture and conventions
-- Brainstorm and task-complete skills
 
 ---
 

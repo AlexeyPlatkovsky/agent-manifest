@@ -1,5 +1,5 @@
 ---
-version: 1.2.1
+version: 1.2.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -333,11 +333,32 @@ Skills implement those contracts by reference.
 
 ---
 
-# Mandatory Skills
+# Protocol-Driven Capability Derivation
+
+Prompts and audits must derive mandatory capabilities from the protocol layer rather than from a hardcoded list of protocol names.
+
+Rules:
+- inspect canonical protocol files under `protocols/`
+- exclude `protocols/README.md` from capability derivation
+- determine project size before deciding which protocols are mandatory
+- read each protocol's `Project Applicability` and `Implementation status`
+- for every mandatory protocol, require a corresponding skill named after the protocol filename basename
+- require that skill to live at `.claude/skills/<protocol-name>/SKILL.md` unless the target AI tool uses a different but equivalent skills directory format
+- require that skill to reference the protocol file rather than restating it inline
+- require that skill to be registered in `AGENTS.md`
+- preserve the protocol's core rules and output contracts without contradiction
+- enforce any cross-capability requirements declared in the protocols at the responsible layer
+
+Prompts may use the currently bundled protocols as examples.
+They must not treat the current bundled set as the mechanism.
+
+---
+
+# Current Bundled Protocol Outcomes
 
 ## Brainstorm Skill (Required in Every Project)
 
-Every project built with this framework **must** include a brainstorm skill.
+The currently bundled `protocols/brainstorm.md` protocol implies a mandatory `brainstorm` skill for every project.
 
 This is non-negotiable regardless of project size.
 
@@ -370,7 +391,7 @@ It must be registered in `AGENTS.md` like any other skill:
 
 ## Task-Complete Skill (Required for Non-Trivial Tasks)
 
-Every project built with this framework **must** include a task-complete skill.
+The currently bundled `protocols/task_complete.md` protocol implies a mandatory `task-complete` skill for every project.
 
 This skill is mandatory for every non-trivial task.
 
@@ -415,7 +436,7 @@ It must be registered in `AGENTS.md` like any other skill:
 
 ## Manager Skill (Required for Medium and Large Projects)
 
-Medium and large projects built with this framework **must** include a manager skill.
+The currently bundled `protocols/manager.md` protocol implies a mandatory `manager` skill for medium and large projects.
 
 Small projects should avoid a manager unless direct evidence shows inline routing is no longer sufficient.
 
@@ -579,9 +600,8 @@ Avoid:
 
 Use:
 - AGENTS.md
-- minimal skills
-- brainstorm skill (mandatory)
-- task-complete skill (mandatory for non-trivial work)
+- minimal skills derived from applicable protocols
+- in the current bundled framework: `brainstorm` and `task-complete`
 
 ---
 
@@ -591,23 +611,25 @@ Must have:
 - skills
 - basic workflows
 - explicit routing gates that name the next capability
-- manager skill for centralized non-trivial routing and completion enforcement
+- protocol-derived mandatory skills
+- in the current bundled framework: `manager` for centralized non-trivial routing and completion enforcement
 
 Always include:
-- brainstorm skill
-- task-complete skill
+- all skills implied by mandatory medium-project protocols
+- in the current bundled framework: `brainstorm` and `task-complete`
 
 ---
 
 ## Large Projects
 
 Must have:
-- manager skill
+- protocol-derived mandatory skills
+- in the current bundled framework: `manager`
 - workflows
 - risk-based routing
 - subagents (selectively)
-- brainstorm skill
-- task-complete skill
+- all skills implied by mandatory large-project protocols
+- in the current bundled framework: `brainstorm` and `task-complete`
 
 Must avoid:
 - duplication
