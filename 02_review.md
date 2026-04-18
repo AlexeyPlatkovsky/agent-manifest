@@ -1,5 +1,5 @@
 ---
-version: 1.1.1
+version: 1.2.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -10,7 +10,8 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md` — canonical source of truth
-- `brainstorm_protocol.md` — canonical brainstorming behavior
+- `brainstorm.md` — canonical brainstorming behavior
+- `task_complete.md` — canonical task completion behavior
 - Your full instruction system: `AGENTS.md`, all skills, workflows, agents, and reference docs
 
 If any are missing, stop and ask the user to provide them.
@@ -39,7 +40,7 @@ Work in exactly 4 phases. Do not skip or merge phases.
 3. **Final Validation** — verdict and minimal fix plan
 4. **Implementation & Verification** — apply fixes and verify results (only when user requests)
 
-During Clarification: follow `brainstorm_protocol.md` exactly.
+During Clarification: follow `brainstorm.md` exactly.
 Do NOT modify files during Phases 1–3.
 Do NOT suggest implementation until Phase 3.
 
@@ -161,7 +162,7 @@ If completion gates are optional rather than mandatory → **Major violation**.
 
 - Does a brainstorm skill exist?
 - Is it registered in AGENTS.md?
-- Does it reference `brainstorm_protocol.md` without redefining it inline?
+- Does it reference `brainstorm.md` without redefining it inline?
 - Is it correctly scoped (discussion only, not execution)?
 
 If the brainstorm skill is missing → this is a **Critical violation**.
@@ -170,10 +171,12 @@ If the brainstorm skill is missing → this is a **Critical violation**.
 
 ### 10. Task-Complete Skill (Mandatory for Non-Trivial Tasks)
 
+- [ ] `task_complete.md` exists and is readable
 - [ ] `.claude/skills/task-complete/SKILL.md` exists in the project's skills directory
+- [ ] The skill references `task_complete.md` without redefining it inline
 - [ ] The skill is registered in `AGENTS.md` with correct scope (non-trivial tasks only)
 - [ ] The manager skill contains an explicit rule appending `task-complete` as the final step for non-trivial pipelines
-- [ ] The report table format is correct: at least 3 columns — `Step | Skill / Agent | Comment`
+- [ ] The report table format in `task_complete.md` is correct: exactly three columns — `Step | Skill / Agent | Comment`
 - [ ] No individual pipeline declares `task-complete` as its own step; enforcement is centralized in the manager
 - [ ] The skill correctly exempts trivial tasks
 
@@ -290,7 +293,7 @@ Ask questions ONLY if:
 - the design intent is ambiguous
 - multiple valid interpretations exist and the choice affects the fix plan
 
-Follow `brainstorm_protocol.md` exactly:
+Follow `brainstorm.md` exactly:
 - one question at a time
 - 2–3 concrete options per question
 - stop and wait after each question

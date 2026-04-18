@@ -1,5 +1,5 @@
 ---
-version: 1.1.1
+version: 1.2.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -36,11 +36,12 @@ The following files must always share the same frontmatter version value:
 - `01_initial.md`
 - `02_review.md`
 - `03_evolution.md`
-- `brainstorm_protocol.md`
+- `brainstorm.md`
+- `task_complete.md`
 
 Rules:
-- all five files must have identical `version` values at all times
-- every framework refactor must increment the version in all five files simultaneously
+- all six files must have identical `version` values at all times
+- every framework refactor must increment the version in all six files simultaneously
 - semantic versioning is mandatory: `MAJOR.MINOR.PATCH`
 
 Version meaning:
@@ -319,14 +320,14 @@ Without a canonical brainstorm skill:
 
 ### What it must implement
 
-The brainstorm skill must follow the protocol defined in `brainstorm_protocol.md`.
+The brainstorm skill must follow the protocol defined in `brainstorm.md`.
 It must NOT redefine the protocol inline.
 
 ### Where it lives
 
 `.claude/skills/brainstorm/SKILL.md`
 
-It must reference `brainstorm_protocol.md` as its canonical behavior source.
+It must reference `brainstorm.md` as its canonical behavior source.
 It must NOT redefine the protocol inline.
 
 ### Registration
@@ -360,24 +361,10 @@ Produces a structured closure report so the user can verify that work was comple
 
 This skill is mandatory for every non-trivial task and exempt for trivial tasks.
 
-### Enforcement Model
+### What it must implement
 
-The manager skill is responsible for appending task-complete as the final step of any non-trivial pipeline at routing time.
-Individual pipelines do not need to declare it.
-Enforcement is centralized in the manager, not distributed across pipelines.
-
-### Report Format
-
-The skill must produce a markdown table with at least 3 columns:
-
-| Step | Skill / Agent | Comment |
-|------|---------------|---------|
-| ... | ... | ... |
-
-Rules:
-- every executed step must appear as a row
-- the `Comment` column must be left blank unless a step deviated from plan, was skipped, or warrants user attention
-- skipped steps must always include a comment explaining why
+The task-complete skill must follow the protocol defined in `task_complete.md`.
+It must NOT redefine the protocol inline.
 
 ### When NOT to use
 
@@ -387,6 +374,9 @@ Do not invoke for single-step, low-risk, or purely cosmetic changes.
 ### Where it lives
 
 `.claude/skills/task-complete/SKILL.md`
+
+It must reference `task_complete.md` as its canonical behavior source.
+It must NOT redefine the protocol inline.
 
 ### Registration
 

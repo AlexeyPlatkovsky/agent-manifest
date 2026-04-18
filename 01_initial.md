@@ -1,5 +1,5 @@
 ---
-version: 1.1.1
+version: 1.2.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -10,9 +10,10 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md` — canonical source of truth
-- `brainstorm_protocol.md` — canonical brainstorming behavior
+- `brainstorm.md` — canonical brainstorming behavior
+- `task_complete.md` — canonical task completion behavior
 
-If either is missing, stop and ask the user to provide them.
+If any are missing, stop and ask the user to provide them.
 
 ---
 
@@ -34,7 +35,7 @@ Work in exactly 3 phases. Do not skip or merge phases.
 2. **Discussion** — resolve key decisions with the user
 3. **Composition** — create or adjust the instruction system
 
-During Discussion: follow `brainstorm_protocol.md` exactly.
+During Discussion: follow `brainstorm.md` exactly.
 During Composition: do not return to discussion.
 
 ---
@@ -97,7 +98,7 @@ Do NOT propose solutions yet.
 
 Resolve the decisions identified in Phase 1 with the user.
 
-Follow `brainstorm_protocol.md` for all discussion behavior:
+Follow `brainstorm.md` for all discussion behavior:
 - one question at a time
 - 2–3 concrete options per question
 - highlight trade-offs and risks
@@ -180,20 +181,20 @@ Replace them with the concrete capability the generated system requires.
 This is mandatory per `MANIFEST.md`.
 
 Create `.claude/skills/brainstorm/SKILL.md` that:
-- references `brainstorm_protocol.md` as its behavior source
+- references `brainstorm.md` as its behavior source
 - does not redefine the protocol inline
 - is registered in `AGENTS.md`
 
 ### Required: Task-Complete Skill
 This is mandatory per `MANIFEST.md`.
 
-Create `.claude/skills/task-complete/SKILL.md` in the project's skills directory and ensure it is registered in `AGENTS.md` under the capability registry.
+Create `.claude/skills/task-complete/SKILL.md` in the project's skills directory.
+Create `task_complete.md` as the canonical task-complete behavior source.
 
 The task-complete skill must:
-- define its purpose and scope as non-trivial tasks only
-- produce a markdown table with at least 3 columns: `Step | Skill / Agent | Comment`
-- state explicitly that comments are required when a step is skipped or deviates from plan, and optional otherwise
-- state explicitly that the manager enforces task-complete, not individual pipelines
+- reference `task_complete.md` as its behavior source
+- not redefine the protocol inline
+- be registered in `AGENTS.md` under the capability registry
 
 Wire it into the manager skill: the manager must append `task-complete` as the final step for all non-trivial pipelines at routing time.
 Do not make individual pipelines declare `task-complete` themselves.
