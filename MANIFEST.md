@@ -1,5 +1,5 @@
 ---
-version: 1.2.2
+version: 1.3.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -8,64 +8,14 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 
 ## Purpose
 
-This document defines the canonical philosophy and rules for managing:
-- AI instructions
-- context distribution
-- orchestration
-- modular execution
+This document defines the canonical rules for designing, reviewing, and evolving AI instruction systems.
 
-It is **technology-agnostic** and **project-agnostic**.
+It is framework-level guidance.
+It is not part of the generated project runtime.
 
-It answers one question:
+The framework exists to answer one question:
 
-> How should any AI system be structured to work efficiently, predictably, and without context waste?
-
-This document is the **single source of truth** for:
-- designing instruction systems
-- evolving orchestration
-- validating architectural decisions
-
----
-
-# Framework Versioning
-
-This framework is versioned as a single unit.
-
-The following files must always share the same frontmatter version value:
-- `MANIFEST.md`
-- `01_initial.md`
-- `02_review.md`
-- `03_evolution.md`
-- `protocols/brainstorm.md`
-- `protocols/task_complete.md`
-- `protocols/manager.md`
-
-Rules:
-- all seven files must have identical `version` values at all times
-- every framework refactor must increment the version in all seven files simultaneously
-- semantic versioning is mandatory: `MAJOR.MINOR.PATCH`
-
-Version meaning:
-- PATCH: wording fixes and clarifications
-- MINOR: new skills, new rules, or structural additions
-- MAJOR: breaking changes to the framework contract
-
-This repository includes a maintenance skill at `.claude/skills/maintain-version-frontmatter/SKILL.md` to enforce this rule during future refactors.
-
----
-
-# Cross-Tool Entry Point Rule
-
-`AGENTS.md` is the canonical operational entry point for the project.
-
-If a project uses multiple AI tools:
-- each tool-specific entry file or configuration must point to `AGENTS.md`
-- no tool-specific file may become a second source of truth
-- tool adapters may explain how the tool loads `AGENTS.md`, but must not duplicate project policy
-
-This framework is tool-agnostic.
-Tool-specific compatibility files are allowed.
-Parallel instruction systems are not.
+> How should an AI instruction system stay minimal, predictable, and scalable without wasting context?
 
 ---
 
@@ -73,627 +23,346 @@ Parallel instruction systems are not.
 
 ## 1. Minimize Always-Loaded Context
 
-Only the **minimum required rules** must be loaded by default.
+Only the minimum required root contract should be always loaded.
 
 Everything else must be:
 - modular
 - on-demand
 - explicitly invoked
 
-Violation of this principle leads to:
-- token waste
-- degraded reasoning quality
-- unpredictable behavior
-
----
-
 ## 2. Separate Policy from Execution
 
-Two fundamentally different things must never be mixed:
-
-### Policy (WHAT / WHEN)
-- global rules
+Policy defines:
 - classification
+- routing gates
 - constraints
-- permissions
-- expected outputs
+- required outputs
 
-### Execution (HOW)
-- step-by-step procedures
-- workflows
-- implementation logic
+Execution defines:
+- how a skill performs a task
+- how a pipeline sequences capabilities
 
-Policy lives in:
-- `AGENTS.md`
+Policy lives in the root contract:
+- `AGENTS.md` for multi-tool or AI-agnostic projects
+- the tool's native entrypoint for single-tool projects
 
 Execution lives in:
 - skills
-- workflows
-
----
+- pipelines
+- agents
 
 ## 3. Progressive Disclosure of Complexity
 
-The system must reveal complexity **only when needed**.
+Escalate only when needed:
+1. direct execution
+2. skill-based execution
+3. pipeline-based execution
+4. agents or subagents
 
-Order of escalation:
-1. Direct execution (trivial tasks)
-2. Skill-based execution
-3. Workflow-based execution
-4. Multi-role / subagent execution
+Never begin at level 4 by default.
 
-Never start from level 4.
+## 4. No Duplication
 
----
-
-## 4. No Duplication Rule (Critical)
-
-Any rule must exist **only once**.
+Any rule should exist only once.
 
 Allowed:
 - referencing a rule
+- centralizing a rule in the correct layer
 
 Forbidden:
-- redefining the same rule in multiple places
+- repeating routing policy in skills
+- repeating validation rules across multiple artifacts
+- copying the same execution instructions into both a skill and a pipeline
 
-Typical violations:
-- task classification repeated in multiple files
-- validation rules copied into workflows
-- git rules duplicated in skills and root
+## 5. Explicit Responsibility Boundaries
 
-Duplication = inconsistency risk.
+Each file should have one responsibility.
 
----
+Examples:
+- root contract: policy and routing gates
+- manager-equivalent: routing and orchestration only
+- execution skill: task execution only
+- pipeline: ordered orchestration only
+- reference doc: reusable project knowledge only
 
-## 5. Composability over Complexity
+Execution skills must stay isolated.
+They must not contain manager handoff text, stage metadata, or routing to other skills.
 
-Build systems from:
-- small
-- well-defined
-- reusable units
+## 6. Deterministic Over Implicit
+
+Critical behavior must be explicit.
 
 Avoid:
-- large "do everything" instructions
-- monolithic workflows
-- tightly coupled components
-
----
-
-## 6. Explicit Responsibility Boundaries
-
-Each layer must have a **single responsibility**.
-
-If a file does more than one job → it is wrong.
-
----
-
-## 7. Deterministic > Implicit Behavior
-
-Critical behaviors must be:
-- explicitly defined
-- predictable
-
-Avoid relying on:
 - "AI will figure it out"
-- implicit conventions
+- descriptive routing without a stop gate
+- implied validation or completion behavior
+
+## 7. Optimize for Real Projects
+
+Do not build for a future the repository does not justify.
+
+Prefer:
+- reusing good existing project capabilities
+- preserving existing naming when it is already coherent
+- creating only artifacts the current project actually needs
+
+## 8. Routing Rules Must Be Mandatory Gates
+
+For non-trivial tasks, the root contract must use imperative blocking language.
+
+Compliant pattern:
+- classify the task first
+- if trivial: proceed directly and state the classification
+- if non-trivial: STOP, load the concrete routing capability, and do not implement until routing resolves
+- if unsure: treat as non-trivial
+
+Routing gates must appear before the capability registry.
+
+## 9. Keep Instruction Files Compact
+
+Every instruction file should target 150 lines or fewer when possible.
+
+This is a strong target, not a hard cap.
+Do not sacrifice clarity, correctness, or single responsibility just to force the file under the line limit.
+
+If a file grows because it is doing too many jobs, split it rather than letting it expand indefinitely.
+
+## 10. Ask Before Structural Refactors
+
+If compliance requires a structural refactor, stop and ask the user before changing it.
+
+Structural refactors include:
+- moving capabilities to a new directory
+- splitting a monolithic file
+- merging or deleting duplicated artifacts
+- renaming or replacing existing capabilities
+
+When asking, explain:
+- what should change
+- why the current structure violates the framework
+- what the target structure would be
+
 
 ---
 
-## 8. Optimize for Real Tasks, Not Theory
+# Root Contract Rules
 
-The system must:
-- minimize overhead for simple tasks
-- scale for complex tasks
+## Single-Tool Projects
 
-Avoid:
-- forcing heavy orchestration on simple work
-- designing for edge cases first
-
----
-
-## 9. Routing Rules Must Be Mandatory Gates
-
-Routing logic in `AGENTS.md` must be written as **imperative, blocking instructions** — not as classification guidance or reference tables.
-
-### Why this matters
-
-Descriptive routing ("non-trivial tasks → route via manager") reads as a suggestion.
-The AI's default behavior is to begin solving immediately.
-Without a hard stop, routing is bypassed — silently and without error.
-
-### What compliant gate language looks like
-
-```
-Before taking any action on a non-trivial task:
-1. STOP.
-2. Load the designated routing skill or agent.
-3. Do not proceed until routing is resolved.
-```
-
-The named routing capability must be concrete.
-For large projects this is typically a manager skill.
-For smaller systems it may be a task-specific routing capability.
-
-### What non-compliant language looks like
-
-```
-Non-trivial tasks should be routed via the manager skill.
-```
-```
-| Non-trivial + Low Risk | Workflow + validation |
-```
-
-These are descriptions of intent, not enforcement mechanisms.
-
-### Rules
-
-- Routing rules MUST use imperative language: STOP, MUST, DO NOT proceed
-- Routing rules MUST specify the exact next action (which skill/agent to load)
-- Routing rules MUST appear at the top of AGENTS.md, before capability registry
-- Trivial task classification MUST be explicit — the AI must justify opting out of routing
-- Skills listed as "required" for task completion MUST use mandatory language, not "use for" suggestions
-
-### Applies to
-
-- Task routing gates (trivial vs non-trivial)
-- Completion gates (validation, review loops)
-- Skill invocation requirements (when a skill is not optional)
-
----
-
-# Canonical Structure
-
-## Root Layer
-
-### `MANIFEST.md`
-- philosophy
-- principles
-- system design rules
-
-### `AGENTS.md`
-- operational contract
-- rules AI must follow
-- task classification
-- available capabilities
-
-If a project uses multiple AI tools, all tool-specific entry files must defer to `AGENTS.md`.
-They are adapters, not independent roots.
-
----
-
-## Execution Layer (Stored under `.claude/` by default)
-
-### `.claude/skills/`
-Atomic, reusable procedures.
-
-Claude skills use the current directory format:
-- `.claude/skills/<skill-name>/SKILL.md`
-
-Examples:
-- implement feature
-- validate
-- work with git
+If a project supports only one AI tool, the project's full operational contract may live directly in that tool's official native entrypoint file.
 
 Rules:
-- must be self-contained
-- must not include orchestration logic
+- the native entrypoint must be verified against the tool's current official documentation during composition
+- the native entrypoint becomes the project's root operational contract
+- supporting artifacts should use the selected tool's native structure by default
+- `AGENTS.md` is not required in this mode
+
+## Multi-Tool or AI-Agnostic Projects
+
+If a project supports multiple AI tools, or the user explicitly wants an AI-agnostic structure:
+- `AGENTS.md` is the canonical root operational contract
+- every supported tool-specific entry file must be a thin adapter
+- each adapter must instruct the tool to follow `AGENTS.md` strictly
+- no tool-specific file may become a second source of truth
+
+For shared storage in this mode, use:
+- `.ai/skills`
+- `.ai/pipelines`
+- `.ai/agents`
+- `.ai/docs`
+
+If a project already stores capabilities elsewhere, migration is a structural refactor and requires user approval.
 
 ---
 
-### `.claude/workflows/`
-Multi-step execution patterns.
+# Existing Project Adaptation Rules
 
-Used only for:
-- non-trivial tasks
+## Reuse Before Creating
 
-Rules:
-- define order of steps
-- reference skills
-- do not redefine skills
+If an existing project capability exactly satisfies a required capability, reuse it instead of creating a new one.
 
----
+An exact match means:
+- the responsibility matches
+- the mandatory protocol coverage matches
+- there is no contradiction with the framework
 
-### `.claude/agents/`
-Specialized roles (subagents).
+If an existing capability is only close:
+- treat it as non-equivalent
+- stop and ask the user whether to split, preserve, or replace it
 
-Used only when:
-- context isolation is beneficial
-- independent reasoning improves results
+## Preserve Project Naming
 
-Examples:
-- code reviewer
-- architect
-- researcher
+Use the project's existing capability names when they already satisfy the framework.
 
----
+Do not create a second near-duplicate capability just to match a canonical protocol filename.
 
-### `.claude/skills/manager/` (or equivalent)
-Routing and orchestration logic.
+If a project-native name fulfills a protocol:
+- keep the project-native name
+- note the protocol mapping once in the root contract or review report
 
-Responsibilities:
-- interpret task classification
-- select workflow
-- choose skills/subagents
-
-Must NOT:
-- duplicate AGENTS.md
-- implement execution steps
+If the naming convention is unclear or conflicts with framework defaults, ask the user.
 
 ---
 
 # Protocol Contract
 
-Every canonical protocol in `protocols/` must declare:
-- project applicability (`small`, `medium`, `large`)
-- `Mandatory` requirements that all implementations must preserve
-- `Adapt` guidance describing what projects may localize without breaking the protocol
+Protocols in `protocols/` are canonical framework inputs.
+They are not project runtime files.
 
-Protocols define reusable behavioral contracts.
-Skills implement those contracts by reference.
+Project skills must be generated from protocol requirements.
+They must not depend on protocol files or framework paths at runtime.
+
+Every protocol must declare structured frontmatter:
+- `implementation: mandatory | optional`
+- `applies_to: [small, medium, large]`
+
+Protocol frontmatter is authoritative for derivation and review.
+Prompt logic must not infer applicability from prose when metadata is present.
+
+Each protocol body must still define:
+- purpose
+- mandatory rules that implementations must preserve
+- allowed project-specific adaptations
+- output contracts, when applicable
 
 ---
 
-# Protocol-Driven Capability Derivation
+# Protocol-Derived Capability Rules
 
-Prompts and audits must derive mandatory capabilities from the protocol layer rather than from a hardcoded list of protocol names.
+Capability derivation must come from canonical protocol metadata, not from memorized protocol names or hardcoded prompt logic.
 
 Rules:
-- inspect canonical protocol files under `protocols/`
-- exclude `protocols/_README.md` from capability derivation
-- determine project size before deciding which protocols are mandatory
-- read each protocol's `Project Applicability` and `Implementation status`
-- for every mandatory protocol, require a corresponding skill named after the protocol filename basename
-- require that skill to live at `.claude/skills/<protocol-name>/SKILL.md` unless the target AI tool uses a different but equivalent skills directory format
-- require that skill to reference the protocol file rather than restating it inline
-- require that skill to be registered in `AGENTS.md`
-- preserve the protocol's core rules and output contracts without contradiction
-- enforce any cross-capability requirements declared in the protocols at the responsible layer
+- only protocols applicable to the confirmed project size may require implementation
+- `protocols/_README.md` is informational and must not participate in capability derivation
+- protocols marked `implementation: mandatory` define required project capabilities for applicable project sizes
+- protocols marked `implementation: optional` may be implemented only when the project genuinely needs them
 
-Prompts may use the currently bundled protocols as examples.
-They must not treat the current bundled set as the mechanism.
+Generated project skills must:
+- be standalone project artifacts
+- include the protocol's mandatory behavior
+- include minimal project-specific adaptation
+- avoid references to framework files, protocol files, or framework-only paths
 
 ---
 
-# Current Bundled Protocol Outcomes
+# Canonical Layers
 
-## Brainstorm Skill (Required in Every Project)
+## Skills
 
-The currently bundled `protocols/brainstorm.md` protocol implies a mandatory `brainstorm` skill for every project.
+Skills are atomic execution capabilities.
 
-This is non-negotiable regardless of project size.
+Rules:
+- one responsibility
+- no orchestration logic
+- no cross-skill routing
+- no duplicated root policy
 
-### Why it is mandatory
+## Pipelines
 
-Discussion and design decisions are a core part of any project lifecycle.
-Without a canonical brainstorm skill:
-- AI behavior during discussions is unpredictable
-- question/answer protocols are inconsistent
-- design decisions are not properly structured
+Pipelines are ordered orchestration for non-trivial work.
 
-### What it must implement
+Rules:
+- pure sequencing only
+- reference skills or agents
+- do not redefine skill behavior
+- for medium and large projects, use one pipeline per file
 
-The brainstorm skill must follow the protocol defined in `protocols/brainstorm.md`.
-It must NOT redefine the protocol inline.
+## Agents
 
-### Where it lives
+Agents are specialized roles used only when context isolation or specialized reasoning is clearly justified by the repository.
 
-`.claude/skills/brainstorm/SKILL.md`
+Do not create a default agent layer without evidence of need.
 
-It must reference `protocols/brainstorm.md` as its canonical behavior source.
+## Reference Docs
 
-### Registration
+Reference docs hold reusable project knowledge referenced by multiple skills or pipelines.
 
-It must be registered in `AGENTS.md` like any other skill:
-- name: brainstorm
-- purpose: structured discussion and design decision support
-- when to use: any time a design, architecture, or workflow decision must be made
-- when not to use: during execution phases; after a decision is already made
-
-## Task-Complete Skill (Required for Non-Trivial Tasks)
-
-The currently bundled `protocols/task_complete.md` protocol implies a mandatory `task-complete` skill for every project.
-
-This skill is mandatory for every non-trivial task.
-
-### Why it is mandatory
-
-Non-trivial execution needs an explicit exit gate.
-Without a canonical task-complete skill:
-- pipelines can terminate without a verifiable closure step
-- skipped or deviated steps can go undocumented
-- users cannot reliably confirm that the planned work actually finished
-
-The skill produces a structured closure report so the user can verify that work was completed correctly and no steps were silently skipped.
-
-### Scope
-
-Non-trivial tasks only.
-Trivial tasks (isolated, low-risk, single-step) are exempt.
-
-### What it must implement
-
-The task-complete skill must follow the protocol defined in `protocols/task_complete.md`.
-It must NOT redefine the protocol inline.
-
-### When NOT to use
-
-Do not invoke for trivial tasks.
-Do not invoke for single-step, low-risk, or purely cosmetic changes.
-
-### Where it lives
-
-`.claude/skills/task-complete/SKILL.md`
-
-It must reference `protocols/task_complete.md` as its canonical behavior source.
-
-### Registration
-
-It must be registered in `AGENTS.md` like any other skill:
-- name: task-complete
-- purpose: mandatory closure reporting for non-trivial tasks
-- when to use: final step of any non-trivial pipeline, appended by the manager
-- when not to use: trivial, single-step, low-risk, or purely cosmetic tasks
-
-## Manager Skill (Required for Medium and Large Projects)
-
-The currently bundled `protocols/manager.md` protocol implies a mandatory `manager` skill for medium and large projects.
-
-Small projects should avoid a manager unless direct evidence shows inline routing is no longer sufficient.
-
-### Why it is mandatory
-
-Once a project has multiple repeated workflows, non-trivial routing must be centralized.
-Without a canonical manager skill:
-- non-trivial work is routed inconsistently
-- completion enforcement drifts across workflows
-- orchestration logic leaks into unrelated skills
-
-### What it must implement
-
-The manager skill must follow the protocol defined in `protocols/manager.md`.
-It must NOT redefine the protocol inline.
-
-### Where it lives
-
-`.claude/skills/manager/SKILL.md`
-
-It must reference `protocols/manager.md` as its canonical behavior source.
-
-### Registration
-
-It must be registered in `AGENTS.md` like any other skill:
-- name: manager
-- purpose: centralized routing and completion enforcement for non-trivial work
-- when to use: before any non-trivial task in a medium or large project
-- when not to use: trivial tasks; small projects that still fit minimal inline routing
-
----
-
-# Capability Registry
-
-AGENTS.md must contain the canonical registry of all available:
-
-- skills
-- agents
-
-Each entry must include:
-- name
-- purpose
-- when to use
-- when not to use
-
-This registry exists to ensure:
-- all actors (main agent and subagents) share the same capabilities view
-- consistent routing and decision making
-- no hidden or implicit functionality
-
-Restrictions:
-- AGENTS.md must NOT contain implementation details
-- AGENTS.md must NOT duplicate skill or agent logic
-- Detailed behavior must remain in corresponding files
-
-If a capability is not listed in AGENTS.md:
-- it is considered non-existent for orchestration purposes
+They must not be always loaded.
 
 ---
 
 # Task Classification Model
 
-## Dimension 1: Complexity
+Complexity:
+- trivial
+- non-trivial
 
-- Trivial
-- Non-trivial
+Risk:
+- low
+- medium
+- high
+- system-level
 
-## Dimension 2: Risk
+Execution expectation:
+- trivial + low risk: direct execution
+- non-trivial + low or medium risk: pipeline plus validation
+- non-trivial + high risk: pipeline plus stronger review
+- system-level: strongest available routing path
 
-- Low
-- Medium
-- High
-- System-level (cross-cutting)
-
----
-
-## Execution Matrix
-
-| Type | Execution |
-|------|----------|
-| Trivial + Low Risk | Direct skill execution |
-| Non-trivial + Low/Medium Risk | Workflow + validation |
-| Non-trivial + High Risk | Workflow + review loop |
-| System-level | Architect + full pipeline |
-
-This matrix is **not a reference table**. It must be translated into mandatory gate language in `AGENTS.md`.
-
-The AI must classify the task **before** beginning any work.
-If the task is non-trivial, the AI must STOP and load the designated routing capability for that project.
-Direct execution of non-trivial tasks without routing is a violation.
+This matrix is not a table to copy into the root contract.
+The root contract must translate it into mandatory gate language.
 
 ---
 
-# Review Strategy
+# Validation and Completion
 
-Review is **not mandatory for every task**.
+Validation is mandatory for non-trivial work.
 
-Use when:
-- logic is complex
-- changes affect multiple areas
-- risk is high
+Rules:
+- every non-trivial pipeline must include at least one explicit validation step
+- stronger review loops apply only for higher-risk work
+- validation should be automated and repeatable where possible
 
-Skip or simplify when:
-- change is isolated
-- behavior is obvious
-- risk is low
-
----
-
-# Validation Rules
-
-Validation is mandatory unless task is purely informational.
-
-Types:
-- tests
-- lint
-- type checks
-
-Validation must:
-- be automated
-- be repeatable
-- not depend on AI judgment
-
----
-
-# Context Management Rules
-
-## Always Loaded
-
-- MANIFEST.md (conceptually)
-- AGENTS.md
-
-## On Demand
-
-- skills
-- workflows
-- subagents
-- reference docs
-
----
-
-## Context Anti-Patterns
-
-Avoid:
-
-- large root files
-- loading all skills at once
-- mixing unrelated instructions
-- embedding workflows in root files
+`task-complete` is the required closure skill for non-trivial work.
+Its enforcement should be centralized in the routing layer, not repeated across execution skills.
 
 ---
 
 # Project Size Guidelines
 
-## Small Projects
+## Small
 
-Avoid:
-- workflows
-- manager skill
-- subagents
+Prefer the smallest coherent system.
 
-Use:
-- AGENTS.md
-- minimal skills derived from applicable protocols
-- in the current bundled framework: `brainstorm` and `task-complete`
+Defaults:
+- no reference docs by default
+- no manager by default
+- no agents by default
+- no pipelines by default unless the project clearly justifies them
+- mandatory skills from applicable protocols still apply
 
----
+## Medium
 
-## Medium Projects
-
-Must have:
-- skills
-- basic workflows
-- explicit routing gates that name the next capability
+Must include:
 - protocol-derived mandatory skills
-- in the current bundled framework: `manager` for centralized non-trivial routing and completion enforcement
+- a manager-equivalent routing capability
+- at least one pipeline
+- explicit validation for every non-trivial pipeline
+- reference docs: `architecture.md`, `conventions.md`, `commands.md`
 
-Always include:
-- all skills implied by mandatory medium-project protocols
-- in the current bundled framework: `brainstorm` and `task-complete`
+Additional docs may be added when reusable project knowledge justifies them.
+Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
 
----
+## Large
 
-## Large Projects
-
-Must have:
+Must include:
 - protocol-derived mandatory skills
-- in the current bundled framework: `manager`
-- workflows
+- a manager-equivalent routing capability
+- pipelines
 - risk-based routing
-- subagents (selectively)
-- all skills implied by mandatory large-project protocols
-- in the current bundled framework: `brainstorm` and `task-complete`
+- explicit validation for every non-trivial pipeline
+- reference docs: `architecture.md`, `conventions.md`, `commands.md`
 
-Must avoid:
-- duplication
-- uncontrolled growth of instructions
-
----
-
-# Reference Documentation Strategy
-
-Optional but recommended for reusable knowledge:
-
-Examples:
-- architecture
-- conventions
-- domain rules
-
-Rules:
-- only create if reused by multiple skills
-- must not be always loaded
-- must be referenced, not embedded
-
----
-
-# Evolution Rules
-
-The system must evolve based on:
-
-- real usage
-- observed failures
-- measurable improvements
-
-When updating:
-- update MANIFEST.md first
-- then propagate changes
-
----
-
-# What This System Optimizes For
-
-- minimal context usage
-- predictable execution
-- modular extensibility
-- cross-AI compatibility
-- maintainability over time
-
----
-
-# What This System Avoids
-
-- over-engineering
-- instruction duplication
-- unnecessary abstraction
-- AI-specific lock-in (except storage convenience)
-- hidden behavior
+Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
 
 ---
 
 # Final Rule
 
-If a new idea:
-- increases complexity
-- duplicates logic
-- or increases always-loaded context
+If a proposed change:
+- adds unnecessary always-loaded context
+- duplicates an existing rule
+- introduces orchestration where direct execution would suffice
+- or forces a structural refactor without user approval
 
-→ it must be rejected or redesigned.
-
----
+then it must be rejected, deferred, or redesigned.

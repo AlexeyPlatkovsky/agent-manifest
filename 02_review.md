@@ -1,5 +1,5 @@
 ---
-version: 1.2.2
+version: 1.3.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -9,234 +9,131 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ## Context Required
 
 Before starting, ensure the following files are available in this session:
-- `MANIFEST.md` — canonical source of truth
-- `protocols/_README.md` — index of canonical protocols
+- `MANIFEST.md`
+- `protocols/_README.md`
 - all canonical protocol files under `protocols/` required by this framework version
-- Your full instruction system: `AGENTS.md`, all skills, workflows, agents, and reference docs
+- the project's full instruction system: root contract, skills, pipelines, agents, and docs
 
-If any are missing, stop and ask the user to provide them.
+If anything required for review is missing, stop and ask for it.
 
 ---
 
 ## Purpose
 
-Your task is to validate that the current instruction system fully complies with `MANIFEST.md` principles.
+Audit the current instruction system against `MANIFEST.md`.
 
-This is NOT an implementation task.
-This is a strict audit and verification process.
+This is a skeptical review.
+Assume the system is wrong until proven correct.
 
-Assume the system is **wrong until proven correct**.
-Be critical, not optimistic.
-Do not suggest fixes before completing the audit.
+Do not implement fixes before the audit and clarification phases are complete.
 
 ---
 
 ## Working Mode
 
-Work in exactly 4 phases. Do not skip or merge phases.
+Work in exactly 4 phases:
+1. Audit
+2. Clarification
+3. Final Validation
+4. Implementation and Verification, only when the user requests it
 
-1. **Audit** — full analysis against MANIFEST principles
-2. **Clarification** — resolve genuine ambiguities with the user
-3. **Final Validation** — verdict and minimal fix plan
-4. **Implementation & Verification** — apply fixes and verify results (only when user requests)
-
-During Clarification: follow `protocols/brainstorm.md` exactly.
-Do NOT modify files during Phases 1–3.
-Do NOT suggest implementation until Phase 3.
+During Clarification, follow `protocols/brainstorm.md`.
+Do not modify files during Phases 1-3.
 
 ---
 
 ## Phase 1 — Audit
 
-Read all provided instruction files. Validate each against MANIFEST principles.
-
----
-
 ### 0. Root Contract Presence
 
-This check must be performed first.
+Determine which root contract model applies.
 
-- verify that `AGENTS.md` exists and is readable
-- verify that it acts as the root operational contract
-- verify that routing and capability declarations are visible from `AGENTS.md`
-- verify that execution details are delegated to skills, workflows, and agents rather than embedded in the root file
-- verify that any tool-specific entry files defer to `AGENTS.md` rather than duplicating policy
+For single-tool projects:
+- verify that the tool's official native entrypoint exists and acts as the full operational contract
+- verify the native entrypoint against the tool's current official docs when needed
 
-Any failure here must appear in the violations list.
+For multi-tool or AI-agnostic projects:
+- verify that `AGENTS.md` exists and acts as the root operational contract
+- verify that supported tool-specific entry files are thin adapters to `AGENTS.md`
 
----
+In both cases:
+- verify that routing and capability declarations are visible from the root contract
+- verify that execution details are delegated to skills, pipelines, and agents
 
 ### 1. Context Minimization
 
-- Is the root context (AGENTS.md) minimal?
-- Is anything unnecessarily always-loaded?
-- Are skills, workflows, and reference docs on-demand only?
-- Are tool-specific adapters lightweight and non-duplicative?
-
----
+- is the root contract minimal
+- are skills, pipelines, agents, and docs on-demand only
+- are tool adapters lightweight
 
 ### 2. Separation of Policy and Execution
 
-- Does AGENTS.md contain only policy (WHAT / WHEN), not execution (HOW)?
-- Exception: small projects may contain inline routing logic — is it minimal and scoped correctly?
-- Are procedures confined to skills and workflows?
-- Is any execution logic embedded in AGENTS.md beyond the permitted inline routing?
-- Do tool-specific AI files duplicate policy that should live only in `AGENTS.md`?
+- does the root contract contain policy rather than execution logic
+- are procedures confined to skills and pipelines
+- do tool-specific files duplicate project policy
 
----
+### 3. Progressive Disclosure
 
-### 3. Progressive Disclosure of Complexity
-
-- Is complexity introduced only when needed?
-- Does the system start from direct execution and escalate appropriately?
-- Are subagents used only where genuinely justified?
-- Is the system over-engineered relative to the project size?
-
----
+- does the system start from direct execution and escalate only when needed
+- are pipelines and agents justified by project size and repository evidence
 
 ### 4. No Duplication
 
 Check for duplicated rules across:
-- AGENTS.md and skills
-- skills and workflows
+- root contract and skills
+- skills and pipelines
 - multiple skills
-- reference docs and skills
-
-Any rule that exists in more than one place is a violation.
-
----
+- docs and skills
 
 ### 5. Responsibility Boundaries
 
-- Does each file have exactly one responsibility?
-- Do any skills contain orchestration logic?
-- Do any workflows contain implementation details?
-- Does AGENTS.md contain execution steps beyond permitted inline routing?
-- Does the manager skill (if present) duplicate AGENTS.md?
+- does each file have one responsibility
+- do execution skills contain orchestration logic
+- do pipelines stay purely orchestration
+- does the manager-equivalent stay purely routing and orchestration
 
----
+### 6. Routing Language Enforcement
 
-### 6. Composability
+Check the main routing gate in the root contract:
+- is the language imperative
+- is the next concrete capability named
+- does the gate appear before capability registry
+- is trivial classification explicit
+- are validation and completion gates mandatory where required
 
-- Are skills atomic and self-contained?
-- Are workflows pure orchestration (referencing skills, not redefining them)?
-- Are components reusable independently?
+Descriptive routing remains a critical violation.
 
----
+### 7. Protocol Inventory and Applicability
 
-### 7. Determinism
+- read every canonical protocol under `protocols/`, excluding `protocols/_README.md`
+- treat protocol frontmatter as authoritative
+- determine the project's confirmed or most likely size
+- derive required capabilities from `implementation` and `applies_to`
 
-- Are critical behaviors explicitly defined?
-- Is any behavior left to "AI will figure it out"?
-- Are routing decisions unambiguous?
+### 8. Protocol Coverage
 
----
+For each required protocol, verify:
+- a corresponding project capability exists
+- the capability is standalone and project-local
+- it implements the protocol's mandatory rules
+- it includes any needed project-specific adaptation without contradiction
 
-### 8. Routing Language Enforcement (Critical)
+Flag as a major violation if a project skill depends on framework protocol files or framework paths at runtime.
 
-This is the most commonly violated principle. Routing rules that read as guidance are non-compliant regardless of intent.
+### 9. Structure and Refactor Risks
 
-**Check for each routing rule in AGENTS.md:**
+Check for:
+- near-duplicate capabilities
+- monolithic pipeline registries
+- mixed AI roots
+- stale unsupported tool entrypoints
+- oversized files that likely violate single responsibility
 
-- Is the language imperative? (`STOP`, `MUST`, `DO NOT`) — or merely descriptive? (`should`, `route via`, `recommended`)
-- Does the rule specify the exact next action? (load X skill, invoke Y agent) — or only the outcome? (use workflow, follow process)
-- Does a routing gate appear **before** the capability registry at the top of AGENTS.md?
-- Is "trivial" explicitly defined? Or is it left to AI interpretation?
-- Are completion gates (validation, review) mandatory or optional?
+### 10. Validation and Completion
 
-**Non-compliant patterns — flag as violation:**
-- Classification tables presented without blocking language
-- "Should", "recommended", "route via" without a STOP instruction
-- Routing logic buried in the capability registry instead of leading AGENTS.md
-- Skills listed as "use for X" when they are mandatory for X
-
-**Compliant pattern — required:**
-- Explicit STOP before any non-trivial action
-- Named skill/agent to load immediately
-- Explicit statement that implementation must not begin until routing resolves
-
-If routing language is descriptive rather than imperative → **Critical violation**.
-If routing gate is missing from top of AGENTS.md → **Critical violation**.
-If completion gates are optional rather than mandatory → **Major violation**.
-
----
-
-### 9. Protocol Inventory and Applicability
-
-- Read every canonical protocol file under `protocols/`, excluding `protocols/_README.md`
-- Determine project size from context (contributor count, domain count, workflow complexity)
-- For each protocol, determine whether it applies to the project's size and whether its `Implementation status` makes it mandatory
-- Derive the expected mandatory skill from the protocol filename basename unless the project's AI tool requires a different but equivalent path convention
-
-If protocol applicability is ambiguous because the protocol itself is underspecified → raise it as a framework ambiguity.
-
----
-
-### 10. Protocol Coverage and Skill Derivation
-
-For each mandatory protocol:
-- [ ] the corresponding skill exists in the project's skills directory
-- [ ] the skill references the correct protocol file without redefining it inline
-- [ ] the skill is registered in `AGENTS.md`
-- [ ] the skill's scope matches the protocol's applicability and limitations
-- [ ] every `Mandatory` item in the protocol is implemented somewhere in the instruction system
-- [ ] no instruction file contradicts the protocol's core rules or output contract
-
-For protocols that are not mandatory for the project's size:
-- check whether an implementation exists anyway
-- if it exists, decide whether it is justified or an over-engineering signal
-
-If any mandatory protocol is missing or unimplemented → this is a **Critical violation**.
-If a skill exists but duplicates the protocol rather than referencing it → this is a **Major violation**.
-
----
-
-### 11. Routing Capability Requirements
-
-- If a mandatory protocol governs routing or orchestration, is `AGENTS.md` routing to that concrete capability?
-- Is the non-trivial routing target unambiguous?
-- Are non-trivial tasks blocked on routing instead of being executed directly?
-- If the current bundled protocol set is in use:
-  - medium and large projects should derive a `manager` skill from `protocols/manager.md`
-  - small projects should not introduce `manager` without clear justification
-
-If project routing is ambiguous or unnamed → **Major violation**.
-
----
-
-### 12. Execution Matrix Application
-
-- Is the execution matrix from MANIFEST translated into mandatory gate language rather than left as a table?
-- Are trivial tasks explicitly allowed to proceed directly?
-- Are non-trivial tasks blocked until the named routing capability is loaded?
-- Are high-risk or system-level tasks routed through stronger validation or review paths?
-
----
-
-### Architecture Validation
-
-- Does the system complexity match the project size?
-- Is there unnecessary manager / workflow / subagent infrastructure?
-- Is routing logic centralized correctly?
-- Are subagents used only when context isolation is genuinely beneficial?
-
----
-
-### Context Efficiency
-
-- Are skills modular and loaded on demand?
-- Are workflows lightweight?
-- Are reference docs used correctly (not always loaded)?
-- Are there any large monolithic files that should be split?
-- Are AI tool adapter files minimal and only responsible for loading `AGENTS.md`?
-
----
-
-### Risk-Based Execution
-
-- Is the execution matrix from MANIFEST actually applied?
-- Are high-risk tasks routed through review loops?
-- Are trivial tasks handled directly without unnecessary overhead?
+- does every non-trivial pipeline include explicit validation
+- is `task-complete` enforced for non-trivial work
+- are stronger review loops reserved for higher-risk work
 
 ---
 
@@ -244,197 +141,61 @@ If project routing is ambiguous or unnamed → **Major violation**.
 
 Provide:
 
-### Routing Gate Report
+### Root Contract Report
 
-For the main routing contract found in `AGENTS.md`:
-
-| Location | Status | Named Capability | Notes |
-|----------|--------|------------------|-------|
-| ... | Valid / Ambiguous / Missing | ... | ... |
+| Location | Mode | Status | Notes |
+|----------|------|--------|-------|
+| ... | Single-tool / Multi-tool | Valid / Ambiguous / Missing | ... |
 
 ### Protocol Coverage Report
 
-| Protocol | Mandatory for This Project | Expected Skill | Status | Notes |
-|----------|----------------------------|----------------|--------|-------|
+| Protocol | Required for This Project | Expected Capability | Status | Notes |
+|----------|---------------------------|---------------------|--------|-------|
 | ... | Yes / No | ... | Valid / Missing / Ambiguous / Overbuilt | ... |
 
-### Compliance Score
-A score from 0 to 100 reflecting overall alignment with MANIFEST.
+### Violations
 
-### Violations List
+List findings by severity with file references.
+Prioritize:
+- critical routing failures
+- incorrect root contract model
+- duplicated or blurred responsibilities
+- protocol coverage failures
 
-Group by severity:
-
-**Critical (must fix before system is usable):**
-- List each violation with: location, principle violated, description
-
-**Major (significant risk or inconsistency):**
-- List each violation with: location, principle violated, description
-
-**Minor (low impact, worth fixing eventually):**
-- List each violation with: location, principle violated, description
-
-### Suspicious Areas
-List anything that is unclear, potentially risky, or could be interpreted multiple ways.
-
-### Over-Engineering Signals
-List any complexity that appears unjustified by the project's actual scale.
-
-### Under-Engineering Risks
-List anything that is dangerously absent given the project's apparent needs.
-
----
-
-STOP after Phase 1 output.
-Do not proceed to Phase 2 until the user acknowledges the audit results.
+Then list:
+- open ambiguities that require clarification
+- residual risks or testing gaps
 
 ---
 
 ## Phase 2 — Clarification
 
-Resolve genuine ambiguities identified in Phase 1.
-
-Ask questions ONLY if:
-- a rule interpretation is unclear
-- the design intent is ambiguous
-- multiple valid interpretations exist and the choice affects the fix plan
+If genuine ambiguity remains, ask only the minimum questions needed to complete the audit.
 
 Follow `protocols/brainstorm.md` exactly:
 - one question at a time
-- 2–3 concrete options per question
-- stop and wait after each question
+- 2-3 options
+- explicit trade-offs
+- stop and wait
 
-Do NOT ask about:
-- things clearly established by the repository
-- violations that are unambiguously wrong
-- trivial details
-
-Focus only on high-impact ambiguities that affect the fix plan.
-
-If there are no genuine ambiguities → skip Phase 2 and proceed directly to Phase 3.
-State explicitly that no clarification is needed and why.
+Do not mix clarification with fixes.
 
 ---
 
 ## Phase 3 — Final Validation
 
-After clarification (or if Phase 2 was skipped):
+Produce:
+- final verdict: compliant, partially compliant, or non-compliant
+- the minimum fix plan required for compliance
+- which issues are structural refactors that require user approval
+
+Do not implement until the user explicitly asks.
 
 ---
 
-### Final Compliance Score
+## Phase 4 — Implementation and Verification
 
-Revised score after clarification, with brief justification.
-
----
-
-### Final Verdict
-
-Choose exactly one:
-- **Compliant** — system fully follows MANIFEST, no fixes required
-- **Conditionally Compliant** — minor issues present, system is functional but should be improved
-- **Non-Compliant** — critical or major violations present, system must be fixed before relying on it
-
----
-
-### Minimal Fix Plan
-
-IMPORTANT:
-- Do NOT propose a full redesign
-- Do NOT propose nice-to-have improvements
-- Only propose the minimum changes required to reach compliance
-
-For each required fix:
-- **File:** which file to change
-- **Issue:** what is wrong
-- **Fix:** exactly what change is needed
-- **Severity:** Critical / Major / Minor
-
-Order fixes by severity. Address Critical first.
-
----
-
-### Structural Correctness Summary
-
-Confirm or deny each of the following:
-
-- [ ] `AGENTS.md` is present and acts as the root operational contract
-- [ ] No duplication exists across files
-- [ ] Responsibility boundaries are clear and enforced
-- [ ] Context is minimal — nothing unnecessary is always-loaded
-- [ ] Layering is correct — policy in AGENTS.md, execution in skills/workflows
-- [ ] Tool-specific entry files defer to `AGENTS.md` and do not duplicate policy
-- [ ] Complexity matches project scale — no over or under engineering
-- [ ] Routing gates use imperative blocking language — not descriptive guidance
-- [ ] Routing gate appears at the top of AGENTS.md before capability registry
-- [ ] Trivial task classification is explicitly defined, not left to AI judgment
-- [ ] Completion gates (validation, review) are mandatory, not optional
-- [ ] All mandatory protocols have corresponding registered skills
-- [ ] Protocols are referenced, not duplicated inline
-- [ ] All protocol `Mandatory` requirements are implemented
-- [ ] Non-applicable protocols are not implemented without clear justification
-- [ ] Large and medium projects include the routing capability implied by applicable protocols, or name another explicit routing capability for non-trivial work
-- [ ] Execution matrix is applied through mandatory routing and completion gates
-
-If any item cannot be confirmed → it must appear in the fix plan.
-
----
-
-STOP after Phase 3 output.
-Do not proceed to Phase 4 until the user explicitly requests implementation.
-
----
-
-## Phase 4 — Implementation & Verification
-
-This phase activates ONLY when the user approves the fix plan and requests implementation.
-
-### 4a. Apply Fixes
-
-Apply each fix from the Phase 3 Minimal Fix Plan, in severity order (Critical first).
-
-### 4b. Verify Every Changed File
-
-After ALL fixes are applied:
-
-1. **Structural check**: Check every created or modified file for errors (syntax, missing required fields, invalid frontmatter). Any error must be fixed before proceeding.
-2. **Content check**: Re-read each modified file and verify:
-   - YAML frontmatter is present and valid (for skill/agent files)
-   - All internal references point to correct paths
-   - No content was accidentally removed or corrupted
-3. **Re-run Structural Correctness Summary**: Go through every checkbox from Phase 3 against the actual file state. Confirm each item passes.
-
-### 4c. Verification Report
-
-```
-## Verification Report
-
-### Files Changed
-| File | Action | Structural Check | Content Check |
-|------|--------|-----------|---------------|
-| ... | created / modified | pass / fail | pass / fail |
-
-### Structural Correctness (post-fix)
-[Re-run the Phase 3 checklist with updated status]
-
-### Revised Compliance Score
-[New score with justification]
-
-### Issues Introduced by Fixes
-[List any, or "None"]
-```
-
-If any verification step fails → fix before reporting completion.
-Do NOT declare implementation complete until all checks pass.
-
----
-
-## Critical Rule
-
-If unsure about any audit finding:
-- do not assume
-- do not guess
-- raise it in Phase 2
-
-Validation without certainty is invalid.
-A passing audit is only valid if every checklist item in the Structural Correctness Summary is explicitly confirmed.
+Only after user request:
+- apply the approved fixes
+- verify the resulting system
+- report what changed and what remains

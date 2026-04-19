@@ -1,5 +1,5 @@
 ---
-version: 1.2.2
+version: 1.3.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -9,8 +9,8 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ## Context Required
 
 Before starting, ensure the following files are available in this session:
-- `MANIFEST.md` — canonical source of truth
-- `protocols/_README.md` — index of canonical protocols
+- `MANIFEST.md`
+- `protocols/_README.md`
 - all canonical protocol files under `protocols/` required by this framework version
 
 If any are missing, stop and ask the user to provide them.
@@ -19,231 +19,247 @@ If any are missing, stop and ask the user to provide them.
 
 ## Purpose
 
-Your task is to create a minimal, correct AI instruction system for this project — or adjust the existing one — so it fully aligns with `MANIFEST.md`.
+Create or adjust the smallest coherent AI instruction system that fully aligns with `MANIFEST.md`.
+
+The result must be correct enough to stand on its own.
+`02_review.md` may catch bugs, but it is not the planned repair phase for an intentionally rough draft.
 
 You must also:
-- ask the user two mandatory questions during Discussion: intended project size and which AI tools are in use
-- ensure every AI tool entry point routes to `AGENTS.md`
-- derive mandatory skills from the applicable protocols rather than from memorized protocol names
-
-The goal is the **smallest coherent system that fits the project today**.
-Do not design for a future that does not yet exist.
-Do not add complexity that the project does not justify.
+- ask the user the mandatory project-size question during Discussion
+- ask the user which AI tools are in use now or must be supported immediately
+- ask the user which AI landscape or template family should be used when that is not already fixed
+- derive required capabilities from protocol frontmatter, not from memorized protocol names
+- keep generated project skills standalone and project-local
 
 ---
 
 ## Working Mode
 
-Work in exactly 3 phases. Do not skip or merge phases.
+Work in exactly 3 phases:
+1. Inventory
+2. Discussion
+3. Composition
 
-1. **Inventory** — understand the project
-2. **Discussion** — resolve key decisions with the user
-3. **Composition** — create or adjust the instruction system
-
-During Discussion: follow `protocols/brainstorm.md` exactly.
-During Composition: do not return to discussion.
+During Discussion, follow `protocols/brainstorm.md` exactly.
+During Composition, do not return to discussion.
 
 ---
 
 ## Phase 1 — Inventory
 
-Investigate the repository thoroughly before forming any opinions.
+Investigate the repository before proposing any changes.
 
 ### A. Project Nature
-- What kind of project is this?
-- Likely scale: small / medium / large
-- Maturity: prototype / active development / stable / legacy
-- Single-purpose or multi-domain?
+
+- what kind of project is this
+- likely scale: `small`, `medium`, or `large`
+- maturity: prototype, active development, stable, or legacy
+- single-purpose or multi-domain
 
 ### B. Tech Stack
-- Languages, frameworks, test stack
-- Build tools, CI/CD
-- Deployment or runtime environment
+
+- languages and frameworks
+- test stack
+- build and CI tooling
+- runtime or deployment environment
 
 ### C. Existing Documentation
-- Root docs, design docs, architecture docs
-- Conventions, workflow docs
-- Any existing AI instruction files
-- Any duplicated or conflicting guidance
+
+- root docs
+- architecture or design docs
+- conventions docs
+- pipeline docs
+- existing AI instruction files
+- duplicated or conflicting guidance
 
 ### D. Existing Instruction System
-- Does `AGENTS.md` exist?
-- Do skills / workflows / agents already exist?
-- Does routing logic exist?
-- Does the current setup violate `MANIFEST.md`?
+
+- what acts as the current root operational contract
+- whether `AGENTS.md` exists
+- whether native tool entrypoints exist
+- whether skills, pipelines, agents, or reference docs already exist
+- whether routing logic exists
+- whether execution skills are improperly coupled to orchestration
 
 ### E. AI Tool Surface
-- Which AI tools are already configured or obviously intended? (Claude Code, Cursor, Codex, etc.)
-- Do tool-specific files exist?
-- Do those files defer to `AGENTS.md` or duplicate policy?
+
+- which AI tools are already configured or clearly intended
+- which tool-specific entry files exist
+- whether the repo is single-tool or multi-tool
+- whether existing tool-specific files contain real policy or are already adapters
 
 ### F. Reusable Project Knowledge
-Identify whether the project needs reference docs such as:
-- architecture overview
-- code conventions
-- test conventions
-- domain rules
-- repo structure / commands
 
-Do not decide what to create yet. Only identify likely needs.
+Identify reusable knowledge that may justify reference docs:
+- architecture
+- conventions
+- commands
+- domain rules
+- repository structure
+
+Do not decide what to create yet.
 
 ### G. Protocol Inventory
-- Which canonical protocol files are present under `protocols/`?
-- Which of them apply to the chosen project size?
-- Which mandatory skills do they imply?
-- Do any protocols declare cross-capability constraints that must be enforced during composition?
+
+- read every canonical protocol under `protocols/`, excluding `protocols/_README.md`
+- treat protocol frontmatter as authoritative
+- determine which protocols are mandatory for the confirmed project size
+- determine which optional protocols may be justified by project needs
+- identify any cross-capability enforcement declared by the protocols
+
+### H. Structural Risk Inventory
+
+Explicitly identify:
+- duplicated skills or near-duplicate names
+- monolithic pipeline registries that would need splitting
+- existing capabilities that may already satisfy a required protocol
+- any structural refactor that would require user approval before implementation
 
 ---
 
 ## Phase 1 Output
 
 Stop after inventory and provide:
+1. project summary
+2. current instruction-system summary
+3. initial compliance check
+4. main risks, gaps, and ambiguities
+5. proposed discussion agenda
 
-1. **Project summary** — nature, scale, maturity
-2. **Current instruction system summary** — what exists, what is missing
-3. **Initial compliance check** — obvious MANIFEST violations in current setup
-4. **Main risks / gaps / ambiguities** — what needs clarification before proceeding
-5. **Proposed discussion agenda** — the decisions that must be resolved
+End with an explicit checkpoint:
+- say Phase 1 is complete
+- ask the user to confirm or correct the inventory
+- state that Phase 2 will begin only after confirmation
+- do not ask the first discussion question in the same message
 
-End Phase 1 with an explicit handoff checkpoint:
-- tell the user Phase 1 is complete
-- ask the user to confirm the inventory or correct anything inaccurate
-- state that Phase 2 will begin only after that confirmation
-- do NOT ask the first Discussion question in the same message
-
-Do NOT start editing or creating files yet.
-Do NOT propose solutions yet.
+Do not edit or create files in Phase 1.
 
 ---
 
 ## Phase 2 — Discussion
 
-Resolve the decisions identified in Phase 1 with the user.
+Resolve only the high-impact decisions identified in Phase 1.
 
-Follow `protocols/brainstorm.md` for all discussion behavior:
-- one question at a time
-- 2–3 concrete options per question
+Rules:
+- ask one question at a time
+- provide 2-3 concrete options
 - highlight trade-offs and risks
 - stop and wait after each question
 - never mix discussion with execution
 
-The first two questions are mandatory, even if the repository suggests an answer:
-1. confirm the intended project size (`small`, `medium`, or `large`)
+The first two questions are mandatory even if the repository suggests an answer:
+1. confirm the intended project size
 2. identify which AI tools are in use now or must be supported immediately
 
-Ask them one at a time, following `protocols/brainstorm.md`.
+After that, ask only what is actually needed to complete a correct design.
 
-Focus discussion on high-impact decisions only:
-- appropriate project scale assumption
-- how each AI tool should be wired to `AGENTS.md`
-- whether workflows are justified
-- whether subagents are justified
-- which reference docs are worth creating
-- how strict validation should be
-- whether existing docs should be refactored or preserved
+High-impact discussion topics may include:
+- primary AI landscape when the repo mixes tools
+- single-tool versus multi-tool or AI-agnostic structure
+- where instruction artifacts should live
+- whether existing capabilities exactly satisfy required protocol-derived capabilities
+- whether pipelines are justified and which real pipeline should be formalized first
+- whether reference docs should be created
+- whether existing files should be migrated, split, merged, or preserved
+- whether unselected AI entry files should be removed or neutralized
 
-Do not ask about things already clearly established by the repository.
-Do not ask trivial questions.
-
-At the end of discussion, produce a **decision summary** and ask the user to confirm before proceeding.
+At the end of discussion:
+- produce a decision summary
+- ask the user to confirm it before Phase 3
 
 ---
 
 ## Phase 3 — Composition
 
-Only begin after the user confirms the decision summary.
+Begin only after the user confirms the decision summary.
 
-### Design Rules
+### Composition Rules
 
-- `MANIFEST.md` is the canonical source — never contradict it
-- `AGENTS.md` is the project-level operational contract
-- all tool-specific adapters must defer to `AGENTS.md`
-- Policy and execution must be separated
-- Root instructions must stay compact
-- Detailed procedures must be modular
-- No duplicated logic across files
-- Complexity must be progressively disclosed
-- The system must match the actual project scale
-- mandatory skills must be derived from the applicable protocols
-- do not hardcode the current bundled protocol names as the derivation mechanism
+- `MANIFEST.md` is the canonical framework source
+- for multi-tool or AI-agnostic projects, `AGENTS.md` is the project root contract
+- for single-tool projects, use the tool's official native entrypoint as the full root contract
+- verify the chosen tool's native entrypoint convention from current official docs during composition
+- tool-specific adapters must stay thin and must not duplicate policy
+- generated project skills must be standalone project artifacts
+- generated project skills must include protocol-mandated behavior plus minimal project-specific adaptation
+- generated project skills must not reference framework protocol files or framework-only paths
+- execution skills must stay isolated and must not contain manager or cross-skill routing language
+- use `pipeline` terminology consistently
+- keep file size near the 150-line target when possible without harming quality
 
-### Required: Mandatory Gate Language in AGENTS.md
+### Protocol-Derived Capabilities
 
-Per `MANIFEST.md` Principle 9, routing rules must be written as imperative blocking instructions — not classification tables or descriptive guidance.
+Derive required capabilities from protocol frontmatter:
+- if `implementation: mandatory` and the confirmed size is in `applies_to`, the corresponding project capability must exist
+- if `implementation: optional` and the confirmed size is in `applies_to`, implement it only if the project clearly needs it
 
-**Non-compliant (never produce this):**
-```
-Non-trivial tasks should be routed via the manager skill.
-```
-```
-| Non-trivial + Low Risk | Workflow + validation |
-```
+Use the protocol filename basename as the default capability name only when the project does not already have an exact equivalent.
 
-**Compliant (always produce this pattern):**
-```
-## Task Routing — MANDATORY
+An existing capability counts as an exact equivalent only if:
+- responsibility matches
+- mandatory protocol coverage matches
+- no contradiction exists
 
-Before taking any action, classify the task:
+If the existing capability is only close:
+- treat it as non-equivalent
+- stop and ask the user before splitting, merging, replacing, or duplicating anything
 
-**If the task is trivial (isolated, low-risk, no orchestration needed):**
-Proceed directly. State your classification explicitly.
+### Root Contract Rules
 
-**If the task is non-trivial:**
-STOP. Do not write any code, create any files, or begin implementation.
-Load [exact routing skill or agent name] NOW.
-Do not proceed until routing is resolved.
+For multi-tool or AI-agnostic projects:
+- create or update `AGENTS.md`
+- create or update thin tool-specific adapters that say to follow `AGENTS.md` strictly
+- store shared capabilities under `.ai/skills`, `.ai/pipelines`, `.ai/agents`, and `.ai/docs` unless the user explicitly chose another location
 
-**If unsure:**
-Treat as non-trivial. STOP and load the project's default routing capability.
-```
+For single-tool projects:
+- place the full contract directly in the official native entrypoint
+- use the tool's native structure for supporting artifacts by default
+- do not create `AGENTS.md` unless the user explicitly asked for AI-agnostic or multi-tool structure
 
-Apply this pattern to:
-- the main routing gate at the top of AGENTS.md
-- any required completion steps (validation, review loops)
-- any skills declared as mandatory for a task type
+### Structural Refactor Safety
 
-The gate MUST appear **before** the capability registry in AGENTS.md.
-It is the first thing the AI reads.
-Do NOT leave placeholders like `[exact routing skill or agent name]` in the final output.
-Replace them with the concrete capability the generated system requires.
+Before any structural refactor, stop and ask the user.
 
----
+This includes:
+- splitting monolithic pipeline files
+- moving artifacts into `.ai/`
+- renaming capabilities
+- merging or deleting duplicated artifacts
+- replacing existing tool entrypoints
 
-### Required: Protocol-Derived Mandatory Skills
+When asking, explain:
+- what should change
+- why it is needed
+- what the compliant target structure would be
 
-Determine the mandatory skills by reading the canonical protocol files under `protocols/`, excluding `protocols/_README.md`.
+### Pipelines
 
-For each protocol that is mandatory for the confirmed project size:
-- create the corresponding skill using the protocol filename basename as the default skill name
-- place it in the project's skills directory
-- make it reference the protocol file as its behavior source
-- do not redefine the protocol inline
-- register it in `AGENTS.md`
+Rules:
+- for medium and large projects, create at least one pipeline
+- anchor the first pipeline to the most obvious real project pipeline discovered during inventory
+- if no dominant real pipeline is visible, ask the user which pipeline to formalize first
+- use one pipeline per file
 
-Preserve each protocol's core rules and output contracts without contradiction.
-If a protocol declares cross-capability enforcement rules, implement them at the responsible layer rather than duplicating them across multiple skills.
+### Reference Docs
 
-In the current bundled framework, this derivation yields:
-- `brainstorm` for all projects
-- `task-complete` for all projects, scoped to non-trivial work
-- `manager` for medium and large projects
+Rules:
+- small projects: skip reference docs by default
+- medium and large projects: create `architecture.md`, `conventions.md`, and `commands.md`
+- add more docs only when reusable project knowledge clearly justifies them
 
-For small projects, prefer minimal inline routing in `AGENTS.md` unless the applicable protocols or repository evidence clearly justify a routing skill.
+### Validation and Completion
 
-### Composition Steps
+Rules:
+- every non-trivial pipeline must include at least one explicit validation step
+- stronger review loops apply only for higher-risk work
+- `task-complete` must be the closure step for non-trivial work
 
-1. Decide which instruction artifacts are actually needed
-2. Inventory canonical protocols and map applicable protocols to mandatory skills for the chosen project size
-3. Propose the minimal coherent target structure
-4. Create or refactor the files
-5. Create or refresh tool-specific adapter files so every supported AI tool points to `AGENTS.md`
-6. Remove or merge duplicated logic
-7. Keep responsibility boundaries explicit
+### Scope Boundaries
 
-### Output by Project Size
-
-Follow the project size guidelines defined in `MANIFEST.md` (`# Project Size Guidelines`).
-Do not force a large-project architecture onto a small repo.
+If multiple AI tools are detected but the user selected only some of them:
+- update only the selected tools
+- do not silently rewrite unselected tool entrypoints
+- if stale unselected tool files remain, ask whether to remove or neutralize them
 
 ---
 
@@ -257,7 +273,7 @@ When composition is complete, provide:
 - what decisions were made
 
 ### 2. Target Architecture
-- what files now exist or were created
+- what files now exist
 - what each file is responsible for
 
 ### 3. Change Summary
@@ -265,7 +281,7 @@ When composition is complete, provide:
 - what was updated
 - what was removed or merged
 
-### 4. Remaining Trade-offs
+### 4. Remaining Trade-Offs
 - what is intentionally kept simple
 - what can be added later if the project grows
 
@@ -274,12 +290,11 @@ When composition is complete, provide:
 ## Quality Bar
 
 The final system must:
-- align with `MANIFEST.md` fully
-- be project-specific, not generic filler
-- be as small as possible, but complete
-- avoid unnecessary abstraction
+- align with `MANIFEST.md`
+- be project-specific rather than generic
+- stand on its own without requiring `02_review.md` to rescue obvious flaws
 - avoid duplicated rules
-- be understandable from `AGENTS.md` alone
-- derive mandatory skills from the actual protocol set, not from a hardcoded list
-
-If the project does not justify complexity → explicitly keep it simple.
+- avoid unnecessary abstraction
+- preserve good existing project capabilities where possible
+- keep routing centralized in the correct layer
+- derive capabilities from protocol metadata rather than a hardcoded list
