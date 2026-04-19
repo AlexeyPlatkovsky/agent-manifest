@@ -1,184 +1,129 @@
 ---
-version: 1.2.2
+version: 1.3.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
 
 # AI Instruction Framework
 
-A portable, reusable system for designing, building, and auditing AI instruction architectures across any project.
-
-Suited for open source projects and small-to-medium teams who want predictable, maintainable AI behavior without over-engineering.
+A framework for building and reviewing AI instruction systems that stay minimal, deterministic, and adaptable to real projects.
 
 ---
 
-## What This Is
+## What This Repository Contains
 
-Most projects that use AI tools end up with scattered, inconsistent, duplicated instructions. This framework provides a principled way to design your AI instruction system from the ground up — or audit and fix an existing one.
-
-The framework is built around one canonical document (`MANIFEST.md`), one canonical operational entry point (`AGENTS.md` in the target project), and three sequential prompts that guide you through creation, expansion, and validation.
-
----
-
-## Files in This Folder
-
-| File | Role |
-|------|------|
-| `MANIFEST.md` | The canonical source of truth. Defines all principles, rules, and structural requirements for any AI instruction system. |
-| `protocols/_README.md` | Index of canonical protocols and how to treat them. Summary only, never a second source of truth. |
-| `protocols/brainstorm.md` | Canonical definition of brainstorming behavior. Referenced by prompts and skills — never duplicated. |
-| `protocols/task_complete.md` | Canonical definition of task completion behavior. Referenced by the task-complete skill and review logic — never duplicated. |
-| `protocols/manager.md` | Canonical definition of manager behavior for medium and large projects. Referenced by the manager skill — never duplicated. |
-| `01_initial.md` | Phase 1 prompt. Builds a minimal viable instruction set for your project from scratch or adjusts an existing one. |
-| `02_review.md` | Phase 2 prompt. Audits your instruction system for compliance with MANIFEST principles. |
-| `03_evolution.md` | Phase 3 prompt. Expands your instruction system based on your team's real workflows and daily routines. |
+- `MANIFEST.md`: the canonical framework contract
+- `protocols/_README.md`: protocol index and usage notes
+- `protocols/*.md`: canonical protocol definitions used by the prompts
+- `01_initial.md`: builds or adjusts a baseline instruction system
+- `02_review.md`: audits an instruction system against the framework
+- `03_evolution.md`: expands a correct baseline around real team habits
 
 ---
 
-## How to Use
+## Core Model
 
-### Prerequisites
+This framework now supports two root-contract modes:
 
-These prompts are designed to be used inside an AI chat session (Claude, Cursor, Codex, or any capable AI assistant).
+- Single-tool projects: the selected AI tool's official native entrypoint may hold the full project contract.
+- Multi-tool or AI-agnostic projects: `AGENTS.md` is the canonical root contract, and tool-specific files are thin adapters.
 
-All files in this folder must be provided to the AI at the start of each session. The prompts assume `MANIFEST.md`, `protocols/_README.md`, and the applicable protocol files under `protocols/` are available in context.
+For multi-tool shared storage, the default layout is:
+- `.ai/skills`
+- `.ai/pipelines`
+- `.ai/agents`
+- `.ai/docs`
 
-### The Pipeline
-
-The three prompts are designed to be used **in order**. Each phase builds on the previous one.
-
----
-
-#### Step 1 — Build (`01_initial.md`)
-
-**When:** Starting a new project, or setting up AI instructions for the first time.
-
-**What it does:**
-- Reads your repository to understand the project
-- Identifies your tech stack, scale, and existing instruction files
-- Asks the two mandatory setup questions first: intended project size and AI tools in use
-- Asks any additional targeted gap-filling questions one at a time
-- Produces a minimal, correct instruction set aligned with MANIFEST
-- Derives mandatory skills from the protocol layer rather than from a hardcoded protocol list
-- Wires every supported AI tool to `AGENTS.md`
-- Generates mandatory routing and completion gates in `AGENTS.md`
-
-**Goal:** The smallest coherent instruction system that fits your project today.
-
-**How to run:**
-1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/_README.md`, all canonical protocol files under `protocols/`, and `01_initial.md`
-3. Provide access to your repository (paste key files or use an IDE integration)
-4. Follow the AI's phases: Inventory → Discussion → Composition
+Project skills are standalone project artifacts.
+They are derived from framework protocols during composition, but they must not reference framework protocol files at runtime.
 
 ---
 
-#### Step 2 — Review (`02_review.md`)
+## Protocol Metadata
 
-**When:** After building your initial instruction set, or after any significant change.
+Protocol frontmatter is authoritative for derivation and review.
 
-**What it does:**
-- Audits your entire instruction system against MANIFEST principles
-- Produces a compliance score and violations list
-- Asks clarifying questions only when genuinely ambiguous
-- Verifies that routing and completion gates are mandatory rather than descriptive
-- Verifies that mandatory skills are derived from the applicable protocols rather than from stale assumptions
-- Verifies that tool-specific AI files still route to `AGENTS.md` and are not stale
-- Produces a minimal fix plan — not a full redesign
+Each protocol declares:
+- `implementation: mandatory | optional`
+- `applies_to: [small, medium, large]`
 
-**Goal:** Confidence that your instruction system is correct, minimal, and non-duplicated.
-
-**How to run:**
-1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/_README.md`, all canonical protocol files under `protocols/`, and `02_review.md`
-3. Provide your full instruction system (AGENTS.md, all skills, workflows, agents)
-4. Follow the AI's phases: Audit → Clarification → Final Validation
+In the bundled protocol set:
+- `brainstorm` is mandatory for all project sizes
+- `task-complete` is mandatory for all project sizes
+- `manager` is mandatory for medium and large projects
 
 ---
 
-#### Step 3 — Evolve (`03_evolution.md`)
+## How To Use The Prompts
 
-**When:** Your project has grown, your team has expanded, or your workflows have matured beyond the initial setup.
+### `01_initial.md`
 
-**What it does:**
-- Starts with a free-form conversation about your team's daily routines and workflows
-- Identifies what skills, agents, and workflows would genuinely help
-- Proposes a complete set of additions at once
-- You review and approve before anything is created
+Use this when starting from scratch or when refactoring an existing instruction system.
 
-**Goal:** A comprehensive instruction system built from real usage patterns, not assumptions.
+What it does:
+- inventories the repository
+- runs a structured discussion for unresolved design choices
+- derives required capabilities from protocol metadata
+- preserves good existing capability names when they already satisfy the framework
+- asks before structural refactors such as splits, moves, merges, or deletions
 
-**How to run:**
-1. Open a new AI session
-2. Provide: `MANIFEST.md`, `protocols/_README.md`, all canonical protocol files under `protocols/`, and `03_evolution.md`
-3. Provide your current instruction files (AGENTS.md, skills, workflows)
-4. Be ready to describe your team's actual daily routines in conversation
+### `02_review.md`
 
----
+Use this after significant instruction changes or when you want a compliance audit.
 
-## Key Principles (Summary)
+What it does:
+- validates the correct root-contract model
+- checks routing gates, duplication, and responsibility boundaries
+- verifies protocol coverage from structured metadata
+- produces a minimal fix plan before any implementation
 
-The full philosophy is in `MANIFEST.md`. The short version:
+### `03_evolution.md`
 
-- **Minimal context** — only load what's needed, when it's needed
-- **No duplication** — every rule exists in exactly one place
-- **Separation of concerns** — policy in AGENTS.md, execution in skills/workflows
-- **Single canonical root** — every AI tool must ultimately defer to `AGENTS.md`
-- **Progressive complexity** — don't start with subagents if a skill will do
-- **Protocol-driven capability derivation** — mandatory skills come from applicable protocols, not from a hardcoded prompt list
-- **Mandatory routing gates** — non-trivial work must be blocked until the named routing capability is loaded
-- **Brainstorm skill is mandatory** — every project must have one, following `protocols/brainstorm.md`
-- **Task-complete skill is mandatory for non-trivial work** — every project must have one, following `protocols/task_complete.md`
-- **Manager skill is mandatory for medium and large projects** — it must follow `protocols/manager.md`
+Use this only after a valid baseline exists.
+
+What it does:
+- learns real recurring work from the user
+- proposes new skills, pipelines, agents, and docs
+- keeps additions grounded in actual usage rather than theory
 
 ---
 
-## Typical Project Outcomes
+## Typical Outcomes
 
-**Small project (solo or 2–3 contributors):**
-- `AGENTS.md`
-- 2–4 skills, including the ones implied by small-project protocols
-- In the current bundled framework: `brainstorm` and `task-complete`
-- No workflows, no subagents
+### Small Project
 
-**Medium project (active team, multiple domains):**
-- `AGENTS.md`
-- Skills for each repeated workflow
-- 1–2 workflows for non-trivial tasks
-- Explicit routing gate for non-trivial tasks
-- Protocol-derived mandatory skills for medium projects
-- In the current bundled framework: `brainstorm`, `task-complete`, and `manager`
+- minimal root contract
+- mandatory protocol-derived skills
+- no reference docs by default
+- no manager by default
+- no agents by default
 
-**Large project (complex, multi-domain, many contributors):**
-- `AGENTS.md`
-- Protocol-derived mandatory skills for large projects
-- In the current bundled framework: `brainstorm`, `task-complete`, and `manager`
-- Explicit routing gate for non-trivial tasks
-- Domain-specific skills and workflows
-- Selective subagents
-- Reference docs for architecture and conventions
+### Medium Project
 
----
+- manager-equivalent routing capability
+- at least one pipeline
+- reference docs: `architecture.md`, `conventions.md`, `commands.md`
+- explicit validation on every non-trivial pipeline
 
-## When to Re-run Each Prompt
+### Large Project
 
-| Trigger | Use |
-|---------|-----|
-| Starting from scratch | `01_initial.md` |
-| Adjusting existing instructions | `01_initial.md` |
-| After any major instruction change | `02_review.md` |
-| Periodic health check | `02_review.md` |
-| MANIFEST was updated | `02_review.md` |
-| Project scaled up significantly | `03_evolution.md` |
-| Team workflows have matured | `03_evolution.md` |
+- manager-equivalent routing capability
+- multiple pipelines as needed
+- reference docs: `architecture.md`, `conventions.md`, `commands.md`
+- selective agents when context isolation is clearly justified
 
 ---
 
-## Contributing
+## Operating Rules
 
-If you improve MANIFEST.md, update it first — then propagate changes to the prompts.
-Never update a prompt to work around a MANIFEST principle. Update MANIFEST first.
+- Keep instruction files near 150 lines when possible without harming quality.
+- Keep execution skills isolated from orchestration.
+- Use `pipeline` terminology consistently.
+- Do not duplicate rules across root contracts, skills, pipelines, or docs.
+- Do not perform structural refactors silently.
+
+---
 
 ## License
-©Alexey Platkovsky. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-You may use, share, and adapt this work for any purpose — including commercial — as long as you credit the original author and link to this repository.
+
+© Alexey Platkovsky. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
