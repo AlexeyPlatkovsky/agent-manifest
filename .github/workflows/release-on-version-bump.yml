@@ -72,13 +72,32 @@ jobs:
           echo "release=$release" >> "$GITHUB_OUTPUT"
           echo "tag=v$current" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare archived docs
+      - name: Prepare curated release assets
         if: steps.decide.outputs.release == 'true'
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p release-artifacts
-          cp MANIFEST.md "release-artifacts/MANIFEST-${{ steps.versions.outputs.current_version }}.md"
-          tar -czf "release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}.tar.gz" MANIFEST.md
+          prefix="agent-manifest-${{ steps.versions.outputs.current_version }}/"
+          archive_base="release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}"
+
+          archive_paths=(
+            README.md
+            MANIFEST.md
+            01_initial.md
+            02_review.md
+            03_evolution.md
+            protocols
+          )
+
+          for path in "${archive_paths[@]}"; do
+            git ls-tree -d --name-only HEAD "$path" > /dev/null 2>&1 || \
+            git ls-files --error-unmatch "$path" > /dev/null 2>&1 || \
+            { echo "ERROR: '$path' not found in HEAD" >&2; exit 1; }
+          done
+
+          git archive --format=tar.gz --prefix="$prefix" --output="${archive_base}.tar.gz" HEAD "${archive_paths[@]}"
+          git archive --format=zip    --prefix="$prefix" --output="${archive_base}.zip"    HEAD "${archive_paths[@]}"
 
       - name: Create Git tag
         if: steps.decide.outputs.release == 'true'
@@ -96,5 +115,5 @@ jobs:
           tag_name: ${{ steps.decide.outputs.tag }}
           generate_release_notes: true
           files: |
-            release-artifacts/MANIFEST-${{ steps.versions.outputs.current_version }}.md
             release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}.tar.gz
+            release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}.zip
