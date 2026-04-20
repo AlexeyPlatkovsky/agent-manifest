@@ -18,7 +18,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Read current and previous versions
         id: versions
@@ -87,6 +88,7 @@ jobs:
             01_initial.md
             02_review.md
             03_evolution.md
+            04_tool_integration.md
             protocols
           )
 
@@ -98,6 +100,26 @@ jobs:
 
           git archive --format=tar.gz --prefix="$prefix" --output="${archive_base}.tar.gz" HEAD "${archive_paths[@]}"
           git archive --format=zip    --prefix="$prefix" --output="${archive_base}.zip"    HEAD "${archive_paths[@]}"
+
+      - name: Build release notes from commit log
+        if: steps.decide.outputs.release == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          prev_tag=$(git tag --list 'v*' --sort=-v:refname | head -n1 || true)
+          if [ -n "$prev_tag" ]; then
+            range="${prev_tag}..HEAD"
+            header="## Changes since ${prev_tag}"
+          else
+            range="HEAD"
+            header="## Changes"
+          fi
+          {
+            echo "$header"
+            echo
+            git log --no-merges --pretty=format:'- %s (%h)' "$range"
+            echo
+          } > release-notes.md
 
       - name: Create Git tag
         if: steps.decide.outputs.release == 'true'
@@ -113,7 +135,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.decide.outputs.tag }}
-          generate_release_notes: true
+          body_path: release-notes.md
           files: |
             release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}.tar.gz
             release-artifacts/agent-manifest-${{ steps.versions.outputs.current_version }}.zip
