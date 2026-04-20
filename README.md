@@ -1,5 +1,5 @@
 ---
-version: 1.4.0
+version: 1.4.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -8,7 +8,7 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 
 The Agent Manifesto is a portable framework designed to organize and streamline AI instruction systems, preventing the "messy" complexity that often arises in growing projects. It operates through a three-stage process: **initial builds** to establish a solid foundation, **system audits** for validation and compliance, and **evolutionary updates** that adapt to a team’s specific habits. T
 
-he framework emphasizes minimalism and logic, recommending that instruction files remain around 150 lines to ensure clarity and performance. It is supporting both single-tool and multi-tool environments. By centralizing core rules and separating execution from orchestration, the manifesto ensures that AI agents remain consistent and manageable over time. Ultimately, this resource provides a structured blueprint for developers to build sustainable, future-proof AI workflows.
+The framework emphasizes minimalism and logic, recommending that instruction files remain around 150 lines to ensure clarity and performance. It is supporting both single-tool and multi-tool environments. By centralizing core rules and separating execution from orchestration, the manifesto ensures that AI agents remain consistent and manageable over time. Ultimately, this resource provides a structured blueprint for developers to build sustainable, future-proof AI workflows.
 
 ---
 
