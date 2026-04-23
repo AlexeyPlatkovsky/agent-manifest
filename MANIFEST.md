@@ -30,6 +30,7 @@ Everything else must be:
 - on-demand
 - explicitly invoked
 
+
 ## 2. Separate Policy from Execution
 
 Policy defines:
@@ -90,7 +91,7 @@ They must not contain manager handoff text, stage metadata, or routing to other 
 
 Implementation must respect the same boundaries:
 - touch only files required by the task
-- do not improve anything that doesn't need for a task opportunistically
+- do not improve anything unrelated to the task opportunistically
 - do not refactor unrelated areas
 - clean up only unused items introduced by the current change
 
@@ -161,7 +162,6 @@ When asking, explain:
 - why the change is needed
 - what the safe target state would be
 
-
 ---
 
 # Root Contract Rules
@@ -190,13 +190,7 @@ For shared storage in this mode, use:
 - `.ai/agents`
 - `.ai/docs`
 
-The framework-standard skill format in this mode is:
-- `.ai/skills/<skill_name>/SKILL.md`
-
-Framework-standard skills must use markdown with Claude-style YAML frontmatter.
-At minimum, the frontmatter must include:
-- `name`
-- `description`
+The framework-standard skill format in this mode is `.ai/skills/<skill_name>/SKILL.md` using markdown with Claude-style YAML frontmatter. At minimum, the frontmatter must include `name` and `description`.
 
 If a project already stores capabilities elsewhere, migration is a structural refactor and requires user approval.
 
@@ -233,18 +227,13 @@ If the naming convention is unclear or conflicts with framework defaults, ask th
 
 # Protocol Contract
 
-Protocols in `protocols/` are canonical framework inputs.
-They are not project runtime files.
-
-Project skills must be generated from protocol requirements.
-They must not depend on protocol files or framework paths at runtime.
+Protocols in `protocols/` are canonical framework inputs. They are not project runtime files. Project skills must be generated from protocol requirements and must not depend on protocol files or framework paths at runtime.
 
 Every protocol must declare structured frontmatter:
 - `implementation: mandatory | optional`
 - `applies_to: [small, medium, large]`
 
-Protocol frontmatter is authoritative for derivation and review.
-Prompt logic must not infer applicability from prose when metadata is present.
+Protocol frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
 
 Each protocol body must still define:
 - purpose
@@ -252,15 +241,13 @@ Each protocol body must still define:
 - allowed project-specific adaptations
 - output contracts, when applicable
 
----
-
-# Protocol-Derived Capability Rules
+## Capability Derivation
 
 Capability derivation must come from canonical protocol metadata, not from memorized protocol names or hardcoded prompt logic.
 
 Rules:
 - only protocols applicable to the confirmed project size may require implementation
-- `protocols/_README.md` is informational and must not participate in capability derivation
+- `protocols/_README.md` is an index of available protocols and must not participate in capability derivation
 - protocols marked `implementation: mandatory` define required project capabilities for applicable project sizes
 - protocols marked `implementation: optional` may be implemented only when the project genuinely needs them
 
@@ -270,9 +257,7 @@ Generated project skills must:
 - include minimal project-specific adaptation
 - avoid references to framework files, protocol files, or framework-only paths
 
-For multi-tool or AI-agnostic projects, generated project skills must use the framework-standard skill format:
-- `.ai/skills/<skill_name>/SKILL.md`
-- markdown body with Claude-style YAML frontmatter including at least `name` and `description`
+For multi-tool or AI-agnostic projects, generated project skills must use the framework-standard skill format defined in the Root Contract Rules above.
 
 ---
 
@@ -287,8 +272,6 @@ Rules:
 - no orchestration logic
 - no cross-skill routing
 - no duplicated root policy
-
-For multi-tool or AI-agnostic projects, each skill lives in its own directory as `SKILL.md` using the framework-standard frontmatter.
 
 ## Pipelines
 
@@ -332,8 +315,7 @@ Execution expectation:
 - non-trivial + high risk: pipeline plus stronger review
 - system-level: strongest available routing path
 
-This matrix is not a table to copy into the root contract.
-The root contract must translate it into mandatory gate language.
+Translate this matrix into mandatory gate language in the root contract — do not copy the matrix itself.
 
 ---
 
@@ -362,7 +344,7 @@ Defaults:
 - no pipelines by default unless the project clearly justifies them
 - mandatory skills from applicable protocols still apply
 
-## Medium
+## Medium and Large
 
 Must include:
 - protocol-derived mandatory skills
@@ -371,20 +353,10 @@ Must include:
 - explicit validation for every non-trivial pipeline
 - reference docs: `architecture.md`, `conventions.md`, `commands.md`
 
-Additional docs may be added when reusable project knowledge justifies them.
-Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
-
-## Large
-
-Must include:
-- protocol-derived mandatory skills
-- a manager-equivalent routing capability
-- pipelines
+Large projects additionally require:
 - risk-based routing
-- explicit validation for every non-trivial pipeline
-- reference docs: `architecture.md`, `conventions.md`, `commands.md`
 
-Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
+Additional docs may be added when reusable project knowledge justifies them. Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
 
 ---
 
