@@ -1,5 +1,5 @@
 ---
-version: 1.5.1
+version: 1.5.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -88,16 +88,27 @@ Examples:
 Execution skills must stay isolated.
 They must not contain manager handoff text, stage metadata, or routing to other skills.
 
+Implementation must respect the same boundaries:
+- touch only files required by the task
+- do not improve anything that doesn't need for a task opportunistically
+- do not refactor unrelated areas
+- clean up only unused items introduced by the current change
+
 ## 6. Deterministic Over Implicit
 
 Critical behavior must be explicit.
+
+Before non-trivial implementation:
+- state assumptions explicitly
+- surface ambiguity instead of guessing
+- define success criteria and intended verification
 
 Avoid:
 - "AI will figure it out"
 - descriptive routing without a stop gate
 - implied validation or completion behavior
 
-## 7. Optimize for Real Projects
+## 7. Optimize for Real, Minimal Change
 
 Do not build for a future the repository does not justify.
 
@@ -105,6 +116,13 @@ Prefer:
 - reusing good existing project capabilities
 - preserving existing naming when it is already coherent
 - creating only artifacts the current project actually needs
+- making the smallest sufficient change
+
+Avoid:
+- speculative features
+- single-use abstractions
+- configurability that was not requested
+- changes that cannot be traced directly to the user's request
 
 ## 8. Routing Rules Must Be Mandatory Gates
 
@@ -127,20 +145,21 @@ Do not sacrifice clarity, correctness, or single responsibility just to force th
 
 If a file grows because it is doing too many jobs, split it rather than letting it expand indefinitely.
 
-## 10. Ask Before Structural Refactors
+## 10. Ask Before Risky Changes
 
-If compliance requires a structural refactor, stop and ask the user before changing it.
+If compliance or implementation requires a risky change, stop and ask the user before changing it.
 
-Structural refactors include:
+Risky changes include:
 - moving capabilities to a new directory
 - splitting a monolithic file
 - merging or deleting duplicated artifacts
 - renaming or replacing existing capabilities
+- choosing between multiple valid implementation contracts
 
 When asking, explain:
 - what should change
-- why the current structure violates the framework
-- what the target structure would be
+- why the change is needed
+- what the safe target state would be
 
 
 ---
@@ -375,6 +394,6 @@ If a proposed change:
 - adds unnecessary always-loaded context
 - duplicates an existing rule
 - introduces orchestration where direct execution would suffice
-- or forces a structural refactor without user approval
+- or forces a risky change without user approval
 
 then it must be rejected, deferred, or redesigned.

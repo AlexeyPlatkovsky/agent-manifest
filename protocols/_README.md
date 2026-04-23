@@ -1,5 +1,5 @@
 ---
-version: 1.5.1
+version: 1.5.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/_README.md
 ---

@@ -1,5 +1,5 @@
 ---
-version: 1.5.0
+version: 1.5.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -74,7 +74,7 @@ What it does:
 - runs a structured discussion for unresolved design choices
 - derives required capabilities from protocol metadata
 - preserves good existing capability names when they already satisfy the framework
-- asks before structural refactors such as splits, moves, merges, or deletions
+- asks before risky changes such as splits, moves, merges, deletions, or contract choices
 
 ### `02_review.md`
 
@@ -136,10 +136,11 @@ What it does:
 ## Operating Rules
 
 - Keep instruction files near 150 lines when possible without harming quality.
+- Prefer minimal, surgical changes that trace directly to the user's request.
 - Keep execution skills isolated from orchestration.
 - Use `pipeline` terminology consistently.
 - Do not duplicate rules across root contracts, skills, pipelines, or docs.
-- Do not perform structural refactors silently.
+- Do not perform risky changes silently.
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-version: 1.5.1
+version: 1.5.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -202,7 +202,7 @@ Do not mix clarification with fixes.
 Produce:
 - final verdict: compliant, partially compliant, or non-compliant
 - the minimum fix plan required for compliance
-- which issues are structural refactors that require user approval
+- which issues are risky changes that require user approval
 
 Do not implement until the user explicitly asks.
 

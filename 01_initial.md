@@ -1,5 +1,5 @@
 ---
-version: 1.5.1
+version: 1.5.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
 ---
@@ -113,7 +113,7 @@ Explicitly identify:
 - duplicated skills or near-duplicate names
 - monolithic pipeline registries that would need splitting
 - existing capabilities that may already satisfy a required protocol
-- any structural refactor that would require user approval before implementation
+- any risky change that would require user approval before implementation
 
 ---
 
@@ -218,9 +218,9 @@ For single-tool projects:
 - use the tool's native structure for supporting artifacts by default
 - do not create `AGENTS.md` unless the user explicitly asked for AI-agnostic or multi-tool structure
 
-### Structural Refactor Safety
+### Risky Change Safety
 
-Before any structural refactor, stop and ask the user.
+Before any risky change, stop and ask the user.
 
 This includes:
 - splitting monolithic pipeline files
@@ -228,11 +228,12 @@ This includes:
 - renaming capabilities
 - merging or deleting duplicated artifacts
 - replacing existing tool entrypoints
+- choosing between multiple valid implementation contracts
 
 When asking, explain:
 - what should change
 - why it is needed
-- what the compliant target structure would be
+- what the compliant target state would be
 
 ### Pipelines
 
