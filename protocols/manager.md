@@ -1,18 +1,18 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/manager.md
 implementation: mandatory
-applies_to:
-  - medium
-  - large
+requires_when:
+  - routing must choose between multiple skills, pipelines, or agents
+  - validation and completion enforcement should stay centralized
 ---
 
 # manager.md
 
 ## Purpose
 
-This protocol defines canonical centralized routing behavior for medium and large projects.
+This protocol defines canonical centralized routing behavior for projects that need a manager-equivalent routing capability.
 
 It is a framework input.
 Project skills derived from it must be standalone project artifacts.
@@ -36,14 +36,13 @@ Projects may adapt the skill to repository-specific capability names and local p
 # When Manager Applies
 
 The manager-equivalent applies when:
-- the project is medium or large
 - a task is non-trivial
 - routing must choose between multiple skills, pipelines, or agents
 - validation and completion enforcement should stay centralized
 
 It does not apply:
 - to trivial tasks
-- to small projects that still fit direct routing
+- to projects that still fit direct routing
 - to purely factual questions with no execution path
 
 ---

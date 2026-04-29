@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - MANIFEST.md
+      - IMPLEMENTATION.md
       - README.md
-      - 01_initial.md
+      - 00_project_profile.md
+      - 01_initial_composition.md
       - 02_review.md
-      - 03_evolution.md
-      - 04_tool_integration.md
+      - 03_capability_expansion.md
+      - 04_tool_adoption.md
       - protocols/*.md
 
 permissions:
@@ -86,10 +88,12 @@ jobs:
           archive_paths=(
             README.md
             MANIFEST.md
-            01_initial.md
+            IMPLEMENTATION.md
+            00_project_profile.md
+            01_initial_composition.md
             02_review.md
-            03_evolution.md
-            04_tool_integration.md
+            03_capability_expansion.md
+            04_tool_adoption.md
             protocols
           )
 

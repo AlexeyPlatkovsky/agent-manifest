@@ -1,5 +1,5 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -8,364 +8,189 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 
 ## Purpose
 
-This document defines the canonical rules for designing, reviewing, and evolving AI instruction systems.
+This document defines what the agent-manifest framework values and what must be true of a well-designed AI instruction system.
 
-It is framework-level guidance.
-It is not part of the generated project runtime.
-
-The framework exists to answer one question:
-
-> How should an AI instruction system stay minimal, predictable, and scalable without wasting context?
+It does not define file layouts, derivation rules, or runtime mechanics. For how these principles are applied in practice, see [IMPLEMENTATION.md](IMPLEMENTATION.md).
 
 ---
 
-# Core Principles
+# Values
 
-## 1. Minimize Always-Loaded Context
+The framework values:
 
-Only the minimum required root contract should be always loaded.
+- useful context over complete context
+- clear authority over convenient duplication
+- direct execution over premature orchestration
+- explicit decisions over inferred behavior
+- current need over speculative design
+- user consent over autonomous risky change
 
-Everything else must be:
-- modular
-- on-demand
-- explicitly invoked
-
-
-## 2. Separate Policy from Execution
-
-Policy defines:
-- classification
-- routing gates
-- constraints
-- required outputs
-
-Execution defines:
-- how a skill performs a task
-- how a pipeline sequences capabilities
-
-Policy lives in the root contract:
-- `AGENTS.md` for multi-tool or AI-agnostic projects
-- the tool's native entrypoint for single-tool projects
-
-Execution lives in:
-- skills
-- pipelines
-- agents
-
-## 3. Progressive Disclosure of Complexity
-
-Escalate only when needed:
-1. direct execution
-2. skill-based execution
-3. pipeline-based execution
-4. agents or subagents
-
-Never begin at level 4 by default.
-
-## 4. No Duplication
-
-Any rule should exist only once.
-
-Allowed:
-- referencing a rule
-- centralizing a rule in the correct layer
-
-Forbidden:
-- repeating routing policy in skills
-- repeating validation rules across multiple artifacts
-- copying the same execution instructions into both a skill and a pipeline
-
-## 5. Explicit Responsibility Boundaries
-
-Each file should have one responsibility.
-
-Examples:
-- root contract: policy and routing gates
-- manager-equivalent: routing and orchestration only
-- execution skill: task execution only
-- pipeline: ordered orchestration only
-- reference doc: reusable project knowledge only
-
-Execution skills must stay isolated.
-They must not contain manager handoff text, stage metadata, or routing to other skills.
-
-Implementation must respect the same boundaries:
-- touch only files required by the task
-- do not improve anything unrelated to the task opportunistically
-- do not refactor unrelated areas
-- clean up only unused items introduced by the current change
-
-## 6. Deterministic Over Implicit
-
-Critical behavior must be explicit.
-
-Before non-trivial implementation:
-- state assumptions explicitly
-- surface ambiguity instead of guessing
-- define success criteria and intended verification
-
-Avoid:
-- "AI will figure it out"
-- descriptive routing without a stop gate
-- implied validation or completion behavior
-
-## 7. Optimize for Real, Minimal Change
-
-Do not build for a future the repository does not justify.
-
-Prefer:
-- reusing good existing project capabilities
-- preserving existing naming when it is already coherent
-- creating only artifacts the current project actually needs
-- making the smallest sufficient change
-
-Avoid:
-- speculative features
-- single-use abstractions
-- configurability that was not requested
-- changes that cannot be traced directly to the user's request
-
-## 8. Routing Rules Must Be Mandatory Gates
-
-For non-trivial tasks, the root contract must use imperative blocking language.
-
-Compliant pattern:
-- classify the task first
-- if trivial: proceed directly and state the classification
-- if non-trivial: STOP, load the concrete routing capability, and do not implement until routing resolves
-- if unsure: treat as non-trivial
-
-Routing gates must appear before the capability registry.
-
-## 9. Keep Instruction Files Compact
-
-Every instruction file should target 150 lines or fewer when possible.
-
-This is a strong target, not a hard cap.
-Do not sacrifice clarity, correctness, or single responsibility just to force the file under the line limit.
-
-If a file grows because it is doing too many jobs, split it rather than letting it expand indefinitely.
-
-## 10. Ask Before Risky Changes
-
-If compliance or implementation requires a risky change, stop and ask the user before changing it.
-
-Risky changes include:
-- moving capabilities to a new directory
-- splitting a monolithic file
-- merging or deleting duplicated artifacts
-- renaming or replacing existing capabilities
-- choosing between multiple valid implementation contracts
-
-When asking, explain:
-- what should change
-- why the change is needed
-- what the safe target state would be
+The items on the right still matter, but the items on the left matter more.
 
 ---
 
-# Root Contract Rules
+# Principles
 
-## Single-Tool Projects
+## Context And Simplicity
 
-If a project supports only one AI tool, the project's full operational contract may live directly in that tool's official native entrypoint file.
+### 1. Load Only What You Need
 
-Rules:
-- the native entrypoint must be verified against the tool's current official documentation during composition
-- the native entrypoint becomes the project's root operational contract
-- supporting artifacts should use the selected tool's native structure by default
-- `AGENTS.md` is not required in this mode
+Default context should contain only what the current work needs to begin correctly.
 
-## Multi-Tool or AI-Agnostic Projects
+**Prefer:**
+- Small always-available instructions
+- Capabilities loaded when they are relevant
+- Clear entry points into deeper guidance
 
-If a project supports multiple AI tools, or the user explicitly wants an AI-agnostic structure:
-- `AGENTS.md` is the canonical root operational contract
-- every supported tool-specific entry file must be a thin adapter
-- each adapter must instruct the tool to follow `AGENTS.md` strictly
-- no tool-specific file may become a second source of truth
-
-For shared storage in this mode, use:
-- `.ai/skills`
-- `.ai/pipelines`
-- `.ai/agents`
-- `.ai/docs`
-
-The framework-standard skill format in this mode is `.ai/skills/<skill_name>/SKILL.md` using markdown with Claude-style YAML frontmatter. At minimum, the frontmatter must include `name` and `description`.
-
-If a project already stores capabilities elsewhere, migration is a structural refactor and requires user approval.
+**Avoid:**
+- Carrying task-specific guidance everywhere
+- Adding context as a substitute for design
+- Treating more instruction as automatically safer
 
 ---
 
-# Existing Project Adaptation Rules
+### 2. Build For Now, Not For Later
 
-## Reuse Before Creating
+The system should solve the real current problem before designing for imagined futures.
 
-If an existing project capability exactly satisfies a required capability, reuse it instead of creating a new one.
+**Prefer:**
+- The smallest structure that satisfies current need
+- Generalization after the pattern is proven
+- Changes traceable to an actual requirement
 
-An exact match means:
-- the responsibility matches
-- the mandatory protocol coverage matches
-- there is no contradiction with the framework
-
-If an existing capability is only close:
-- treat it as non-equivalent
-- stop and ask the user whether to split, preserve, or replace it
-
-## Preserve Project Naming
-
-Use the project's existing capability names when they already satisfy the framework.
-
-Do not create a second near-duplicate capability just to match a canonical protocol filename.
-
-If a project-native name fulfills a protocol:
-- keep the project-native name
-- note the protocol mapping once in the root contract or review report
-
-If the naming convention is unclear or conflicts with framework defaults, ask the user.
+**Avoid:**
+- Speculative configurability
+- Single-use abstractions
+- Future-proofing without evidence
 
 ---
 
-# Protocol Contract
+### 3. Escalate Only When Justified
 
-Protocols in `protocols/` are canonical framework inputs. They are not project runtime files. Project skills must be generated from protocol requirements and must not depend on protocol files or framework paths at runtime.
+Complexity should be earned by real risk, coordination need, repetition, or scale.
 
-Every protocol must declare structured frontmatter:
-- `implementation: mandatory | optional`
-- `applies_to: [small, medium, large]`
+**Prefer:**
+- Direct handling for simple work
+- Reusable capabilities for repeated work
+- Coordination only when multiple steps or responsibilities must be managed
 
-Protocol frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
-
-Each protocol body must still define:
-- purpose
-- mandatory rules that implementations must preserve
-- allowed project-specific adaptations
-- output contracts, when applicable
-
-## Capability Derivation
-
-Capability derivation must come from canonical protocol metadata, not from memorized protocol names or hardcoded prompt logic.
-
-Rules:
-- only protocols applicable to the confirmed project size may require implementation
-- `protocols/_README.md` is an index of available protocols and must not participate in capability derivation
-- protocols marked `implementation: mandatory` define required project capabilities for applicable project sizes
-- protocols marked `implementation: optional` may be implemented only when the project genuinely needs them
-
-Generated project skills must:
-- be standalone project artifacts
-- include the protocol's mandatory behavior
-- include minimal project-specific adaptation
-- avoid references to framework files, protocol files, or framework-only paths
-
-For multi-tool or AI-agnostic projects, generated project skills must use the framework-standard skill format defined in the Root Contract Rules above.
+**Avoid:**
+- Starting with the heaviest structure available
+- Adding layers as a precaution
+- Treating complexity as evidence of quality
 
 ---
 
-# Canonical Layers
+## Authority And Structure
 
-## Skills
+### 4. Give Every Artifact One Job
 
-Skills are atomic execution capabilities.
+Every artifact should have one clear responsibility it can be judged against.
 
-Rules:
-- one responsibility
-- no orchestration logic
-- no cross-skill routing
-- no duplicated root policy
+**Prefer:**
+- Artifacts that can be described in one sentence
+- Names that reveal responsibility
+- Splitting an artifact when a second job appears
 
-## Pipelines
-
-Pipelines are ordered orchestration for non-trivial work.
-
-Rules:
-- pure sequencing only
-- reference skills or agents
-- do not redefine skill behavior
-- for medium and large projects, use one pipeline per file
-
-## Agents
-
-Agents are specialized roles used only when context isolation or specialized reasoning is clearly justified by the repository.
-
-Do not create a default agent layer without evidence of need.
-
-## Reference Docs
-
-Reference docs hold reusable project knowledge referenced by multiple skills or pipelines.
-
-They must not be always loaded.
+**Avoid:**
+- Mixed policy, procedure, and reference content
+- Broad catch-all files
+- Responsibilities that depend on reader interpretation
 
 ---
 
-# Task Classification Model
+### 5. Separate Policy From Execution
 
-Complexity:
-- trivial
-- non-trivial
+The system should distinguish decisions about what should happen from the work that makes it happen.
 
-Risk:
-- low
-- medium
-- high
-- system-level
+**Prefer:**
+- Decision rules that classify, authorize, and constrain
+- Work units that perform one kind of task
+- Explicit handoffs between decision and execution
 
-Execution expectation:
-- trivial + low risk: direct execution
-- non-trivial + low or medium risk: pipeline plus validation
-- non-trivial + high risk: pipeline plus stronger review
-- system-level: strongest available routing path
-
-Translate this matrix into mandatory gate language in the root contract — do not copy the matrix itself.
+**Avoid:**
+- Work units that decide their own routing
+- Decision rules hidden inside procedures
+- Artifacts that both govern and execute the same concern
 
 ---
 
-# Validation and Completion
+### 6. Keep One Source Of Truth
 
-Validation is mandatory for non-trivial work.
+Every rule, constraint, and definition should have one authoritative home.
 
-Rules:
-- every non-trivial pipeline must include at least one explicit validation step
-- stronger review loops apply only for higher-risk work
-- validation should be automated and repeatable where possible
-- `task-complete` is the required closure skill for non-trivial work. Its enforcement should be centralized in the routing layer, not repeated across execution skills.
+**Prefer:**
+- A single owner for each rule
+- References instead of restatement
+- Shared standards when multiple places need the same guidance
 
----
-
-# Project Size Guidelines
-
-## Small
-
-Prefer the smallest coherent system.
-
-Defaults:
-- no reference docs by default
-- no manager by default
-- no agents by default
-- no pipelines by default unless the project clearly justifies them
-- mandatory skills from applicable protocols still apply
-
-## Medium and Large
-
-Must include:
-- protocol-derived mandatory skills
-- a manager-equivalent routing capability
-- at least one pipeline
-- explicit validation for every non-trivial pipeline
-- reference docs: `architecture.md`, `conventions.md`, `commands.md`
-
-Large projects additionally require:
-- risk-based routing
-
-Additional docs may be added when reusable project knowledge justifies them. Agents should be added only where the repository shows a clear need for context isolation or specialized roles.
+**Avoid:**
+- Local copies of shared rules
+- Competing definitions of the same behavior
+- Repeating constraints across unrelated artifacts
 
 ---
 
-# Final Rule
+### 7. Respect Existing Authority
 
-If a proposed change:
-- adds unnecessary always-loaded context
-- duplicates an existing rule
-- introduces orchestration where direct execution would suffice
-- or forces a risky change without user approval
+Before creating something new, the system should identify whether an existing authority already owns the concern.
 
-then it must be rejected, deferred, or redesigned.
+**Prefer:**
+- Auditing existing sources before adding another
+- Extending the rightful owner when it still fits
+- Preserving coherent ownership and naming
+
+**Avoid:**
+- Parallel authorities for the same concern
+- Replacing something only because it is unfamiliar
+- Creating a cleaner-looking duplicate
+
+---
+
+## Control And Safety
+
+### 8. Make Behavior Explicit
+
+Assumptions, success criteria, uncertainty, and stopping conditions should be stated rather than inferred.
+
+**Prefer:**
+- Declared assumptions
+- Visible success criteria
+- Ambiguity surfaced before action
+
+**Avoid:**
+- Relying on the reader to infer intent
+- Completion behavior that is only implied
+- Soft language for hard requirements
+
+---
+
+### 9. Gates Must Actually Gate
+
+A critical decision point should be able to stop work until the required decision, condition, or approval exists.
+
+**Prefer:**
+- Blocking conditions before execution
+- Clear next steps when a gate blocks
+- Mandatory validation for critical work
+
+**Avoid:**
+- Rules that only advise
+- Gates placed after the action they control
+- Critical checks that can be skipped silently
+
+---
+
+### 10. Ask Before You Cut
+
+Changes that can lose work, disrupt users, or reshape authority should require explicit consent.
+
+**Prefer:**
+- Naming the risk before acting
+- Explaining the intended safe outcome
+- Treating consent as a requirement
+
+**Avoid:**
+- Proceeding because a change seems obvious
+- Hiding risk inside a larger change
+- Treating approval for one change as approval for related changes

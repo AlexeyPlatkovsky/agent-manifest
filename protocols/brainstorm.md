@@ -1,12 +1,11 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/brainstorm.md
 implementation: mandatory
-applies_to:
-  - small
-  - medium
-  - large
+requires_when:
+  - open design decisions with multiple valid paths
+  - clarification requires trade-off evaluation
 ---
 
 # brainstorm.md
@@ -105,7 +104,7 @@ Ask only about decisions that materially affect:
 - validation
 - structure
 - reusable documentation
-- project scale assumptions
+- capability triggers
 
 ---
 
