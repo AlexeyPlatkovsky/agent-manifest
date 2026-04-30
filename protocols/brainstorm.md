@@ -6,6 +6,7 @@ implementation: mandatory
 requires_when:
   - open design decisions with multiple valid paths
   - clarification requires trade-off evaluation
+  - setup or profile clarification requires choosing between meaningful options
 ---
 
 # brainstorm.md
@@ -40,12 +41,13 @@ Brainstorming applies when:
 - a design decision is still open
 - multiple valid approaches exist
 - trade-offs need explicit evaluation
+- setup, profile, or workflow clarification requires the user to choose between meaningful options
 - the user has not committed to a direction yet
 
 Brainstorming does not apply:
 - during execution
 - after a decision is already confirmed
-- for purely factual questions
+- for purely factual questions that do not require choosing between meaningful options
 
 ---
 
@@ -72,6 +74,8 @@ Options must be:
 State what each option optimizes for, what it sacrifices, and what risks or bottlenecks it carries.
 
 Do not present options as equally valid when they are not.
+
+For setup or profile clarification, keep trade-off notes brief and practical. Explain the likely impact of each option without expanding factual profile capture into broad design analysis.
 
 ## 4. Stop and Wait
 

@@ -35,7 +35,9 @@ Work in exactly 4 phases:
 3. Research, only when needed and approved
 4. Composition
 
-During Profile Capture, ask focused profile questions. These are not design-decision brainstorming questions, so do not force trade-off analysis for simple selectable lists.
+Before Profile Capture begins, present a short inferred inventory summary as a Markdown table. Do not begin with raw prose or a batch of questions.
+
+During Profile Capture, use `protocols/brainstorm.md` for every missing or ambiguous profile point that requires user input. Ask one question at a time, provide 2-3 concrete options, explain the practical impact of each option, stop, and wait. For factual profile fields, keep the trade-off notes brief and practical instead of turning them into broad design analysis.
 
 During Research, use external sources only when local context is insufficient and the user approves current best-practice research.
 
@@ -55,6 +57,24 @@ Identify:
 - existing `.ai/docs/project_specification.md`, if present
 
 Do not create or edit files in Phase 1.
+
+At the end of Phase 1, summarize what was inferred before asking for clarification.
+
+The summary must be:
+- short
+- table-based
+- based only on repository evidence
+- separated from the first clarification question
+
+Use this table shape:
+
+| Area | Inferred from local context | Confidence / gap |
+| --- | --- | --- |
+| Project purpose | ... | ... |
+| Authoritative sources | ... | ... |
+| AI/tool surface | ... | ... |
+| Quality workflow | ... | ... |
+| Open profile gaps | ... | ... |
 
 ---
 
@@ -83,7 +103,15 @@ Example duty options:
 - release or deployment support
 - project or domain research
 
-Use `protocols/brainstorm.md` only when a real design decision has multiple valid paths with trade-offs.
+Use `protocols/brainstorm.md` to collect profile clarification:
+- ask exactly one question per turn
+- provide 2-3 concrete options
+- allow free-form correction when the listed options do not fit
+- state the impact, trade-off, or risk of each option
+- stop and wait after the question
+- do not bundle remaining required fields into one message
+
+Do not ask the first clarification question in the same message as the inventory summary. Let the user confirm or correct the summary first, then proceed one question at a time.
 
 ---
 

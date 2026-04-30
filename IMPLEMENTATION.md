@@ -333,7 +333,7 @@ Prefer the smallest coherent system that satisfies the triggers actually present
 
 Use these triggers:
 - multiple AI tools or AI-agnostic portability need: root contract plus thin adapters
-- open design decisions with trade-offs: brainstorming capability
+- open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
 - non-trivial routed work: validation and task-complete capability
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
 - repeated multi-step workflow: pipeline

@@ -165,7 +165,7 @@ Each protocol declares:
 - `requires_when: [...]`
 
 In the bundled protocol set:
-- `brainstorm` is mandatory when open design decisions need trade-off evaluation
+- `brainstorm` is mandatory when open design decisions or setup/profile clarifications require choosing between meaningful options
 - `task-complete` is mandatory for non-trivial routed work
 - `manager` is mandatory when routing must choose between multiple capabilities or centralize validation/completion
 
@@ -176,7 +176,7 @@ In the bundled protocol set:
 The framework derives structure from concrete triggers, not broad labels.
 
 - multiple AI tools or portability need → root contract plus thin adapters
-- open design decisions → brainstorming capability
+- open design decisions or setup/profile clarification choices → brainstorming capability
 - non-trivial routed work → validation and task completion
 - routing across multiple capabilities → manager-equivalent routing
 - repeated multi-step workflow → pipeline
