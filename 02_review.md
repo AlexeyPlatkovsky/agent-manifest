@@ -14,7 +14,7 @@ Before starting, ensure the following files are available in this session:
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/` required by this framework version
 - `.ai/docs/project_specification.md`
-- the project's full instruction system: root contract, skills, pipelines, agents, rules, and docs
+- the project's full instruction system: root contract, skills, pipelines, agents, conventions, and docs
 
 If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
 
@@ -66,7 +66,7 @@ For multi-tool or AI-agnostic projects:
 - verify that supported tool-specific entry files are thin adapters to `AGENTS.md`
 - verify that shared skills use the framework-standard format `.ai/skills/<skill_name>/SKILL.md`
 - verify that each shared skill uses Claude-style YAML frontmatter with at least `name` and `description`
-- verify that shared project rules, when present, live in the project rules layer
+- verify that shared project conventions, when present, live in the project conventions layer
 
 In both cases:
 - verify that routing and capability declarations are visible from the root contract
@@ -77,7 +77,7 @@ In both cases:
 #### 1. Load Only What You Need
 
 - is the root contract minimal
-- are skills, pipelines, agents, rules, and docs on-demand only
+- are skills, pipelines, agents, conventions, and docs on-demand only
 - are tool adapters lightweight
 
 #### 2. Build For Now, Not For Later
@@ -99,7 +99,7 @@ In both cases:
 - do execution skills contain orchestration logic
 - do pipelines stay purely orchestration
 - does the manager-equivalent stay purely routing and orchestration
-- do shared rules contain standards rather than task procedures
+- do shared conventions contain standards rather than task procedures
 
 #### 5. Separate Policy From Execution
 
@@ -109,11 +109,11 @@ In both cases:
 
 #### 6. Keep One Source Of Truth
 
-Check for duplicated rules across:
+Check for duplicated behavioral requirements across:
 - root contract and skills
 - skills and pipelines
 - multiple skills
-- skills or agents and shared rules
+- skills or agents and shared conventions
 - docs and skills
 
 #### 7. Respect Existing Authority
@@ -164,15 +164,16 @@ For each required protocol, verify:
 
 Flag as a major violation if a project skill depends on framework protocol files or framework paths at runtime.
 
-### Project Rules
+### Project Conventions
 
-For each shared project rule, verify:
+For each shared project convention, verify:
 - at least two skills or agents reference it or clearly need it
-- it defines shared best-practice standards rather than one task procedure
-- referencing skills or agents do not copy the same statements locally
+- it defines shared standards rather than one task procedure
+- referencing skills or agents do not copy the same standards locally
 - it does not duplicate facts that belong in reference docs
+- in multi-tool or AI-agnostic projects, it lives under `.ai/conventions`
 
-Flag as a violation if a rule exists for one skill only.
+Flag as a violation if a convention exists for one skill only.
 
 ### Imported Capability Adoption
 
@@ -193,7 +194,7 @@ Check for:
 - stale unsupported tool entrypoints
 - oversized files that likely violate single responsibility
 - imported orchestration layers that bypass or weaken the project's canonical routing path
-- project rules that create competing authority
+- project conventions that create competing authority
 
 ### 12. Validation and Completion
 

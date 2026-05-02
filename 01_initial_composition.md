@@ -83,7 +83,7 @@ Read `.ai/docs/project_specification.md` first. Treat it as the authoritative so
 - whether `AGENTS.md` exists
 - whether native tool entrypoints exist
 - whether skills, pipelines, agents, or reference docs already exist
-- whether shared project rules already exist
+- whether shared project conventions already exist
 - whether routing logic exists
 - whether execution skills are improperly coupled to orchestration
 
@@ -102,11 +102,11 @@ Identify reusable knowledge that may justify reference docs:
 - domain context
 - repository structure
 
-Identify repeated best-practice statements that may justify shared project rules:
+Identify repeated behavior that may justify shared project conventions:
 - coding standards
-- review standards
+- work standards
 - testing standards
-- domain rules
+- domain standards
 
 Do not decide what to create yet.
 
@@ -168,7 +168,7 @@ High-impact discussion topics may include:
 - whether existing capabilities exactly satisfy required protocol-derived capabilities
 - whether pipelines are justified and which real pipeline should be formalized first
 - whether reference docs should be created
-- whether shared project rules are justified by repeated behavior across skills or agents
+- whether shared project conventions are justified by repeated behavior across skills or agents
 - whether existing files should be migrated, split, merged, or preserved
 - whether unselected AI entry files should be removed or neutralized
 
@@ -218,7 +218,7 @@ If the existing capability is only close:
 For multi-tool or AI-agnostic projects:
 - create or update `AGENTS.md`
 - create or update thin tool-specific adapters that say to follow `AGENTS.md` strictly
-- store shared capabilities under `.ai/skills`, `.ai/pipelines`, `.ai/agents`, `.ai/rules`, and `.ai/docs` unless the user explicitly chose another location
+- store shared capabilities under `.ai/skills`, `.ai/pipelines`, `.ai/agents`, `.ai/conventions`, and `.ai/docs` unless the user explicitly chose another location
 - create each shared skill as `.ai/skills/<skill_name>/SKILL.md`
 - use Claude-style YAML frontmatter in each shared skill with at least `name` and `description`
 
@@ -259,13 +259,14 @@ Rules:
 - use reference docs for facts such as architecture, commands, project context, domain vocabulary, and authoritative source locations
 - do not create reference docs by default
 
-### Project Rules
+### Project Conventions
 
 Rules:
-- create shared project rules only when at least two skills or agents need the same best-practice statements
-- store shared rules under `.ai/rules` in multi-tool or AI-agnostic projects unless the user explicitly chose another location
-- do not create a rule for a single skill only
-- reference shared rules from skills or agents instead of copying them
+- create shared project conventions only when at least two skills or agents need the same behavior
+- store shared conventions under `.ai/conventions` in multi-tool or AI-agnostic projects unless the user explicitly chose another location
+- use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`
+- do not create a convention for a single skill only
+- reference shared conventions from skills or agents instead of copying them
 
 ### Validation and Completion
 
@@ -314,7 +315,7 @@ The final system must:
 - align with `IMPLEMENTATION.md`
 - be project-specific rather than generic
 - stand on its own without requiring `02_review.md` to rescue obvious flaws
-- avoid duplicated rules
+- avoid duplicated conventions
 - avoid competing authorities
 - avoid unnecessary abstraction
 - preserve good existing project capabilities where possible

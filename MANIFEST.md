@@ -125,7 +125,7 @@ Every rule, constraint, and definition should have one authoritative home.
 - Shared standards when multiple places need the same guidance
 
 **Avoid:**
-- Local copies of shared rules
+- Local copies of shared conventions
 - Competing definitions of the same behavior
 - Repeating constraints across unrelated artifacts
 

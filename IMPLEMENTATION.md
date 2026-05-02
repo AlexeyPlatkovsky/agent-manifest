@@ -35,7 +35,7 @@ Current stages:
 - `00_project_profile.md`: create or update `.ai/docs/project_specification.md`
 - `01_initial_composition.md`: build the initial instruction system
 - `02_review.md`: audit an instruction system for compliance
-- `03_capability_expansion.md`: add justified skills, pipelines, agents, rules, or docs
+- `03_capability_expansion.md`: add justified skills, pipelines, agents, conventions, or docs
 - `04_tool_adoption.md`: adopt an external tool into an existing instruction system
 
 Stage rules:
@@ -79,9 +79,9 @@ For multi-tool or AI-agnostic projects:
 
 Shared multi-tool storage uses:
 - `.ai/agents`
+- `.ai/conventions`
 - `.ai/docs`
 - `.ai/pipelines`
-- `.ai/rules`
 - `.ai/skills`
 
 The framework-standard shared skill format is `.ai/skills/<skill_name>/SKILL.md` using markdown with Claude-style YAML frontmatter. At minimum, the frontmatter must include `name` and `description`.
@@ -119,18 +119,21 @@ Rules:
 - keep agent responsibilities distinct from skills and pipelines
 - use agents for isolation, specialization, or parallel responsibility, not decoration
 
-## Rules
+## Conventions
 
-Rules are shared best-practice standards referenced by multiple skills or agents.
+Conventions are mandatory shared standards used by multiple skills or agents.
 
 Rules:
-- create a rule only when at least two skills or agents need the same statements
-- never create a rule for one skill only
+- create a convention only when at least two skills or agents need the same behavior
+- never create a convention for one skill only
 - define how to approach a category of work, not how to perform one task
-- skills and agents reference rules instead of copying them
-- in multi-tool or AI-agnostic projects, store shared rules under `.ai/rules`
+- skills and agents reference conventions instead of copying them
+- in multi-tool or AI-agnostic projects, store shared conventions under `.ai/conventions`
+- use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`
 
-Consistency between skills is an emergent property of sharing the same rule source.
+Consistency between skills is an emergent property of sharing the same convention source.
+Common behavior must live in one place to prevent drift.
+When a skill or agent references a convention, that convention is mandatory for that skill or agent.
 
 ## Reference Docs
 
@@ -139,7 +142,7 @@ Reference docs hold reusable project knowledge.
 Rules:
 - use docs for facts such as architecture, commands, domain context, and repository structure
 - keep docs on demand, not always loaded
-- do not use docs to enforce behavior that belongs in the root contract, a skill, a pipeline, an agent, or a rule
+- do not use docs to enforce behavior that belongs in the root contract, a skill, a pipeline, an agent, or a convention
 
 ---
 
@@ -151,7 +154,7 @@ Rules:
 
 Implementation:
 - keep the root contract small and policy-focused
-- load skills, pipelines, agents, rules, and docs only when relevant
+- load skills, pipelines, agents, conventions, and docs only when relevant
 - avoid placing task-specific instructions in always-loaded files
 - split large instruction files when they are large because they have multiple jobs
 
@@ -197,7 +200,7 @@ Implementation:
 - skill: atomic task execution
 - pipeline: ordered orchestration
 - agent: specialized role or isolated context
-- rule: shared best-practice standard
+- convention: shared standard
 - reference doc: reusable project knowledge
 
 If a file grows because it is doing too many jobs, split it rather than expanding it indefinitely.
@@ -209,15 +212,15 @@ Implementation:
 - put task procedures in skills
 - put sequencing in pipelines
 - put specialized role behavior in agents
-- keep project knowledge in docs and shared best-practice standards in rules
+- keep project knowledge in docs and shared standards in conventions
 
 Execution skills must not contain manager handoff text, stage metadata, or routing to other skills.
 
 ### 6. Keep One Source Of Truth
 
 Implementation:
-- centralize each rule in the layer responsible for it
-- reference rules and docs instead of copying their text into skills or agents
+- centralize each behavioral requirement in the layer responsible for it
+- reference conventions and docs instead of copying their text into skills or agents
 - derive project capabilities from framework protocol metadata, not from memorized protocol names
 - do not let project skills depend on framework protocol files or framework-only paths at runtime
 
@@ -338,12 +341,12 @@ Use these triggers:
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
 - repeated multi-step workflow: pipeline
 - repeated task type: skill
-- repeated best-practice statements across skills or agents: project rule
+- repeated behavior across skills or agents: project convention
 - reusable project facts such as architecture, commands, domain vocabulary, or source locations: reference doc
 - context isolation or specialized reasoning need: agent
 - high-risk or system-level work: stronger review and validation gates
 
-Do not create managers, pipelines, agents, rules, or docs by default. Create them only when a concrete trigger exists.
+Do not create managers, pipelines, agents, conventions, or docs by default. Create them only when a concrete trigger exists.
 
 ---
 

@@ -126,7 +126,7 @@ Research should identify candidate practices for the user's role and recurring d
 Before writing them into the profile:
 - summarize the candidate practices
 - ask the user which ones to accept, reject, or defer
-- do not silently convert external advice into project rules
+- do not silently convert external advice into project conventions
 
 ---
 

@@ -14,7 +14,7 @@ Before starting, ensure the following files are available in this session:
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/` relevant to the current system
 - `.ai/docs/project_specification.md`
-- the current instruction system: root contract, skills, pipelines, agents, rules, and docs
+- the current instruction system: root contract, skills, pipelines, agents, conventions, and docs
 
 If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
 
@@ -55,7 +55,7 @@ During Composition, do not return to discussion.
 
 Read the current instruction system and identify:
 - what `.ai/docs/project_specification.md` says the user does most often
-- what skills, pipelines, agents, rules, and docs already exist
+- what skills, pipelines, agents, conventions, and docs already exist
 - what recurring work they already cover
 - what important recurring work is still missing
 - whether the user already named concrete additions or target responsibilities
@@ -112,7 +112,7 @@ Group proposals by type:
 1. Skills
 2. Pipelines
 3. Agents
-4. Rules
+4. Conventions
 5. Docs
 
 For each proposed addition, provide:
@@ -143,12 +143,13 @@ Rules:
 - preserve existing good artifacts unless the user approved changes
 - keep execution skills isolated from orchestration
 - update the applicable root contract and capability registry
-- create shared project rules only when at least two skills or agents need the same statements
+- create shared project conventions only when at least two skills or agents need the same behavior
 
 For single-tool projects, update the native root entrypoint.
 For multi-tool or AI-agnostic projects, update `AGENTS.md` and any selected adapters.
 Any new shared skill must use the framework-standard format `.ai/skills/<skill_name>/SKILL.md` with Claude-style YAML frontmatter including at least `name` and `description`.
-Any new shared rule in a multi-tool or AI-agnostic project should live under `.ai/rules` unless the user explicitly chose another location.
+Any new shared convention in a multi-tool or AI-agnostic project should live under `.ai/conventions` unless the user explicitly chose another location.
+Use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`.
 
 ---
 

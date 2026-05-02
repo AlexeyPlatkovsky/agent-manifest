@@ -89,7 +89,7 @@ run @03_capability_expansion.md
 
 **What happens:**
 - Learns recurring work directly from you.
-- Proposes new skills, pipelines, agents, rules, and docs grounded in actual usage.
+- Proposes new skills, pipelines, agents, conventions, and docs grounded in actual usage.
 - Materializes newly-triggered mandatory protocols as standalone skills when new capability triggers appear.
 
 **Outcome:** an instruction system that reflects how your team actually works, without speculative abstractions.
@@ -137,14 +137,20 @@ This framework supports two root-contract modes:
 
 For multi-tool shared storage, the default layout is:
 - `.ai/agents`
+- `.ai/conventions`
 - `.ai/docs`
 - `.ai/pipelines`
-- `.ai/rules`
 - `.ai/skills`
 
 Project skills are standalone project artifacts. They are derived from framework protocols during composition, but they must not reference framework protocol files at runtime.
 
-Project rules are shared best-practice standards referenced by multiple skills or agents. They belong in `.ai/rules` only when at least two skills or agents need the same statements.
+Project conventions are mandatory shared standards used by multiple skills or agents. They belong in `.ai/conventions` only when at least two skills or agents need the same behavior, so common guidance has one source of truth and does not drift.
+
+Use one file per convention area, such as:
+- `.ai/conventions/code.md`
+- `.ai/conventions/testing.md`
+- `.ai/conventions/test_coverage.md`
+- `.ai/conventions/review.md`
 
 The project profile is stored at `.ai/docs/project_specification.md`. Stages 01-04 must stop if it is missing.
 
@@ -181,7 +187,7 @@ The framework derives structure from concrete triggers, not broad labels.
 - routing across multiple capabilities → manager-equivalent routing
 - repeated multi-step workflow → pipeline
 - repeated task type → skill
-- shared standards across skills or agents → project rule
+- shared behavior across skills or agents → project convention
 - reusable project facts → reference doc
 - context isolation or specialized reasoning → agent
 
@@ -193,7 +199,7 @@ The framework derives structure from concrete triggers, not broad labels.
 - Prefer minimal, surgical changes that trace directly to the user's request.
 - Keep execution skills isolated from orchestration.
 - Use `pipeline` terminology consistently.
-- Do not duplicate rules across root contracts, skills, pipelines, agents, rules, or docs.
+- Do not duplicate behavioral requirements across root contracts, skills, pipelines, agents, conventions, or docs.
 - Do not perform risky changes silently.
 
 ---

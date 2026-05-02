@@ -14,7 +14,7 @@ Before starting, ensure the following files are available in this session:
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/` relevant to the current system
 - `.ai/docs/project_specification.md`
-- the current instruction system: root contract, skills, pipelines, agents, rules, and docs
+- the current instruction system: root contract, skills, pipelines, agents, conventions, and docs
 - the external tool being adopted: its repository, documentation, and any instruction bundle it ships
 
 If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
@@ -56,7 +56,7 @@ Read the external tool as it arrives and the current instruction system.
 Identify:
 - the tool's runtime surface: libraries, binaries, configuration files actually required to use it
 - demo or example content shipped with the tool: sample pages, sample tests, fixtures that must not enter the project
-- foreign instruction artifacts shipped with the tool: its own skills, pipelines, agents, rules, or prompt files
+- foreign instruction artifacts shipped with the tool: its own skills, pipelines, agents, conventions, rules, contracts, or prompt files
 - compilation or import integrity: missing imports, broken paths, unresolved types, peer dependencies
 - overlap with existing project capabilities: does the tool's skill system duplicate or conflict with yours
 
@@ -96,7 +96,7 @@ Rules:
 - keep execution skills isolated from orchestration
 - update the applicable root contract and capability registry with the new skills
 - for multi-tool or AI-agnostic projects, emit each translated or generated shared skill as `.ai/skills/<skill_name>/SKILL.md` with Claude-style YAML frontmatter including at least `name` and `description`
-- create shared project rules only when at least two skills or agents need the same retained tool standard
+- create shared project conventions only when at least two skills or agents need the same retained tool behavior
 
 For single-tool projects, update the native root entrypoint.
 For multi-tool or AI-agnostic projects, update `AGENTS.md` and any selected adapters.
@@ -110,7 +110,7 @@ If integration reveals that a triggered mandatory capability is missing, stop an
 Before declaring integration complete, verify:
 - demo pages, demo tests, and vendor sample fixtures are removed
 - all imports resolve and the project compiles or type-checks cleanly
-- no foreign skill, pipeline, agent, or rule file remains inside the project instruction directories
+- no foreign skill, pipeline, agent, convention, rule, or contract file remains inside the project instruction directories
 - the tool's runtime library is the only thing retained from the vendor bundle
 - the capability registry and routing layer list every new project skill
 - every new non-trivial pipeline ends with `task-complete`
