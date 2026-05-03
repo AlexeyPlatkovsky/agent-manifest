@@ -169,6 +169,7 @@ Flag as a major violation if a project skill depends on framework protocol files
 For each shared project convention, verify:
 - at least two skills or agents reference it or clearly need it
 - it defines shared standards rather than one task procedure
+- it does not classify, route, sequence, or execute work
 - referencing skills or agents do not copy the same standards locally
 - it does not duplicate facts that belong in reference docs
 - in multi-tool or AI-agnostic projects, it lives under `.ai/conventions`

@@ -265,6 +265,7 @@ Rules:
 - create shared project conventions only when at least two skills or agents need the same behavior
 - store shared conventions under `.ai/conventions` in multi-tool or AI-agnostic projects unless the user explicitly chose another location
 - use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`
+- do not use conventions to classify, route, sequence, or execute work
 - do not create a convention for a single skill only
 - reference shared conventions from skills or agents instead of copying them
 

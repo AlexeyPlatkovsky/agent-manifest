@@ -127,6 +127,7 @@ Rules:
 - create a convention only when at least two skills or agents need the same behavior
 - never create a convention for one skill only
 - define how to approach a category of work, not how to perform one task
+- do not classify, route, sequence, or execute work
 - skills and agents reference conventions instead of copying them
 - in multi-tool or AI-agnostic projects, store shared conventions under `.ai/conventions`
 - use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`
