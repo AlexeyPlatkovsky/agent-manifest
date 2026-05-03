@@ -69,11 +69,16 @@ Do not propose solutions yet.
 
 Decide how every foreign artifact maps into the project.
 
-For each foreign skill or pipeline the tool ships, choose exactly one disposition:
-- translate: create a standalone project skill that captures the tool's mandatory behavior plus minimal project-specific adaptation, then discard the foreign artifact
-- wrap: keep the foreign artifact only as a runtime library and expose it through a project skill
+For each foreign skill, pipeline, or agent the tool ships, choose exactly one disposition:
+- translate: create a standalone project capability in the correct layer with the tool's mandatory behavior plus minimal project-specific adaptation, then discard the foreign artifact
+- wrap: keep the foreign artifact only as a runtime library and expose it through a project skill or pipeline
 - reference: link it as external documentation when the behavior is not needed as a first-class capability
 - discard: remove entirely when the project has no real use for it
+
+For each foreign convention, rule, contract, or prompt file, choose exactly one disposition:
+- translate: create a project convention when at least two skills or agents need the same retained behavior
+- reference: link it as external documentation when it is useful context but not binding project behavior
+- discard: remove it when it is unused, duplicative, demo-only, or conflicts with the host instruction system
 
 For demo and example content, the only valid disposition is discard, unless the user explicitly asks to keep specific fixtures.
 
@@ -90,10 +95,10 @@ Begin only after explicit user approval of the reconciliation table.
 Apply `IMPLEMENTATION.md` directly: §Project Landscape, §Principle Implementation, and §Framework Protocol Contract.
 
 Stage-specific rules:
-- translate foreign skills into standalone project artifacts under the project's existing skill layer
-- do not keep the tool's foreign skill bundle inside the project instruction system
+- translate retained foreign capabilities into standalone project artifacts under the correct project layer
+- do not keep the tool's foreign instruction bundle inside the project instruction system
 - route new capabilities through the existing manager-equivalent when the project has one
-- update the applicable root contract and capability registry with the new skills
+- update the applicable root contract and capability registry with each new capability
 
 If integration reveals that a triggered mandatory capability is missing, stop and require `03_capability_expansion.md` to run first.
 
@@ -104,9 +109,9 @@ If integration reveals that a triggered mandatory capability is missing, stop an
 Before declaring integration complete, verify:
 - demo pages, demo tests, and vendor sample fixtures are removed
 - all imports resolve and the project compiles or type-checks cleanly
-- no foreign skill, pipeline, agent, convention, rule, or contract file remains inside the project instruction directories
+- no foreign skill, pipeline, agent, convention, rule, contract, or prompt file remains inside the project instruction directories
 - the tool's runtime library is the only thing retained from the vendor bundle
-- the capability registry and routing layer list every new project skill
+- the capability registry and routing layer list every new project capability
 - every new non-trivial pipeline ends with `task-complete`
 
 If any check fails, fix it before reporting completion.
@@ -118,7 +123,7 @@ If any check fails, fix it before reporting completion.
 After implementation, report:
 1. what runtime surface was retained
 2. what foreign artifacts were translated, wrapped, referenced, or discarded
-3. what new project skills and pipelines were added
+3. what new project capabilities were added
 4. what was removed during cleanup
 5. remaining gaps or follow-ups
 6. compliance confirmation

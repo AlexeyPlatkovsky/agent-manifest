@@ -159,7 +159,7 @@ Implementation:
 - avoid placing task-specific instructions in always-loaded files
 - split large instruction files when they are large because they have multiple jobs
 
-The 150-line target remains a strong guideline for instruction files, not a hard cap. Do not sacrifice clarity, correctness, or single responsibility just to satisfy the target.
+The 150-line target remains a strong guideline for generated project instruction files, not a hard cap. Do not sacrifice clarity, correctness, or single responsibility just to satisfy the target.
 
 ### 2. Build For Now, Not For Later
 

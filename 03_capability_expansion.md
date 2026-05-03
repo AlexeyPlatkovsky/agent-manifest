@@ -40,10 +40,11 @@ If the user's request bundles tool adoption with capability expansion, split the
 
 ## Working Mode
 
-Work in exactly 3 phases:
+Work in exactly 4 phases:
 1. Discovery
 2. Brainstorm
 3. Proposal
+4. Composition
 
 During Brainstorm, follow `protocols/brainstorm.md`.
 During Proposal, present the full proposal at once.
