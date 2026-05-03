@@ -72,80 +72,20 @@ In both cases:
 - verify that routing and capability declarations are visible from the root contract
 - verify that execution details are delegated to skills, pipelines, and agents
 
-### Context And Simplicity
+### Principle Compliance
 
-#### 1. Load Only What You Need
+Audit against each `MANIFEST.md` principle. For each, flag concrete violations rather than restating the principle.
 
-- is the root contract minimal
-- are skills, pipelines, agents, conventions, and docs on-demand only
-- are tool adapters lightweight
-
-#### 2. Build For Now, Not For Later
-
-- does each artifact satisfy a current profile, repository, or workflow trigger
-- are speculative abstractions avoided
-- are new capabilities justified by repeated or high-risk work
-
-#### 3. Escalate Only When Justified
-
-- does the system start from direct execution and escalate only when needed
-- are pipelines and agents justified by concrete profile or repository triggers
-
-### Authority And Structure
-
-#### 4. Give Every Artifact One Job
-
-- does each file have one responsibility
-- do execution skills contain orchestration logic
-- do pipelines stay purely orchestration
-- does the manager-equivalent stay purely routing and orchestration
-- do shared conventions contain standards rather than task procedures
-
-#### 5. Separate Policy From Execution
-
-- does the root contract contain policy rather than execution logic
-- are procedures confined to skills and pipelines
-- do tool-specific files duplicate project policy
-
-#### 6. Keep One Source Of Truth
-
-Check for duplicated behavioral requirements across:
-- root contract and skills
-- skills and pipelines
-- multiple skills
-- skills or agents and shared conventions
-- docs and skills
-
-#### 7. Respect Existing Authority
-
-- are existing capabilities audited before new ones are proposed
-- are project-native names preserved when they already satisfy the framework
-- are near-duplicate authorities flagged for user decision
-
-### Control And Safety
-
-#### 8. Make Behavior Explicit
-
-- are assumptions, success criteria, and stopping conditions visible
-- are uncertainties surfaced before action
-- are validation expectations stated before implementation
-
-#### 9. Gates Must Actually Gate
-
-Check the main routing gate in the root contract:
-- is the language imperative
-- is the next concrete capability named
-- does the gate appear before capability registry
-- is trivial classification explicit
-- are validation and completion gates mandatory where required
-
-Descriptive routing remains a critical violation.
-
-#### 10. Ask Before You Cut
-
-- are risky changes blocked until explicit user consent exists
-- does the review name the risk and intended safe outcome
-- are rename, delete, merge, and authority changes treated as consent-required
+- §1 Load Only What You Need — minimal root contract; skills, pipelines, agents, conventions, and docs are on-demand; adapters are thin
+- §2 Build For Now, Not For Later — every artifact ties to a current trigger; no speculative abstractions
+- §3 Escalate Only When Justified — direct execution by default; pipelines and agents anchored to concrete triggers
+- §4 Give Every Artifact One Job — single responsibility per file; no orchestration in execution skills; conventions hold standards, not procedures
+- §5 Separate Policy From Execution — policy and routing in the root contract; procedures in skills and pipelines; adapters do not duplicate policy
+- §6 Keep One Source Of Truth — no duplicated behavioral requirements across root/skills/pipelines/conventions/docs
+- §7 Respect Existing Authority — existing capabilities audited first; project-native names preserved when they satisfy the framework; near-duplicates flagged for user decision
+- §8 Make Behavior Explicit — assumptions, success criteria, stopping conditions, and validation expectations are visible
+- §9 Gates Must Actually Gate — main routing gate uses imperative language, names the next capability, appears before the registry, classifies trivial work, and enforces validation/completion. Descriptive routing is a critical violation.
+- §10 Ask Before You Cut — risky changes (rename, delete, merge, authority shift) require explicit consent; the review names the risk and the safe target state
 
 ### Protocol Inventory and Applicability
 
@@ -178,13 +118,7 @@ Flag as a violation if a convention exists for one skill only.
 
 ### Imported Capability Adoption
 
-When the project adopted an external framework, starter kit, or reusable capability bundle, verify:
-- whether demo residue remains, such as sample pages, sample tests, placeholder fixtures, or example docs that are not justified by the host repository
-- whether the imported capability was normalized into the host project's routing model instead of bringing its own competing orchestration
-- whether imported skills, pipelines, agents, or registries conflict with the host root contract or duplicate existing project capabilities
-- whether the adopted code still compiles or typechecks in the host repository after import
-- whether exported files have the required imports and no obvious unresolved references remain
-- which concrete validation commands would prove the adoption is intact, even if those commands cannot be run during the review
+If the project adopted an external tool, framework, or starter kit, verify the cleanup conditions in `04_tool_adoption.md` §Phase 4 still hold (no demo residue, no foreign skill bundle, imports resolve, capability registry up to date).
 
 ### Structure and Refactor Risks
 
@@ -197,7 +131,7 @@ Check for:
 - imported orchestration layers that bypass or weaken the project's canonical routing path
 - project conventions that create competing authority
 
-### 12. Validation and Completion
+### Validation and Completion
 
 - does every non-trivial pipeline include explicit validation
 - is `task-complete` enforced for non-trivial work

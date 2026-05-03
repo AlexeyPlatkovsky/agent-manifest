@@ -87,19 +87,13 @@ Present the reconciliation table to the user and ask for approval before Phase 3
 
 Begin only after explicit user approval of the reconciliation table.
 
-Rules:
-- follow `MANIFEST.md` and `IMPLEMENTATION.md`
-- keep protocol-derived mandatory capabilities intact
+Apply `IMPLEMENTATION.md` directly: §Project Landscape, §Principle Implementation, and §Framework Protocol Contract.
+
+Stage-specific rules:
 - translate foreign skills into standalone project artifacts under the project's existing skill layer
 - do not keep the tool's foreign skill bundle inside the project instruction system
 - route new capabilities through the existing manager-equivalent when the project has one
-- keep execution skills isolated from orchestration
 - update the applicable root contract and capability registry with the new skills
-- for multi-tool or AI-agnostic projects, emit each translated or generated shared skill as `.ai/skills/<skill_name>/SKILL.md` with Claude-style YAML frontmatter including at least `name` and `description`
-- create shared project conventions only when at least two skills or agents need the same retained tool behavior
-
-For single-tool projects, update the native root entrypoint.
-For multi-tool or AI-agnostic projects, update `AGENTS.md` and any selected adapters.
 
 If integration reveals that a triggered mandatory capability is missing, stop and require `03_capability_expansion.md` to run first.
 

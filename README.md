@@ -128,79 +128,14 @@ run @04_tool_adoption.md
 
 ---
 
-## Core Model
+## Framework Reference
 
-This framework supports two root-contract modes:
+The framework's authoritative content lives in two files:
 
-- **Single-tool projects:** the selected AI tool's official native entrypoint may hold the full project contract.
-- **Multi-tool or AI-agnostic projects:** `AGENTS.md` is the canonical root contract, and tool-specific files are thin adapters.
+- [MANIFEST.md](MANIFEST.md) — values and principles
+- [IMPLEMENTATION.md](IMPLEMENTATION.md) — layers, gates, capability triggers, protocol contract, and operating rules
 
-For multi-tool shared storage, the default layout is:
-- `.ai/agents`
-- `.ai/conventions`
-- `.ai/docs`
-- `.ai/pipelines`
-- `.ai/skills`
-
-Project skills are standalone project artifacts. They are derived from framework protocols during composition, but they must not reference framework protocol files at runtime.
-
-Project conventions are mandatory shared standards used by multiple skills or agents. They belong in `.ai/conventions` only when at least two skills or agents need the same behavior, so common guidance has one source of truth and does not drift.
-
-Use one file per convention area, such as:
-- `.ai/conventions/code.md`
-- `.ai/conventions/testing.md`
-- `.ai/conventions/test_coverage.md`
-- `.ai/conventions/review.md`
-
-The project profile is stored at `.ai/docs/project_specification.md`. Stages 01-04 must stop if it is missing.
-
-In multi-tool or AI-agnostic projects, the framework-standard skill format is:
-- `.ai/skills/<skill_name>/SKILL.md`
-- Claude-style YAML frontmatter with at least `name` and `description`
-
-Single-tool projects should still use the selected tool's native supporting-artifact structure.
-
----
-
-## Protocol Metadata
-
-Protocol frontmatter is authoritative for derivation and review.
-
-Each protocol declares:
-- `implementation: mandatory | optional`
-- `requires_when: [...]`
-
-In the bundled protocol set:
-- `brainstorm` is mandatory when open design decisions or setup/profile clarifications require choosing between meaningful options
-- `task-complete` is mandatory for non-trivial routed work
-- `manager` is mandatory when routing must choose between multiple capabilities or centralize validation/completion
-
----
-
-## Capability Triggers
-
-The framework derives structure from concrete triggers, not broad labels.
-
-- multiple AI tools or portability need → root contract plus thin adapters
-- open design decisions or setup/profile clarification choices → brainstorming capability
-- non-trivial routed work → validation and task completion
-- routing across multiple capabilities → manager-equivalent routing
-- repeated multi-step workflow → pipeline
-- repeated task type → skill
-- shared behavior across skills or agents → project convention
-- reusable project facts → reference doc
-- context isolation or specialized reasoning → agent
-
----
-
-## Operating Rules
-
-- Keep instruction files near 150 lines when possible without harming quality.
-- Prefer minimal, surgical changes that trace directly to the user's request.
-- Keep execution skills isolated from orchestration.
-- Use `pipeline` terminology consistently.
-- Do not duplicate behavioral requirements across root contracts, skills, pipelines, agents, conventions, or docs.
-- Do not perform risky changes silently.
+Read those two files for the full model. The stage files above apply them.
 
 ---
 

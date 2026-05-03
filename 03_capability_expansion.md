@@ -136,20 +136,12 @@ Ask the user to approve, reject, or modify the proposal set before implementatio
 
 Begin only after explicit user approval.
 
-Rules:
-- follow `MANIFEST.md` and `IMPLEMENTATION.md`
-- keep protocol-derived mandatory capabilities intact
+Apply `IMPLEMENTATION.md` directly: §Project Landscape, §Principle Implementation, and §Framework Protocol Contract.
+
+Stage-specific rules:
 - if Discovery found a newly present protocol trigger, materialize every triggered protocol whose `implementation` is `mandatory` as a standalone project skill before any other addition
 - preserve existing good artifacts unless the user approved changes
-- keep execution skills isolated from orchestration
-- update the applicable root contract and capability registry
-- create shared project conventions only when at least two skills or agents need the same behavior
-
-For single-tool projects, update the native root entrypoint.
-For multi-tool or AI-agnostic projects, update `AGENTS.md` and any selected adapters.
-Any new shared skill must use the framework-standard format `.ai/skills/<skill_name>/SKILL.md` with Claude-style YAML frontmatter including at least `name` and `description`.
-Any new shared convention in a multi-tool or AI-agnostic project should live under `.ai/conventions` unless the user explicitly chose another location.
-Use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`.
+- update the applicable root contract and capability registry with each new capability
 
 ---
 
