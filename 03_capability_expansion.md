@@ -79,11 +79,7 @@ Do not reset to a broad "typical day or week" discovery prompt.
 
 Use a broad recurring-work question only when the request is intentionally open-ended and the missing capability areas are still unknown.
 
-Every Brainstorm question must follow `protocols/brainstorm.md` exactly:
-- one question at a time
-- 2-3 concrete options
-- explicit trade-offs
-- stop and wait after each question
+Every Brainstorm question must follow `protocols/brainstorm.md` exactly.
 
 Explore only areas not already covered well by the existing system, such as:
 - review habits
@@ -139,7 +135,7 @@ Ask the user to approve, reject, or modify the proposal set before implementatio
 
 Begin only after explicit user approval.
 
-Apply `IMPLEMENTATION.md` directly: §Project Landscape, §Principle Implementation, and §Framework Protocol Contract.
+Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor.
 
 Stage-specific rules:
 - if Discovery found a newly present protocol trigger, materialize every triggered protocol whose `implementation` is `mandatory` as a standalone project skill before any other addition

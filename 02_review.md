@@ -117,6 +117,16 @@ For each shared project convention, verify:
 
 Flag as a violation if a convention exists for one skill only.
 
+### Layer Purity
+
+Audit every artifact against `IMPLEMENTATION.md` §Layer Purity. Flag any cross-layer leakage as a major violation.
+
+Audit-specific red flags:
+- a pipeline whose body could be deleted without losing execution detail because the detail lives only there (the pipeline is acting as a skill)
+- a pipeline that references skills which do not exist (no callable target for the sequence)
+- a pipeline or skill that restates content already in a convention or reference doc
+- a project where pipelines exist but the skill layer is empty or near-empty — strong signal that pipelines absorbed execution
+
 ### Imported Capability Adoption
 
 If the project adopted an external tool, framework, or starter kit, verify the cleanup conditions in `04_tool_adoption.md` §Phase 4 still hold (no demo residue, no foreign skill bundle, imports resolve, capability registry up to date).
@@ -165,6 +175,7 @@ Prioritize:
 - critical routing failures
 - incorrect root contract model
 - duplicated or blurred responsibilities
+- layer purity failures (pipelines containing execution, skills sequencing siblings, conventions holding procedures, root contract executing)
 - protocol coverage failures
 - imported-framework adoption failures such as demo residue, broken compilation, or competing orchestration
 
@@ -178,13 +189,7 @@ Then list:
 
 If genuine ambiguity remains, ask only the minimum questions needed to complete the audit.
 
-Follow `protocols/brainstorm.md` exactly:
-- one question at a time
-- 2-3 options
-- explicit trade-offs
-- stop and wait
-
-Do not mix clarification with fixes.
+Follow `protocols/brainstorm.md` exactly. Do not mix clarification with fixes.
 
 ---
 

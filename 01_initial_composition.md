@@ -159,12 +159,7 @@ Do not edit or create files in Phase 1.
 
 Resolve only the high-impact decisions identified in Phase 1.
 
-Rules:
-- ask one question at a time
-- provide 2-3 concrete options
-- highlight trade-offs and risks
-- stop and wait after each question
-- never mix discussion with execution
+Follow `protocols/brainstorm.md` exactly. Never mix discussion with execution.
 
 Ask only what is actually needed to complete a correct design. Do not repeat profile questions that `.ai/docs/project_specification.md` already answers.
 
@@ -192,7 +187,7 @@ Begin only after the user confirms the decision summary.
 
 ### Composition Rules
 
-Apply `IMPLEMENTATION.md` directly: §Project Landscape (root contract, skills, pipelines, agents, conventions, reference docs), §Principle Implementation, §Framework Protocol Contract, and §Capability Triggers.
+Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor, plus §Capability Triggers for this stage.
 
 Stage-specific reminders:
 - verify the chosen tool's native entrypoint convention against current official docs during composition
@@ -200,6 +195,21 @@ Stage-specific reminders:
 - tool-specific adapters must be explicit mandatory shims, not passive references; each adapter must name the canonical root contract, require the tool to load and follow it before project work, state that the root contract wins on conflict, and stop if the root contract is unavailable
 - if repeated software task types such as feature implementation, task review, or anything else have distinct ordered steps, create separate pipelines for them instead of representing them only as skills
 - before any risky change (splitting monolithic files, moving artifacts into `.ai/`, renaming, merging, deleting, replacing tool entrypoints, choosing between multiple valid implementation contracts), stop and ask the user — name what changes, why, and the compliant target state
+
+### Layer Purity
+
+Apply `IMPLEMENTATION.md` §Layer Purity to every file written in this stage.
+
+### Skill Extraction Precondition For Pipelines
+
+A pipeline may not be written until the skills it sequences exist or are scheduled for creation in the same composition.
+
+Before authoring any pipeline:
+1. list the atomic operations it sequences
+2. resolve each operation to one of: an existing skill, a new skill to create in this composition, or a single trivial command (one line, no procedure)
+3. if an operation needs more than a one-liner and is not yet a skill, create the skill before writing the pipeline
+
+If this precondition cannot be met, the capability is not yet a pipeline — keep it as a skill or pause and ask the user.
 
 ### Protocol-Derived Capabilities
 
@@ -253,3 +263,5 @@ The final system must:
 - preserve good existing project capabilities where possible
 - keep routing centralized in the correct layer
 - derive capabilities from protocol metadata rather than a hardcoded list
+- pass the Layer Purity tests: no execution in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
+- contain no pipeline whose skills do not yet exist

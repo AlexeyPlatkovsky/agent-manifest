@@ -37,7 +37,7 @@ Work in exactly 4 phases:
 
 Before Profile Capture begins, present a short inferred inventory summary as a Markdown table. Do not begin with raw prose or a batch of questions.
 
-During Profile Capture, use `protocols/brainstorm.md` for every missing or ambiguous profile point that requires user input. Ask one question at a time, provide 2-3 concrete options, explain the practical impact of each option, stop, and wait. For factual profile fields, keep the trade-off notes brief and practical instead of turning them into broad design analysis.
+During Profile Capture, follow `protocols/brainstorm.md` for every missing or ambiguous profile point that requires user input.
 
 During Research, use external sources only when local context is insufficient and the user approves current best-practice research.
 
@@ -103,13 +103,9 @@ Example duty options:
 - release or deployment support
 - project or domain research
 
-Use `protocols/brainstorm.md` to collect profile clarification:
-- ask exactly one question per turn
-- provide 2-3 concrete options
-- allow free-form correction when the listed options do not fit
-- state the impact, trade-off, or risk of each option
-- stop and wait after the question
-- do not bundle remaining required fields into one message
+Follow `protocols/brainstorm.md` for every clarification question.
+
+Stage-specific addition: allow free-form correction when the listed options do not fit a factual profile field such as a specific role, tool name, or path.
 
 Do not ask the first clarification question in the same message as the inventory summary. Let the user confirm or correct the summary first, then proceed one question at a time.
 

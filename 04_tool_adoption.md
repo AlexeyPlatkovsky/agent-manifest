@@ -92,7 +92,7 @@ Present the reconciliation table to the user and ask for approval before Phase 3
 
 Begin only after explicit user approval of the reconciliation table.
 
-Apply `IMPLEMENTATION.md` directly: §Project Landscape, §Principle Implementation, and §Framework Protocol Contract.
+Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor.
 
 Stage-specific rules:
 - translate retained foreign capabilities into standalone project artifacts under the correct project layer

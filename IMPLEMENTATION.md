@@ -44,6 +44,30 @@ Stage rules:
 - stages apply `MANIFEST.md`, `IMPLEMENTATION.md`, framework protocols, and the project specification together
 - stage files are not project runtime artifacts
 
+## Stage Standards
+
+These standards apply to every stage. Stages declare what is stage-specific without restating these rules.
+
+### Context Required
+
+Every stage must declare a "Context Required" list naming the files it needs.
+
+If any listed file is missing, the stage must stop and ask the user to provide it.
+
+If `.ai/docs/project_specification.md` is missing, stages 01-04 must stop and require `00_project_profile.md` first.
+
+### Brainstorming
+
+When a stage uses brainstorming, it must cite `protocols/brainstorm.md` and follow it exactly. Stages must not restate brainstorm protocol rules. A stage may name only the stage-specific scope of the conversation and the topics in scope.
+
+### Composition Anchor
+
+When a stage enters a composition, implementation, or fix-application phase, it must apply this document's §Project Landscape (including §Layer Purity), §Principle Implementation, and §Framework Protocol Contract. Stage-specific composition rules supplement, not replace, these anchors.
+
+### Phase Discipline
+
+Stages must not modify files during inventory, audit, discovery, discussion, brainstorm, clarification, reconciliation, or proposal phases. File modifications belong only in the stage's composition or implementation phase, and only after explicit user approval when the stage requires it.
+
 ---
 
 # Project Landscape
@@ -159,6 +183,18 @@ Rules:
 - use docs for facts such as architecture, commands, domain context, and repository structure
 - keep docs on demand, not always loaded
 - do not use docs to enforce behavior that belongs in the root contract, a skill, a pipeline, an agent, or a convention
+
+## Layer Purity
+
+Every artifact must stay inside the responsibility boundary of its layer.
+
+Tests:
+- pipeline body = ordered references to skills, agents, or single trivial commands; no embedded execution procedure, no "how to" prose, no standards, no DSL or coding rules, no checklists that belong in a skill or convention
+- skill body = one atomic execution capability; may cite conventions and reference docs, but does not sequence sibling skills and does not restate standards already owned by a convention
+- convention body = shared standards only; no classification, routing, sequencing, or execution; no task procedure
+- root contract / manager body = routing and gates only; no execution bodies
+
+If a layer is about to absorb content that belongs elsewhere, place the content in the correct layer first. A pipeline whose body could be deleted without losing execution detail because the detail lives only there is a skill mislabeled as a pipeline.
 
 ---
 
