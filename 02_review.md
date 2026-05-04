@@ -64,6 +64,7 @@ For single-tool projects:
 For multi-tool or AI-agnostic projects:
 - verify that `AGENTS.md` exists and acts as the root operational contract
 - verify that supported tool-specific entry files are thin adapters to `AGENTS.md`
+- verify that adapters use explicit mandatory language, name the exact root contract path, require the tool to load and follow it before project work, state that `AGENTS.md` wins on conflict, and stop if it is unavailable
 - verify that shared skills use the framework-standard format `.ai/skills/<skill_name>/SKILL.md`
 - verify that each shared skill uses Claude-style YAML frontmatter with at least `name` and `description`
 - verify that shared project conventions, when present, live in the project conventions layer
@@ -125,8 +126,10 @@ If the project adopted an external tool, framework, or starter kit, verify the c
 Check for:
 - near-duplicate capabilities
 - monolithic pipeline registries
+- missing pipelines for repeated non-trivial task types with distinct steps, validation, or review gates
 - mixed AI roots
 - stale unsupported tool entrypoints
+- passive tool-specific adapters that merely point at the root contract without enforcing it
 - oversized files that likely violate single responsibility
 - imported orchestration layers that bypass or weaken the project's canonical routing path
 - project conventions that create competing authority

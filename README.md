@@ -52,6 +52,8 @@ run @01_initial_composition.md
 - It reads `.ai/docs/project_specification.md`.
 - It asks only unresolved design questions needed for composition.
 - It derives required capabilities from protocol metadata.
+- It makes tool-specific adapters explicit enough to enforce the canonical root contract.
+- It checks repeated software work such as feature implementation, code review, and code refactoring as pipeline candidates when their steps differ.
 - It preserves good existing capability names where they already satisfy the framework.
 - It asks before any risky change (splits, moves, merges, deletions, contract choices).
 

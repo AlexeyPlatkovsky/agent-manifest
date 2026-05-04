@@ -59,6 +59,7 @@ Read the current instruction system and identify:
 - what skills, pipelines, agents, conventions, and docs already exist
 - what recurring work they already cover
 - what important recurring work is still missing
+- whether any existing skill actually represents a repeated non-trivial workflow that needs a pipeline
 - whether the user already named concrete additions or target responsibilities
 - which design decisions are still genuinely open versus already decided by the user request
 - whether the current system still matches protocol requirements
@@ -127,6 +128,7 @@ For each proposed addition, provide:
 Before presenting, verify that each proposal:
 - does not duplicate an existing artifact
 - fits the correct layer
+- uses a pipeline, not only a skill, when the recurring work has distinct ordered steps, validation, or review gates
 - is justified by actual repository or user evidence
 
 Ask the user to approve, reject, or modify the proposal set before implementation.

@@ -74,8 +74,19 @@ For single-tool projects:
 For multi-tool or AI-agnostic projects:
 - `AGENTS.md` is the canonical root operational contract
 - every tool-specific entry file must be a thin adapter
-- each adapter must instruct the tool to follow `AGENTS.md` strictly
+- each adapter must explicitly instruct the tool to load and follow `AGENTS.md` before doing project work
+- each adapter must use imperative language, name the exact canonical file path, and state that `AGENTS.md` wins over the adapter if there is any conflict
+- each adapter must stop the tool if `AGENTS.md` is unavailable instead of letting the tool proceed from memory or inference
 - no tool-specific file may become a second source of truth
+
+A thin adapter is not a vague pointer. It should be short, but it must still be operationally complete for that tool. Avoid adapter language such as "see", "refer to", or "follow if needed" when the adapter is meant to impose a mandatory root contract.
+
+Minimum adapter content:
+- state that the file is only an adapter for the named tool
+- instruct the tool to read `AGENTS.md` before starting any project task
+- instruct the tool to follow every applicable rule in `AGENTS.md`
+- state that `AGENTS.md` overrides the adapter on conflict
+- require the tool to stop and ask for `AGENTS.md` if it cannot read it
 
 Shared multi-tool storage uses:
 - `.ai/agents`
@@ -109,6 +120,10 @@ Rules:
 - do not redefine skill behavior
 - include validation for non-trivial work
 - use one file per pipeline when more than one pipeline exists or when a pipeline is substantial
+- create a pipeline when a repeated task type is non-trivial and has a distinct ordered execution path
+- do not collapse distinct workflows into one generic pipeline when their steps, validation, or review gates differ
+
+For software projects, common pipeline candidates include feature implementation, code review, and code refactoring. Create these only when the project profile or repository evidence shows they are real recurring work, but explicitly test them during initial composition for software repositories.
 
 ## Agents
 
@@ -340,7 +355,7 @@ Use these triggers:
 - open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
 - non-trivial routed work: validation and task-complete capability
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
-- repeated multi-step workflow: pipeline
+- repeated multi-step workflow or repeated non-trivial task type with distinct steps: pipeline
 - repeated task type: skill
 - repeated behavior across skills or agents: project convention
 - reusable project facts such as architecture, commands, domain vocabulary, or source locations: reference doc

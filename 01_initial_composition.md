@@ -93,6 +93,7 @@ Read `.ai/docs/project_specification.md` first. Treat it as the authoritative so
 - which tool-specific entry files exist
 - whether the repo is single-tool or multi-tool
 - whether existing tool-specific files contain real policy or are already adapters
+- whether any tool-specific adapter is too passive to enforce the root contract
 
 ### F. Reusable Project Knowledge
 
@@ -107,6 +108,13 @@ Identify repeated behavior that may justify shared project conventions:
 - work standards
 - testing standards
 - domain standards
+
+Identify repeated non-trivial task types that may justify pipelines.
+
+For each candidate, decide whether it is:
+- a direct task that needs no pipeline
+- an atomic skill
+- a pipeline with distinct ordered steps, validation, or review gates
 
 Do not decide what to create yet.
 
@@ -189,6 +197,8 @@ Apply `IMPLEMENTATION.md` directly: §Project Landscape (root contract, skills, 
 Stage-specific reminders:
 - verify the chosen tool's native entrypoint convention against current official docs during composition
 - use `pipeline` terminology consistently
+- tool-specific adapters must be explicit mandatory shims, not passive references; each adapter must name the canonical root contract, require the tool to load and follow it before project work, state that the root contract wins on conflict, and stop if the root contract is unavailable
+- if repeated software task types such as feature implementation, task review, or anything else have distinct ordered steps, create separate pipelines for them instead of representing them only as skills
 - before any risky change (splitting monolithic files, moving artifacts into `.ai/`, renaming, merging, deleting, replacing tool entrypoints, choosing between multiple valid implementation contracts), stop and ask the user — name what changes, why, and the compliant target state
 
 ### Protocol-Derived Capabilities
