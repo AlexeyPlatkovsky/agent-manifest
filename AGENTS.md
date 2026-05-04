@@ -4,11 +4,13 @@ Use this skill whenever a task changes the `agent-manifest` framework itself.
 
 This repository is versioned as a single unit. The following files must always share the same `version` value in YAML frontmatter:
 - `MANIFEST.md`
+- `IMPLEMENTATION.md`
 - `README.md`
-- `01_initial.md`
+- `00_project_profile.md`
+- `01_initial_composition.md`
 - `02_review.md`
-- `03_evolution.md`
-- `04_tool_integration.md`
+- `03_capability_expansion.md`
+- `04_tool_adoption.md`
 - `protocols/*.md`
 
 ## Rules

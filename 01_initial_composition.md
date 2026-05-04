@@ -1,33 +1,36 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
-url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial.md
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
 
-# 01_initial.md — Initial Instruction Composition
+# 01_initial_composition.md — Initial Composition
 
 ## Context Required
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
+- `IMPLEMENTATION.md`
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/` required by this framework version
+- `.ai/docs/project_specification.md`
 
-If any are missing, stop and ask the user to provide them.
+If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
+
+If any framework source is missing, stop and ask the user to provide it.
 
 ---
 
 ## Purpose
 
-Create or adjust the smallest coherent AI instruction system that fully aligns with `MANIFEST.md`.
+Create or adjust the smallest coherent AI instruction system that fully aligns with `MANIFEST.md` and `IMPLEMENTATION.md`.
 
 The result must be correct enough to stand on its own.
 `02_review.md` may catch bugs, but it is not the planned repair phase for an intentionally rough draft.
 
 You must also:
-- ask the user the mandatory project-size question during Discussion
-- ask the user which AI tools are in use now or must be supported immediately
-- ask the user which AI landscape or template family should be used when that is not already fixed
+- use `.ai/docs/project_specification.md` as the authoritative profile source
+- ask only for profile clarification when the profile has gaps that block composition
 - derive required capabilities from protocol frontmatter, not from memorized protocol names
 - keep generated project skills standalone and project-local
 
@@ -49,10 +52,12 @@ During Composition, do not return to discussion.
 
 Investigate the repository before proposing any changes.
 
+Read `.ai/docs/project_specification.md` first. Treat it as the authoritative source for user role, recurring duties, capability triggers, AI tools, quality expectations, and local authority sources unless the repository clearly contradicts it.
+
 ### A. Project Nature
 
 - what kind of project is this
-- likely scale: `small`, `medium`, or `large`
+- likely capability triggers
 - maturity: prototype, active development, stable, or legacy
 - single-purpose or multi-domain
 
@@ -78,6 +83,7 @@ Investigate the repository before proposing any changes.
 - whether `AGENTS.md` exists
 - whether native tool entrypoints exist
 - whether skills, pipelines, agents, or reference docs already exist
+- whether shared project conventions already exist
 - whether routing logic exists
 - whether execution skills are improperly coupled to orchestration
 
@@ -87,15 +93,28 @@ Investigate the repository before proposing any changes.
 - which tool-specific entry files exist
 - whether the repo is single-tool or multi-tool
 - whether existing tool-specific files contain real policy or are already adapters
+- whether any tool-specific adapter is too passive to enforce the root contract
 
 ### F. Reusable Project Knowledge
 
 Identify reusable knowledge that may justify reference docs:
 - architecture
-- conventions
 - commands
-- domain rules
+- domain context
 - repository structure
+
+Identify repeated behavior that may justify shared project conventions:
+- coding standards
+- work standards
+- testing standards
+- domain standards
+
+Identify repeated non-trivial task types that may justify pipelines.
+
+For each candidate, decide whether it is:
+- a direct task that needs no pipeline
+- an atomic skill
+- a pipeline with distinct ordered steps, validation, or review gates
 
 Do not decide what to create yet.
 
@@ -103,8 +122,8 @@ Do not decide what to create yet.
 
 - read every canonical protocol under `protocols/`, excluding `protocols/_README.md`
 - treat protocol frontmatter as authoritative
-- determine which protocols are mandatory for the confirmed project size
-- determine which optional protocols may be justified by project needs
+- determine which protocol triggers are present
+- determine which optional protocols may be justified by project needs and present triggers
 - identify any cross-capability enforcement declared by the protocols
 
 ### H. Structural Risk Inventory
@@ -140,26 +159,19 @@ Do not edit or create files in Phase 1.
 
 Resolve only the high-impact decisions identified in Phase 1.
 
-Rules:
-- ask one question at a time
-- provide 2-3 concrete options
-- highlight trade-offs and risks
-- stop and wait after each question
-- never mix discussion with execution
+Follow `protocols/brainstorm.md` exactly. Never mix discussion with execution.
 
-The first two questions are mandatory even if the repository suggests an answer:
-1. confirm the intended project size
-2. identify which AI tools are in use now or must be supported immediately
-
-After that, ask only what is actually needed to complete a correct design.
+Ask only what is actually needed to complete a correct design. Do not repeat profile questions that `.ai/docs/project_specification.md` already answers.
 
 High-impact discussion topics may include:
+- contradictions between the profile and repository evidence
 - primary AI landscape when the repo mixes tools
 - single-tool versus multi-tool or AI-agnostic structure
 - where instruction artifacts should live
 - whether existing capabilities exactly satisfy required protocol-derived capabilities
 - whether pipelines are justified and which real pipeline should be formalized first
 - whether reference docs should be created
+- whether shared project conventions are justified by repeated behavior across skills or agents
 - whether existing files should be migrated, split, merged, or preserved
 - whether unselected AI entry files should be removed or neutralized
 
@@ -175,87 +187,35 @@ Begin only after the user confirms the decision summary.
 
 ### Composition Rules
 
-- `MANIFEST.md` is the canonical framework source
-- for multi-tool or AI-agnostic projects, `AGENTS.md` is the project root contract
-- for single-tool projects, use the tool's official native entrypoint as the full root contract
-- verify the chosen tool's native entrypoint convention from current official docs during composition
-- tool-specific adapters must stay thin and must not duplicate policy
-- generated project skills must be standalone project artifacts
-- generated project skills must include protocol-mandated behavior plus minimal project-specific adaptation
-- generated project skills must not reference framework protocol files or framework-only paths
-- execution skills must stay isolated and must not contain manager or cross-skill routing language
+Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor, plus §Capability Triggers for this stage.
+
+Stage-specific reminders:
+- verify the chosen tool's native entrypoint convention against current official docs during composition
 - use `pipeline` terminology consistently
-- keep file size near the 150-line target when possible without harming quality
+- tool-specific adapters must be explicit mandatory shims, not passive references; each adapter must name the canonical root contract, require the tool to load and follow it before project work, state that the root contract wins on conflict, and stop if the root contract is unavailable
+- if repeated software task types such as feature implementation, task review, or anything else have distinct ordered steps, create separate pipelines for them instead of representing them only as skills
+- before any risky change (splitting monolithic files, moving artifacts into `.ai/`, renaming, merging, deleting, replacing tool entrypoints, choosing between multiple valid implementation contracts), stop and ask the user — name what changes, why, and the compliant target state
+
+### Layer Purity
+
+Apply `IMPLEMENTATION.md` §Layer Purity to every file written in this stage.
+
+### Skill Extraction Precondition For Pipelines
+
+A pipeline may not be written until the skills it sequences exist or are scheduled for creation in the same composition.
+
+Before authoring any pipeline:
+1. list the atomic operations it sequences
+2. resolve each operation to one of: an existing skill, a new skill to create in this composition, or a single trivial command (one line, no procedure)
+3. if an operation needs more than a one-liner and is not yet a skill, create the skill before writing the pipeline
+
+If this precondition cannot be met, the capability is not yet a pipeline — keep it as a skill or pause and ask the user.
 
 ### Protocol-Derived Capabilities
 
-Derive required capabilities from protocol frontmatter:
-- if `implementation: mandatory` and the confirmed size is in `applies_to`, the corresponding project capability must exist
-- if `implementation: optional` and the confirmed size is in `applies_to`, implement it only if the project clearly needs it
+Derive required capabilities from protocol frontmatter per `IMPLEMENTATION.md` §Framework Protocol Contract.
 
-Use the protocol filename basename as the default capability name only when the project does not already have an exact equivalent.
-
-An existing capability counts as an exact equivalent only if:
-- responsibility matches
-- mandatory protocol coverage matches
-- no contradiction exists
-
-If the existing capability is only close:
-- treat it as non-equivalent
-- stop and ask the user before splitting, merging, replacing, or duplicating anything
-
-### Root Contract Rules
-
-For multi-tool or AI-agnostic projects:
-- create or update `AGENTS.md`
-- create or update thin tool-specific adapters that say to follow `AGENTS.md` strictly
-- store shared capabilities under `.ai/skills`, `.ai/pipelines`, `.ai/agents`, and `.ai/docs` unless the user explicitly chose another location
-- create each shared skill as `.ai/skills/<skill_name>/SKILL.md`
-- use Claude-style YAML frontmatter in each shared skill with at least `name` and `description`
-
-For single-tool projects:
-- place the full contract directly in the official native entrypoint
-- use the tool's native structure for supporting artifacts by default
-- do not create `AGENTS.md` unless the user explicitly asked for AI-agnostic or multi-tool structure
-
-### Risky Change Safety
-
-Before any risky change, stop and ask the user.
-
-This includes:
-- splitting monolithic pipeline files
-- moving artifacts into `.ai/`
-- renaming capabilities
-- merging or deleting duplicated artifacts
-- replacing existing tool entrypoints
-- choosing between multiple valid implementation contracts
-
-When asking, explain:
-- what should change
-- why it is needed
-- what the compliant target state would be
-
-### Pipelines
-
-Rules:
-- for medium and large projects, create at least one pipeline
-- anchor the first pipeline to the most obvious real project pipeline discovered during inventory
-- if no dominant real pipeline is visible, ask the user which pipeline to formalize first
-- use one pipeline per file
-
-### Reference Docs
-
-Rules:
-- small projects: skip reference docs by default
-- medium and large projects: create `architecture.md`, `conventions.md`, and `commands.md`
-- add more docs only when reusable project knowledge clearly justifies them
-
-### Validation and Completion
-
-Rules:
-- every non-trivial pipeline must include at least one explicit validation step
-- stronger review loops apply only for higher-risk work
-- `task-complete` must be the closure step for non-trivial work
+Use the protocol filename basename as the default capability name only when the project does not already have an exact equivalent. An existing capability is exact only when responsibility matches, mandatory protocol coverage matches, and no contradiction exists. If only close, treat as non-equivalent and ask the user before splitting, merging, replacing, or duplicating.
 
 ### Scope Boundaries
 
@@ -294,10 +254,14 @@ When composition is complete, provide:
 
 The final system must:
 - align with `MANIFEST.md`
+- align with `IMPLEMENTATION.md`
 - be project-specific rather than generic
 - stand on its own without requiring `02_review.md` to rescue obvious flaws
-- avoid duplicated rules
+- avoid duplicated conventions
+- avoid competing authorities
 - avoid unnecessary abstraction
 - preserve good existing project capabilities where possible
 - keep routing centralized in the correct layer
 - derive capabilities from protocol metadata rather than a hardcoded list
+- pass the Layer Purity tests: no execution in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
+- contain no pipeline whose skills do not yet exist

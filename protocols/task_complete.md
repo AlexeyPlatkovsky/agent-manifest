@@ -1,12 +1,11 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/task_complete.md
 implementation: mandatory
-applies_to:
-  - small
-  - medium
-  - large
+requires_when:
+  - non-trivial routed work
+  - multi-step execution path
 ---
 
 # task_complete.md

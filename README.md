@@ -1,57 +1,67 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
 
 # AI Instruction Framework
 
-The Agent Manifesto is a portable, tool-agnostic framework for organizing AI instruction systems. It prevents the "messy" complexity that grows in AI-assisted projects by centralizing core rules, separating execution from orchestration, and keeping instruction files minimal and logical. It supports both single-tool and multi-tool environments, and scales from small prototypes to large codebases.
+The Agent Manifesto is a portable, tool-agnostic framework for organizing AI instruction systems. `MANIFEST.md` defines the framework's values and principles; `IMPLEMENTATION.md` defines the practices that apply them. Together they keep instruction systems minimal, explicit, and scalable across single-tool and multi-tool environments.
 
 ---
 
 ## How To Use
 
-The framework is delivered as a set of prompt files. Each prompt is self-contained — attach or reference it in your AI tool and ask the tool to run it. The exact syntax depends on your tool (`@file` in Claude Code, Cursor, and most modern agents), but the idea is the same across all of them:
+The framework is delivered as a set of stages. A stage is any `NN_name.md` file. Each stage is self-contained — attach or reference it in your AI tool and ask the tool to run it. The exact syntax depends on your tool (`@file` in Claude Code, Cursor, and most modern agents), but the idea is the same across all of them:
 
-> `run @<prompt-file>.md`
+> `run @<stage-file>.md`
 
-You do not run all prompts in sequence. Pick the one that matches your current situation.
-
----
-
-### Step 0 — Pick Your Mode
-
-Before running anything, decide which root-contract mode fits your project:
-
-- **Single-tool** — one AI tool is used (e.g., only Claude Code). The tool's native entrypoint holds the full project contract.
-- **Multi-tool or AI-agnostic** — multiple AI tools, or you want portability. `AGENTS.md` is the canonical root contract, and tool-specific files are thin adapters.
-
-The prompts will ask you to confirm this, so you do not need to configure anything up front — just know which one you want.
+Run `00_project_profile.md` before any other stage. After that, pick the stage that matches your current situation.
 
 ---
 
-### Step 1 — Build The Baseline
+### Stage 00 — Profile The Project
+
+**When:** before any other framework stage, or when the user's role, duties, tools, or project assumptions changed.
+
+**Run:**
+```
+run @00_project_profile.md
+```
+
+**What happens:**
+- The AI captures the project purpose, user role, recurring duties, and AI tool surface.
+- It identifies authoritative local sources, domain vocabulary, and quality expectations.
+- It optionally researches current best practices when local context is insufficient and the user approves.
+
+**Outcome:** `.ai/docs/project_specification.md`, the reusable profile required by every later stage.
+
+---
+
+### Stage 01 — Compose The Initial System
 
 **When:** starting from scratch, or refactoring an existing messy instruction system.
 
 **Run:**
 ```
-run @01_initial.md
+run @01_initial_composition.md
 ```
 
 **What happens:**
 - The AI inventories your repository.
-- It asks you structured questions about project size, tools, and unresolved design choices.
+- It reads `.ai/docs/project_specification.md`.
+- It asks only unresolved design questions needed for composition.
 - It derives required capabilities from protocol metadata.
+- It makes tool-specific adapters explicit enough to enforce the canonical root contract.
+- It checks repeated software work such as feature implementation, code review, and code refactoring as pipeline candidates when their steps differ.
 - It preserves good existing capability names where they already satisfy the framework.
 - It asks before any risky change (splits, moves, merges, deletions, contract choices).
 
-**Outcome:** the smallest coherent instruction system that fully aligns with `MANIFEST.md`.
+**Outcome:** the smallest coherent instruction system that fully aligns with `MANIFEST.md` and `IMPLEMENTATION.md`.
 
 ---
 
-### Step 2 — Audit For Compliance
+### Stage 02 — Review For Compliance
 
 **When:** after significant instruction changes, or when you want a compliance check on an existing system.
 
@@ -70,31 +80,31 @@ run @02_review.md
 
 ---
 
-### Step 3 — Evolve Around Real Habits
+### Stage 03 — Expand Capabilities
 
 **When:** a valid baseline already exists and the team has real recurring workflows to encode.
 
 **Run:**
 ```
-run @03_evolution.md
+run @03_capability_expansion.md
 ```
 
 **What happens:**
 - Learns recurring work directly from you.
-- Proposes new skills, pipelines, agents, and docs grounded in actual usage.
-- Materializes newly-applicable mandatory protocols as standalone skills when project scale changes.
+- Proposes new skills, pipelines, agents, conventions, and docs grounded in actual usage.
+- Materializes newly-triggered mandatory protocols as standalone skills when new capability triggers appear.
 
 **Outcome:** an instruction system that reflects how your team actually works, without speculative abstractions.
 
 ---
 
-### Step 4 — Integrate External Tools
+### Stage 04 — Adopt External Tools
 
 **When:** adopting a specific external tool, library, or framework into an existing instruction system.
 
 **Run:**
 ```
-run @04_tool_integration.md
+run @04_tool_adoption.md
 ```
 
 **What happens:**
@@ -108,85 +118,26 @@ run @04_tool_integration.md
 
 ## What This Repository Contains
 
-- `MANIFEST.md` — the canonical framework contract
+- `MANIFEST.md` — framework values and principles
+- `IMPLEMENTATION.md` — framework mechanics and operational rules
 - `protocols/_README.md` — protocol index and usage notes
-- `protocols/*.md` — canonical protocol definitions used by the prompts
-- `01_initial.md` — builds or adjusts a baseline instruction system
+- `protocols/*.md` — canonical protocol definitions used by stages
+- `00_project_profile.md` — creates or updates the reusable project specification
+- `01_initial_composition.md` — builds or adjusts a baseline instruction system
 - `02_review.md` — audits an instruction system against the framework
-- `03_evolution.md` — expands a correct baseline around real team habits
-- `04_tool_integration.md` — adopts an external tool or framework into an existing instruction system
+- `03_capability_expansion.md` — expands a correct baseline with new capabilities
+- `04_tool_adoption.md` — adopts an external tool or framework into an existing instruction system
 
 ---
 
-## Core Model
+## Framework Reference
 
-This framework supports two root-contract modes:
+The framework's authoritative content lives in two files:
 
-- **Single-tool projects:** the selected AI tool's official native entrypoint may hold the full project contract.
-- **Multi-tool or AI-agnostic projects:** `AGENTS.md` is the canonical root contract, and tool-specific files are thin adapters.
+- [MANIFEST.md](MANIFEST.md) — values and principles
+- [IMPLEMENTATION.md](IMPLEMENTATION.md) — layers, gates, capability triggers, protocol contract, and operating rules
 
-For multi-tool shared storage, the default layout is:
-- `.ai/skills`
-- `.ai/pipelines`
-- `.ai/agents`
-- `.ai/docs`
-
-Project skills are standalone project artifacts. They are derived from framework protocols during composition, but they must not reference framework protocol files at runtime.
-
-In multi-tool or AI-agnostic projects, the framework-standard skill format is:
-- `.ai/skills/<skill_name>/SKILL.md`
-- Claude-style YAML frontmatter with at least `name` and `description`
-
-Single-tool projects should still use the selected tool's native supporting-artifact structure.
-
----
-
-## Protocol Metadata
-
-Protocol frontmatter is authoritative for derivation and review.
-
-Each protocol declares:
-- `implementation: mandatory | optional`
-- `applies_to: [small, medium, large]`
-
-In the bundled protocol set:
-- `brainstorm` is mandatory for all project sizes
-- `task-complete` is mandatory for all project sizes
-- `manager` is mandatory for medium and large projects
-
----
-
-## Typical Outcomes
-
-### Small Project
-- minimal root contract
-- mandatory protocol-derived skills
-- no reference docs by default
-- no manager by default
-- no agents by default
-
-### Medium Project
-- manager-equivalent routing capability
-- at least one pipeline
-- reference docs: `architecture.md`, `conventions.md`, `commands.md`
-- explicit validation on every non-trivial pipeline
-
-### Large Project
-- manager-equivalent routing capability
-- multiple pipelines as needed
-- reference docs: `architecture.md`, `conventions.md`, `commands.md`
-- selective agents when context isolation is clearly justified
-
----
-
-## Operating Rules
-
-- Keep instruction files near 150 lines when possible without harming quality.
-- Prefer minimal, surgical changes that trace directly to the user's request.
-- Keep execution skills isolated from orchestration.
-- Use `pipeline` terminology consistently.
-- Do not duplicate rules across root contracts, skills, pipelines, or docs.
-- Do not perform risky changes silently.
+Read those two files for the full model. The stage files above apply them.
 
 ---
 

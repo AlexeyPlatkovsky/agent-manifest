@@ -1,20 +1,24 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
-url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_evolution.md
+url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_expansion.md
 ---
 
-# 03_evolution.md — Instruction System Evolution
+# 03_capability_expansion.md — Capability Expansion
 
 ## Context Required
 
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
+- `IMPLEMENTATION.md`
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/` relevant to the current system
-- the current instruction system: root contract, skills, pipelines, agents, and docs
+- `.ai/docs/project_specification.md`
+- the current instruction system: root contract, skills, pipelines, agents, conventions, and docs
 
-If required context is missing, stop and ask for it.
+If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
+
+If other required context is missing, stop and ask for it.
 
 ---
 
@@ -22,22 +26,25 @@ If required context is missing, stop and ask for it.
 
 Expand a correct baseline instruction system into a more complete one that reflects real team habits and recurring work.
 
-When the user already asks for specific new capabilities, keep evolution anchored to that explicit request instead of resetting to broad discovery of team habits.
+Use `.ai/docs/project_specification.md` as the authoritative profile source for role, duties, quality expectations, and accepted assumptions.
 
-This prompt is not for building from scratch.
-It assumes `01_initial.md` already produced a valid baseline.
+When the user already asks for specific new capabilities, keep expansion anchored to that explicit request instead of resetting to broad discovery of team habits.
+
+This stage is not for building from scratch.
+It assumes `01_initial_composition.md` already produced a valid baseline.
 
 It is not for adopting external tools, libraries, or frameworks.
-If the user's request bundles tool adoption with evolution, split the work: run `03_evolution.md` first, then hand off tool adoption to `04_tool_integration.md`.
+If the user's request bundles tool adoption with capability expansion, split the work: run `03_capability_expansion.md` first, then hand off tool adoption to `04_tool_adoption.md`.
 
 ---
 
 ## Working Mode
 
-Work in exactly 3 phases:
+Work in exactly 4 phases:
 1. Discovery
 2. Brainstorm
 3. Proposal
+4. Composition
 
 During Brainstorm, follow `protocols/brainstorm.md`.
 During Proposal, present the full proposal at once.
@@ -48,9 +55,11 @@ During Composition, do not return to discussion.
 ## Phase 1 — Discovery
 
 Read the current instruction system and identify:
-- what skills, pipelines, agents, and docs already exist
+- what `.ai/docs/project_specification.md` says the user does most often
+- what skills, pipelines, agents, conventions, and docs already exist
 - what recurring work they already cover
 - what important recurring work is still missing
+- whether any existing skill actually represents a repeated non-trivial workflow that needs a pipeline
 - whether the user already named concrete additions or target responsibilities
 - which design decisions are still genuinely open versus already decided by the user request
 - whether the current system still matches protocol requirements
@@ -70,11 +79,7 @@ Do not reset to a broad "typical day or week" discovery prompt.
 
 Use a broad recurring-work question only when the request is intentionally open-ended and the missing capability areas are still unknown.
 
-Every Brainstorm question must follow `protocols/brainstorm.md` exactly:
-- one question at a time
-- 2-3 concrete options
-- explicit trade-offs
-- stop and wait after each question
+Every Brainstorm question must follow `protocols/brainstorm.md` exactly.
 
 Explore only areas not already covered well by the existing system, such as:
 - review habits
@@ -82,6 +87,7 @@ Explore only areas not already covered well by the existing system, such as:
 - testing and debugging patterns
 - onboarding
 - docs maintenance
+- shared coding, review, testing, or domain standards
 - recurring cross-team coordination
 - constraints or variants of the explicitly requested capability set
 
@@ -104,7 +110,8 @@ Group proposals by type:
 1. Skills
 2. Pipelines
 3. Agents
-4. Docs
+4. Conventions
+5. Docs
 
 For each proposed addition, provide:
 - name
@@ -117,6 +124,7 @@ For each proposed addition, provide:
 Before presenting, verify that each proposal:
 - does not duplicate an existing artifact
 - fits the correct layer
+- uses a pipeline, not only a skill, when the recurring work has distinct ordered steps, validation, or review gates
 - is justified by actual repository or user evidence
 
 Ask the user to approve, reject, or modify the proposal set before implementation.
@@ -127,17 +135,12 @@ Ask the user to approve, reject, or modify the proposal set before implementatio
 
 Begin only after explicit user approval.
 
-Rules:
-- follow `MANIFEST.md`
-- keep protocol-derived mandatory capabilities intact
-- if Discovery concluded that project scale changed, materialize every protocol whose `applies_to` now includes the new scale and whose `implementation` is `mandatory` as a standalone project skill before any other addition (for example, a scale bump to `medium` or `large` requires a standalone manager skill derived from `protocols/manager.md`)
-- preserve existing good artifacts unless the user approved changes
-- keep execution skills isolated from orchestration
-- update the applicable root contract and capability registry
+Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor.
 
-For single-tool projects, update the native root entrypoint.
-For multi-tool or AI-agnostic projects, update `AGENTS.md` and any selected adapters.
-Any new shared skill must use the framework-standard format `.ai/skills/<skill_name>/SKILL.md` with Claude-style YAML frontmatter including at least `name` and `description`.
+Stage-specific rules:
+- if Discovery found a newly present protocol trigger, materialize every triggered protocol whose `implementation` is `mandatory` as a standalone project skill before any other addition
+- preserve existing good artifacts unless the user approved changes
+- update the applicable root contract and capability registry with each new capability
 
 ---
 

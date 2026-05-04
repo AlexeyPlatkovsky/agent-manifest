@@ -1,5 +1,5 @@
 ---
-version: 1.5.4
+version: 2.0.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/_README.md
 ---
@@ -15,7 +15,7 @@ They are not copied into projects and are not referenced by project runtime file
 
 - Treat each protocol file as the canonical source for that behavior at framework design time.
 - Derive capabilities from protocol frontmatter, not from memorized protocol names.
-- Use `implementation` and `applies_to` as the authoritative applicability metadata.
+- Use `implementation` and `requires_when` as the authoritative applicability metadata.
 - Generate standalone project skills from protocol mandatory rules plus minimal project-specific adaptation.
 - Do not make generated project skills depend on `protocols/` files or framework-only paths.
 
@@ -31,4 +31,4 @@ Closure reporting for non-trivial work.
 
 ### `manager.md`
 
-Centralized routing and completion enforcement for medium and large projects.
+Centralized routing and completion enforcement when routing must choose between multiple capabilities.
