@@ -1,5 +1,5 @@
 ---
-version: 2.0.0
+version: 2.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -31,6 +31,8 @@ The items on the right still matter, but the items on the left matter more.
 
 # Principles
 
+Six principles, two per group. Each is meant to be remembered as a short phrase you can apply without rereading.
+
 ## Context And Simplicity
 
 ### 1. Load Only What You Need
@@ -39,7 +41,7 @@ Default context should contain only what the current work needs to begin correct
 
 **Prefer:**
 - Small always-available instructions
-- Capabilities loaded when they are relevant
+- Capabilities loaded when relevant
 - Clear entry points into deeper guidance
 
 **Avoid:**
@@ -49,146 +51,82 @@ Default context should contain only what the current work needs to begin correct
 
 ---
 
-### 2. Build For Now, Not For Later
+### 2. Earn Complexity
 
-The system should solve the real current problem before designing for imagined futures.
+The smallest structure that solves the real current problem wins. Layers, abstractions, and coordination must be justified by real risk, repetition, or scale — not by imagined futures.
 
 **Prefer:**
-- The smallest structure that satisfies current need
+- Direct handling for simple work
 - Generalization after the pattern is proven
 - Changes traceable to an actual requirement
 
 **Avoid:**
-- Speculative configurability
-- Single-use abstractions
-- Future-proofing without evidence
-
----
-
-### 3. Escalate Only When Justified
-
-Complexity should be earned by real risk, coordination need, repetition, or scale.
-
-**Prefer:**
-- Direct handling for simple work
-- Reusable capabilities for repeated work
-- Coordination only when multiple steps or responsibilities must be managed
-
-**Avoid:**
+- Speculative configurability and single-use abstractions
 - Starting with the heaviest structure available
-- Adding layers as a precaution
 - Treating complexity as evidence of quality
 
 ---
 
 ## Authority And Structure
 
-### 4. Give Every Artifact One Job
+### 3. One Artifact, One Job
 
-Every artifact should have one clear responsibility it can be judged against.
+Every artifact should have one clear responsibility it can be judged against. Decision artifacts decide. Execution artifacts execute. Reference artifacts inform.
 
 **Prefer:**
-- Artifacts that can be described in one sentence
+- Artifacts describable in one sentence
 - Names that reveal responsibility
-- Splitting an artifact when a second job appears
-
-**Avoid:**
-- Mixed policy, procedure, and reference content
-- Broad catch-all files
-- Responsibilities that depend on reader interpretation
-
----
-
-### 5. Separate Policy From Execution
-
-The system should distinguish decisions about what should happen from the work that makes it happen.
-
-**Prefer:**
-- Decision rules that classify, authorize, and constrain
-- Work units that perform one kind of task
 - Explicit handoffs between decision and execution
 
 **Avoid:**
+- Mixed policy, procedure, and reference content
 - Work units that decide their own routing
-- Decision rules hidden inside procedures
-- Artifacts that both govern and execute the same concern
+- Broad catch-all files
 
 ---
 
-### 6. Keep One Source Of Truth
+### 4. One Owner Per Concern
 
-Every rule, constraint, and definition should have one authoritative home.
+Every rule, constraint, and definition has exactly one authoritative home. Before creating something new, find out whether an existing owner already covers it.
 
 **Prefer:**
-- A single owner for each rule
-- References instead of restatement
-- Shared standards when multiple places need the same guidance
+- A single owner for each rule, referenced from elsewhere
+- Auditing existing sources before adding another
+- Extending the rightful owner when it still fits
 
 **Avoid:**
 - Local copies of shared conventions
-- Competing definitions of the same behavior
-- Repeating constraints across unrelated artifacts
-
----
-
-### 7. Respect Existing Authority
-
-Before creating something new, the system should identify whether an existing authority already owns the concern.
-
-**Prefer:**
-- Auditing existing sources before adding another
-- Extending the rightful owner when it still fits
-- Preserving coherent ownership and naming
-
-**Avoid:**
-- Parallel authorities for the same concern
-- Replacing something only because it is unfamiliar
+- Parallel or competing authorities for the same concern
 - Creating a cleaner-looking duplicate
 
 ---
 
 ## Control And Safety
 
-### 8. Make Behavior Explicit
+### 5. Make Behavior Explicit
 
-Assumptions, success criteria, uncertainty, and stopping conditions should be stated rather than inferred.
+Assumptions, success criteria, uncertainty, and stopping conditions should be stated rather than inferred. Critical decision points must be able to actually stop work until the required condition exists.
 
 **Prefer:**
-- Declared assumptions
-- Visible success criteria
+- Declared assumptions and visible success criteria
 - Ambiguity surfaced before action
+- Blocking conditions with clear next steps when they fire
 
 **Avoid:**
-- Relying on the reader to infer intent
-- Completion behavior that is only implied
 - Soft language for hard requirements
-
----
-
-### 9. Gates Must Actually Gate
-
-A critical decision point should be able to stop work until the required decision, condition, or approval exists.
-
-**Prefer:**
-- Blocking conditions before execution
-- Clear next steps when a gate blocks
-- Mandatory validation for critical work
-
-**Avoid:**
-- Rules that only advise
-- Gates placed after the action they control
+- Rules that only advise where they should gate
 - Critical checks that can be skipped silently
 
 ---
 
-### 10. Ask Before You Cut
+### 6. Ask Before You Cut
 
-Changes that can lose work, disrupt users, or reshape authority should require explicit consent.
+Changes that can lose work, disrupt users, or reshape authority require explicit consent.
 
 **Prefer:**
 - Naming the risk before acting
 - Explaining the intended safe outcome
-- Treating consent as a requirement
+- Treating consent as a requirement, scoped to what was approved
 
 **Avoid:**
 - Proceeding because a change seems obvious
