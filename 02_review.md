@@ -1,5 +1,5 @@
 ---
-version: 2.0.0
+version: 2.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -78,15 +78,11 @@ In both cases:
 Audit against each `MANIFEST.md` principle. For each, flag concrete violations rather than restating the principle.
 
 - §1 Load Only What You Need — minimal root contract; skills, pipelines, agents, conventions, and docs are on-demand; adapters are thin
-- §2 Build For Now, Not For Later — every artifact ties to a current trigger; no speculative abstractions
-- §3 Escalate Only When Justified — direct execution by default; pipelines and agents anchored to concrete triggers
-- §4 Give Every Artifact One Job — single responsibility per file; no orchestration in execution skills; conventions hold standards, not procedures
-- §5 Separate Policy From Execution — policy and routing in the root contract; procedures in skills and pipelines; adapters do not duplicate policy
-- §6 Keep One Source Of Truth — no duplicated behavioral requirements across root/skills/pipelines/conventions/docs
-- §7 Respect Existing Authority — existing capabilities audited first; project-native names preserved when they satisfy the framework; near-duplicates flagged for user decision
-- §8 Make Behavior Explicit — assumptions, success criteria, stopping conditions, and validation expectations are visible
-- §9 Gates Must Actually Gate — main routing gate uses imperative language, names the next capability, appears before the registry, classifies trivial work, and enforces validation/completion. Descriptive routing is a critical violation.
-- §10 Ask Before You Cut — risky changes (rename, delete, merge, authority shift) require explicit consent; the review names the risk and the safe target state
+- §2 Earn Complexity — every artifact ties to a current trigger; direct execution remains the default; pipelines, agents, abstractions, and stronger review are anchored to concrete risk, repetition, or scale
+- §3 One Artifact, One Job — single responsibility per file; policy and routing stay in the root contract; procedures stay in skills; sequencing stays in pipelines; adapters do not duplicate policy
+- §4 One Owner Per Concern — no duplicated behavioral requirements across root/skills/pipelines/conventions/docs; existing capabilities are audited first; project-native names are preserved when they satisfy the framework; near-duplicates are flagged for user decision
+- §5 Make Behavior Explicit — assumptions, success criteria, stopping conditions, and validation expectations are visible; the main routing gate uses imperative language, names the next capability, appears before the registry, classifies trivial work, and enforces validation/completion. Descriptive routing is a critical violation.
+- §6 Ask Before You Cut — risky changes (rename, delete, merge, authority shift) require explicit consent; the review names the risk and the safe target state
 
 ### Protocol Inventory and Applicability
 

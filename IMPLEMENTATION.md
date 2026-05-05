@@ -1,5 +1,5 @@
 ---
-version: 2.0.0
+version: 2.1.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -212,7 +212,7 @@ Implementation:
 
 The 150-line target remains a strong guideline for generated project instruction files, not a hard cap. Do not sacrifice clarity, correctness, or single responsibility just to satisfy the target.
 
-### 2. Build For Now, Not For Later
+### 2. Earn Complexity
 
 Implementation:
 - create only artifacts the current project actually needs
@@ -220,8 +220,6 @@ Implementation:
 - preserve existing naming when it is already coherent
 - add configurability only when the current project requires it
 - generalize only after a repeated pattern exists
-
-### 3. Escalate Only When Justified
 
 Classify work by complexity and risk.
 
@@ -245,7 +243,7 @@ Translate this matrix into mandatory gate language in the root contract. Do not 
 
 ## Authority And Structure
 
-### 4. Give Every Artifact One Job
+### 3. One Artifact, One Job
 
 Implementation:
 - root contract: policy and routing gates
@@ -257,9 +255,7 @@ Implementation:
 
 If a file grows because it is doing too many jobs, split it rather than expanding it indefinitely.
 
-### 5. Separate Policy From Execution
-
-Implementation:
+Decision and execution boundaries:
 - put classification, routing gates, constraints, and required outputs in the root contract
 - put task procedures in skills
 - put sequencing in pipelines
@@ -268,15 +264,13 @@ Implementation:
 
 Execution skills must not contain manager handoff text, stage metadata, or routing to other skills.
 
-### 6. Keep One Source Of Truth
+### 4. One Owner Per Concern
 
 Implementation:
 - centralize each behavioral requirement in the layer responsible for it
 - reference conventions and docs instead of copying their text into skills or agents
 - derive project capabilities from framework protocol metadata, not from memorized protocol names
 - do not let project skills depend on framework protocol files or framework-only paths at runtime
-
-### 7. Respect Existing Authority
 
 If an existing project capability exactly satisfies a required capability, reuse it.
 
@@ -299,7 +293,7 @@ If the naming convention is unclear or conflicts with framework defaults, ask th
 
 ## Control And Safety
 
-### 8. Make Behavior Explicit
+### 5. Make Behavior Explicit
 
 Before non-trivial implementation:
 - state assumptions explicitly
@@ -309,17 +303,15 @@ Before non-trivial implementation:
 
 Avoid descriptive routing without a stop gate, implied validation, and implied completion behavior.
 
-### 9. Gates Must Actually Gate
-
-For non-trivial tasks, the root contract must use imperative blocking language.
+Gate behavior:
+- for non-trivial tasks, the root contract must use imperative blocking language
+- routing gates must appear before the capability registry
 
 Compliant pattern:
 - classify the task first
 - if trivial: proceed directly and state the classification
 - if non-trivial: stop, load the concrete routing capability, and do not implement until routing resolves
 - if unsure: treat as non-trivial
-
-Routing gates must appear before the capability registry.
 
 Validation is mandatory for non-trivial work:
 - every non-trivial pipeline must include at least one explicit validation step
@@ -328,7 +320,7 @@ Validation is mandatory for non-trivial work:
 - `task-complete` is the required closure skill for non-trivial work
 - `task-complete` enforcement should be centralized in the routing layer, not repeated across execution skills
 
-### 10. Ask Before You Cut
+### 6. Ask Before You Cut
 
 If compliance or implementation requires a risky change, stop and ask the user before changing it.
 
