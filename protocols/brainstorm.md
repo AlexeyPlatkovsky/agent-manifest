@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/brainstorm.md
 implementation: mandatory
@@ -29,6 +29,7 @@ Any project skill derived from this protocol must:
 - stop and wait after each question
 - keep brainstorming separate from execution
 - end the brainstorming phase with a decision summary before execution begins
+- wait for user confirmation of the decision summary before execution begins
 
 The generated project skill may add minimal project-specific adaptation, examples, or terminology.
 It must not weaken these rules.
@@ -37,12 +38,10 @@ It must not weaken these rules.
 
 # When Brainstorming Applies
 
-Brainstorming applies when:
-- a design decision is still open
-- multiple valid approaches exist
-- trade-offs need explicit evaluation
-- setup, profile, or workflow clarification requires the user to choose between meaningful options
-- the user has not committed to a direction yet
+Brainstorming applies only when a `requires_when` trigger from this protocol's frontmatter is present:
+- open design decisions with multiple valid paths
+- clarification requires trade-off evaluation
+- setup or profile clarification requires choosing between meaningful options
 
 Brainstorming does not apply:
 - during execution
@@ -68,6 +67,8 @@ Options must be:
 - distinct
 - actionable
 - specific enough to compare
+
+For factual setup or profile fields, include or allow a free-form correction path when the listed options may not fit the user's actual role, tool, path, or project fact.
 
 ## 3. Always Highlight Trade-Offs
 

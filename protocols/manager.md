@@ -1,11 +1,10 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/manager.md
 implementation: mandatory
 requires_when:
   - routing must choose between multiple skills, pipelines, or agents
-  - validation and completion enforcement should stay centralized
 ---
 
 # manager.md
@@ -15,21 +14,21 @@ requires_when:
 This protocol defines canonical centralized routing behavior for projects that need a manager-equivalent routing capability.
 
 It is a framework input.
-Project skills derived from it must be standalone project artifacts.
+Project manager-equivalent routing capabilities derived from it must be standalone project artifacts.
 
 ---
 
 # Mandatory Implementation Rules
 
-Any project skill derived from this protocol must:
+Any project manager-equivalent routing capability derived from this protocol must:
 - stay purely responsible for routing and orchestration
 - classify non-trivial work before execution begins
-- name the next concrete capability or capabilities
-- append `task-complete` to every non-trivial pipeline
+- name the selected existing pipeline or immediate next concrete capability
+- append `task-complete` to non-trivial routed work
 - escalate safeguards as task risk increases
 - stop and surface ambiguity instead of guessing
 
-Projects may adapt the skill to repository-specific capability names and local pipeline names.
+Projects may adapt the manager-equivalent capability to repository-specific capability names and local pipeline names.
 
 ---
 
@@ -38,7 +37,6 @@ Projects may adapt the skill to repository-specific capability names and local p
 The manager-equivalent applies when:
 - a task is non-trivial
 - routing must choose between multiple skills, pipelines, or agents
-- validation and completion enforcement should stay centralized
 
 It does not apply:
 - to trivial tasks
@@ -51,8 +49,9 @@ It does not apply:
 
 ## 1. Routing Only
 
-The manager chooses and sequences capabilities.
+The manager selects an existing pipeline or the immediate next capability and required gates.
 It does not implement execution steps itself.
+It must not invent or inline execution sequences that belong in pipeline files.
 
 ## 2. Classify Before Action
 
@@ -68,13 +67,13 @@ If the task is actually trivial, the manager should say so and release it for di
 The manager must produce a concrete routing decision.
 
 That decision must identify:
-- which skill, pipeline, or agent is next
+- which existing pipeline or immediate next skill/agent is selected
 - what validation or review gate applies
 - whether reference docs must be loaded
 
 ## 4. Centralize Task Completion
 
-The manager is responsible for appending `task-complete` as the final step of every non-trivial pipeline.
+The manager is responsible for appending `task-complete` as the final step of non-trivial routed work.
 
 Execution skills and pipelines should not repeat that responsibility.
 
@@ -90,7 +89,7 @@ Examples:
 If a safe routing decision depends on missing or conflicting policy:
 - stop
 - surface the ambiguity
-- return for clarification or brainstorming before execution continues
+- ask for clarification, or route to brainstorming when its trigger is present and the capability exists
 
 ---
 
@@ -98,6 +97,6 @@ If a safe routing decision depends on missing or conflicting policy:
 
 At routing time, produce a short execution plan that includes:
 - task classification
-- selected capabilities in order
+- selected existing pipeline or immediate next capability
 - validation and review requirements
-- explicit final `task-complete` step for non-trivial work
+- explicit final `task-complete` step for non-trivial routed work

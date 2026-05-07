@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -16,14 +16,16 @@ This document defines how the agent-manifest framework realizes the values and p
 
 # Framework Sources
 
-The framework has four source types:
+The framework has five source types:
 
 - `MANIFEST.md` defines values and principles.
 - `IMPLEMENTATION.md` defines framework mechanics.
 - `NN_name.md` files define framework stages.
 - `protocols/*.md` define framework protocols used by stages.
+- `agents/*.md`, excluding `agents/_README.md`, define framework agent templates used by generated landscapes.
 
 Framework protocols are not project runtime files. They are inputs for generating or reviewing project-local capabilities.
+Framework agent templates are copied into project-local instruction systems when their metadata applies.
 
 ---
 
@@ -62,7 +64,7 @@ When a stage uses brainstorming, it must cite `protocols/brainstorm.md` and foll
 
 ### Composition Anchor
 
-When a stage enters a composition, implementation, or fix-application phase, it must apply this document's §Project Landscape (including §Layer Purity), §Principle Implementation, and §Framework Protocol Contract. Stage-specific composition rules supplement, not replace, these anchors.
+When a stage enters a composition, implementation, or fix-application phase, it must apply this document's §Project Landscape (including §Layer Purity), §Principle Implementation, §Framework Protocol Contract, §Framework Agent Template Contract, and §Capability Triggers. Stage-specific composition rules supplement, not replace, these anchors.
 
 ### Phase Discipline
 
@@ -155,8 +157,11 @@ Agents are specialized roles used only when context isolation or specialized rea
 
 Rules:
 - do not create a default agent layer without evidence of need
+- mandatory framework agent templates with a present `requires_when` trigger are evidence of need
 - keep agent responsibilities distinct from skills and pipelines
 - use agents for isolation, specialization, or parallel responsibility, not decoration
+- copy mandatory framework agent templates into every generated landscape where their trigger applies
+- preserve the template's responsibility and output contract when adapting to a tool-specific agent format
 
 ## Conventions
 
@@ -313,11 +318,12 @@ Compliant pattern:
 - if non-trivial: stop, load the concrete routing capability, and do not implement until routing resolves
 - if unsure: treat as non-trivial
 
-Validation is mandatory for non-trivial work:
+Validation is mandatory for non-trivial routed work:
 - every non-trivial pipeline must include at least one explicit validation step
 - stronger review loops apply only for higher-risk work
 - validation should be automated and repeatable where possible
-- `task-complete` is the required closure skill for non-trivial work
+- validation is a required check unless a project explicitly creates a concrete validation skill, pipeline step, or convention
+- `task-complete` is the required closure skill for non-trivial routed work
 - `task-complete` enforcement should be centralized in the routing layer, not repeated across execution skills
 
 ### 6. Ask Before You Cut
@@ -343,8 +349,13 @@ When asking, explain:
 Protocols in `protocols/` are canonical framework inputs. They are not project runtime files.
 
 Every protocol must declare structured frontmatter:
+- `version`
+- `project`
+- `url`
 - `implementation: mandatory | optional`
 - `requires_when: [...]`
+
+`requires_when` entries are human-readable trigger phrases. Write them with spaces rather than slug-style underscores.
 
 Protocol frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
 
@@ -364,13 +375,42 @@ Rules:
 - protocols marked `implementation: mandatory` define required project capabilities when their trigger is present
 - protocols marked `implementation: optional` may be implemented only when their trigger is present and the project genuinely needs them
 
-Generated project skills must:
+Generated project capabilities derived from protocols must:
 - be standalone project artifacts
 - include the protocol's mandatory behavior
 - include minimal project-specific adaptation
 - avoid references to framework files, protocol files, or framework-only paths
 
-For multi-tool or AI-agnostic projects, generated project skills must use the framework-standard skill format defined above.
+When a protocol derives a skill in a multi-tool or AI-agnostic project, use the framework-standard skill format defined above. When a protocol derives a manager-equivalent routing capability, keep it in the routing layer rather than formatting it as a normal execution skill.
+
+---
+
+# Framework Agent Template Contract
+
+Agent templates in `agents/`, excluding `agents/_README.md`, are canonical framework inputs for specialized project-local agents.
+
+Every agent template must declare structured frontmatter:
+- `version`
+- `project`
+- `url`
+- `name`
+- `description`
+- `implementation: mandatory | optional`
+- `requires_when: [...]`
+
+`requires_when` entries are human-readable trigger phrases. Write them the same way as protocol triggers, with spaces rather than slug-style underscores.
+
+Agent template frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
+
+Rules:
+- templates marked `implementation: mandatory` define required project-local agents when their `requires_when` trigger is present
+- templates marked `implementation: optional` may be copied only when their trigger is present and the project genuinely needs them
+- `any AI landscape` is the trigger for agents that must be included in every generated project instruction system
+- copied agents must remain on demand; root contracts and adapters route to them but do not inline their full instructions
+- copied mandatory agents must preserve the template content verbatim when the generated landscape ships the same authority files the template references
+- if the generated landscape does not ship the framework authority files, adapt those references to equivalent project-local authority while preserving the template's role, constraints, and output contract
+- target-tool formatting may be adapted only as much as needed to make the agent usable in that AI landscape
+- generated project agents must avoid references to framework files, template files, or framework-only paths unless those files are intentionally shipped as project-local authority
 
 ---
 
@@ -379,9 +419,10 @@ For multi-tool or AI-agnostic projects, generated project skills must use the fr
 Prefer the smallest coherent system that satisfies the triggers actually present in the project profile and repository evidence.
 
 Use these triggers:
+- any AI landscape: instruction-evaluator agent
 - multiple AI tools or AI-agnostic portability need: root contract plus thin adapters
 - open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
-- non-trivial routed work: validation and task-complete capability
+- non-trivial routed work: explicit validation check and task-complete capability
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
 - repeated multi-step workflow or repeated non-trivial task type with distinct steps: pipeline
 - repeated task type: skill
