@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/00_project_profile.md
 ---
@@ -37,7 +37,7 @@ Work in exactly 4 phases:
 
 Before Profile Capture begins, present a short inferred inventory summary as a Markdown table. Do not begin with raw prose or a batch of questions.
 
-During Profile Capture, follow `protocols/brainstorm.md` for every missing or ambiguous profile point that requires user input.
+During Profile Capture, use direct factual questions for missing facts. Follow `protocols/brainstorm.md` only when the missing or ambiguous profile point requires choosing between meaningful options or trade-offs.
 
 During Research, use external sources only when local context is insufficient and the user approves current best-practice research.
 
@@ -83,17 +83,22 @@ Use this table shape:
 Ask only for missing or ambiguous profile information.
 
 Required profile fields:
+- project purpose
 - primary user role or position in this project
 - recurring duties the instruction system should support
+- known capability triggers
 - AI tool mode: single-tool or multi-tool / AI-agnostic
 - exact AI tools in use now or required immediately
+- domain vocabulary, if known
 - authoritative local sources for domain and business logic
 - preferred quality expectations and workflows
+- accepted assumptions
+- open profile gaps
 - whether external best-practice research is allowed
 
-For role and duties, provide selectable options and allow multiple choices or free-form answers.
+For role and duties, use `protocols/brainstorm.md` only when the user must choose between meaningful alternatives. Otherwise ask direct factual questions.
 
-Example duty options:
+Internal candidate duty areas:
 - coding and refactoring
 - test writing and automation
 - code review
@@ -103,11 +108,9 @@ Example duty options:
 - release or deployment support
 - project or domain research
 
-Follow `protocols/brainstorm.md` for every clarification question.
+Do not present the full candidate list as a single user-facing option set.
 
-Stage-specific addition: allow free-form correction when the listed options do not fit a factual profile field such as a specific role, tool name, or path.
-
-Do not ask the first clarification question in the same message as the inventory summary. Let the user confirm or correct the summary first, then proceed one question at a time.
+For factual profile fields such as a specific role, tool name, or path, do not force selectable options.
 
 ---
 
@@ -122,6 +125,7 @@ Research should identify candidate practices for the user's role and recurring d
 Before writing them into the profile:
 - summarize the candidate practices
 - ask the user which ones to accept, reject, or defer
+- follow `protocols/brainstorm.md` when accepting, rejecting, or deferring candidate practices requires choosing between meaningful trade-offs
 - do not silently convert external advice into project conventions
 
 ---
@@ -129,6 +133,12 @@ Before writing them into the profile:
 ## Phase 4 — Composition
 
 Create or update `.ai/docs/project_specification.md`.
+
+Before writing:
+- present the proposed profile, or an update summary when the file already exists
+- state whether an existing `.ai/docs/project_specification.md` will change
+- ask for explicit approval to write
+- preserve unresolved facts as open profile gaps unless the user accepted an assumption
 
 The file must include:
 - project purpose
@@ -140,7 +150,7 @@ The file must include:
 - authoritative local sources
 - quality expectations
 - preferred workflows
-- accepted external best practices, if any
+- accepted external best practices, with a source note and user decision status, if any
 - rejected or irrelevant assumptions, if any
 - open questions or profile gaps
 

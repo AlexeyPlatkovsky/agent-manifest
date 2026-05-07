@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -12,7 +12,7 @@ The Agent Manifesto is a portable, tool-agnostic framework for organizing AI ins
 
 ## How To Use
 
-The framework is delivered as a set of stages. A stage is any `NN_name.md` file. Each stage is self-contained — attach or reference it in your AI tool and ask the tool to run it. The exact syntax depends on your tool (`@file` in Claude Code, Cursor, and most modern agents), but the idea is the same across all of them:
+The framework is delivered as a set of stages. A stage is any `NN_name.md` file. Each stage is a self-contained entry point with a declared required context list — attach or reference it in your AI tool and ask the tool to run it. The exact syntax depends on your tool (`@file` in Claude Code, Cursor, and most modern agents), but the idea is the same across all of them:
 
 > `run @<stage-file>.md`
 
@@ -52,6 +52,7 @@ run @01_initial_composition.md
 - It reads `.ai/docs/project_specification.md`.
 - It asks only unresolved design questions needed for composition.
 - It derives required capabilities from protocol metadata.
+- It derives required agents from agent template metadata.
 - It makes tool-specific adapters explicit enough to enforce the canonical root contract.
 - It checks repeated software work such as feature implementation, code review, and code refactoring as pipeline candidates when their steps differ.
 - It preserves good existing capability names where they already satisfy the framework.
@@ -74,9 +75,10 @@ run @02_review.md
 - Validates the correct root-contract model.
 - Checks routing gates, duplication, and responsibility boundaries.
 - Verifies protocol coverage from structured metadata.
+- Verifies required agent coverage from structured metadata.
 - Produces a minimal fix plan before any implementation.
 
-**Outcome:** a validated instruction system and a short, targeted list of fixes if anything is off.
+**Outcome:** a compliance verdict and minimum fix plan; fixes are implemented only when explicitly requested.
 
 ---
 
@@ -92,7 +94,7 @@ run @03_capability_expansion.md
 **What happens:**
 - Learns recurring work directly from you.
 - Proposes new skills, pipelines, agents, conventions, and docs grounded in actual usage.
-- Materializes newly-triggered mandatory protocols as standalone skills when new capability triggers appear.
+- Verifies present mandatory protocol triggers and mandatory agent-template triggers before optional additions.
 
 **Outcome:** an instruction system that reflects how your team actually works, without speculative abstractions.
 
@@ -100,7 +102,9 @@ run @03_capability_expansion.md
 
 ### Stage 04 — Adopt External Tools
 
-**When:** adopting a specific external tool, library, or framework into an existing instruction system.
+**When:** adopting a specific external tool, library, or framework into an existing instruction system after a valid baseline exists.
+
+Run Stage 03 first if the tool introduces new capability triggers.
 
 **Run:**
 ```
@@ -120,8 +124,9 @@ run @04_tool_adoption.md
 
 - `MANIFEST.md` — framework values and principles
 - `IMPLEMENTATION.md` — framework mechanics and operational rules
-- `protocols/_README.md` — protocol index and usage notes
+- `protocols/_README.md` — protocol index
 - `protocols/*.md` — canonical protocol definitions used by stages
+- `agents/*.md` — canonical agent templates copied into generated landscapes when their metadata applies (`agents/_README.md` is the index)
 - `00_project_profile.md` — creates or updates the reusable project specification
 - `01_initial_composition.md` — builds or adjusts a baseline instruction system
 - `02_review.md` — audits an instruction system against the framework
@@ -132,12 +137,12 @@ run @04_tool_adoption.md
 
 ## Framework Reference
 
-The framework's authoritative content lives in two files:
+The framework's principles and mechanics live in two primary files:
 
 - [MANIFEST.md](MANIFEST.md) — values and principles
 - [IMPLEMENTATION.md](IMPLEMENTATION.md) — layers, gates, capability triggers, protocol contract, and operating rules
 
-Read those two files for the full model. The stage files above apply them.
+Stages, protocols, and agent templates are also canonical framework inputs. Read the two files above for the full model; the stage files, protocol files, and agent templates apply it.
 
 ---
 

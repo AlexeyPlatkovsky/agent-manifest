@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_expansion.md
 ---
@@ -12,13 +12,16 @@ Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
 - `protocols/_README.md`
-- all canonical protocol files under `protocols/` relevant to the current system
+- frontmatter for all canonical protocol files under `protocols/`, excluding `protocols/_README.md`; full bodies only for triggered protocols
+- frontmatter for all canonical agent template files under `agents/`, excluding `agents/_README.md`; full bodies only for triggered templates
 - `.ai/docs/project_specification.md`
 - the current instruction system: root contract, skills, pipelines, agents, conventions, and docs
 
 If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
 
 If other required context is missing, stop and ask for it.
+
+Use `protocols/_README.md` only as an inventory index. Derive capabilities from canonical protocol frontmatter, not from the index.
 
 ---
 
@@ -42,13 +45,13 @@ If the user's request bundles tool adoption with capability expansion, split the
 
 Work in exactly 4 phases:
 1. Discovery
-2. Brainstorm
+2. Brainstorm trigger check
 3. Proposal
 4. Composition
 
-During Brainstorm, follow `protocols/brainstorm.md`.
+During the Brainstorm trigger check, use `protocols/brainstorm.md` only when an unresolved high-impact decision has meaningful options.
 During Proposal, present the full proposal at once.
-During Composition, do not return to discussion.
+During Composition, do not return to brainstorming. Pause only for explicit approval or clarification gates required by `IMPLEMENTATION.md`.
 
 ---
 
@@ -63,23 +66,30 @@ Read the current instruction system and identify:
 - whether the user already named concrete additions or target responsibilities
 - which design decisions are still genuinely open versus already decided by the user request
 - whether the current system still matches protocol requirements
+- whether the current system still matches required agent template metadata
 - whether duplication or blurred responsibilities have crept in
+
+If no current instruction system exists, or if a valid baseline cannot be confirmed, stop and require `01_initial_composition.md` or a review/fix pass before expansion.
 
 Provide a brief current-state summary, then move to Phase 2.
 Do not propose solutions yet.
 
 ---
 
-## Phase 2 — Brainstorm
+## Phase 2 — Brainstorm Trigger Check
 
-Ask only about unresolved high-impact decisions.
+Determine whether `protocols/brainstorm.md` is triggered by unresolved high-impact decisions with meaningful options.
+
+If no such decision exists, record that brainstorming is not triggered and proceed to Phase 3 without asking a brainstorm question.
+
+When brainstorming is triggered, ask only about unresolved high-impact decisions.
 
 If the user already requested concrete additions, start with a scoped question about that requested capability set.
 Do not reset to a broad "typical day or week" discovery prompt.
 
 Use a broad recurring-work question only when the request is intentionally open-ended and the missing capability areas are still unknown.
 
-Every Brainstorm question must follow `protocols/brainstorm.md` exactly.
+When brainstorming is triggered, `protocols/brainstorm.md` owns the question format and decision-summary requirements.
 
 Explore only areas not already covered well by the existing system, such as:
 - review habits
@@ -98,7 +108,9 @@ Stop when:
 - no major new pipelines or specialized roles are emerging
 - you have enough evidence to justify a concrete proposal
 
-Before leaving Phase 2, ask whether anything important is still missing.
+Before leaving Phase 2, ask a final protocol-compliant question when meaningful options remain, then produce the required decision summary.
+
+After producing a brainstorm decision summary, stop for user confirmation before Composition can begin. Proposal approval may count only if it explicitly confirms the decisions.
 
 ---
 
@@ -112,6 +124,7 @@ Group proposals by type:
 3. Agents
 4. Conventions
 5. Docs
+6. Required compliance fixes
 
 For each proposed addition, provide:
 - name
@@ -120,6 +133,8 @@ For each proposed addition, provide:
 - what user-described need justifies it
 - what existing artifacts it depends on
 - why it belongs in that layer
+
+Include mandatory protocol-derived capabilities, mandatory copied agents, and compliance fixes in the proposed delta before asking for approval.
 
 Before presenting, verify that each proposal:
 - does not duplicate an existing artifact
@@ -131,16 +146,19 @@ Ask the user to approve, reject, or modify the proposal set before implementatio
 
 ---
 
-## Composition
+## Phase 4 — Composition
 
-Begin only after explicit user approval.
+Begin only after explicit user approval and any required brainstorm decision confirmation.
 
 Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor.
 
 Stage-specific rules:
-- if Discovery found a newly present protocol trigger, materialize every triggered protocol whose `implementation` is `mandatory` as a standalone project skill before any other addition
+- for every present mandatory protocol trigger, reuse an exact existing project capability or materialize the required standalone project capability before any optional addition
+- for every present mandatory agent template trigger, reuse an exact existing project-local agent or copy the required template before accepting new instruction artifacts
+- if an existing capability or agent is close but non-equivalent, stop and ask whether to split, preserve, replace, or add another artifact
+- use the instruction-evaluator agent to review new or changed instruction artifacts before final acceptance after copying or verifying that required agent in the target landscape
 - preserve existing good artifacts unless the user approved changes
-- update the applicable root contract and capability registry with each new capability
+- update the root contract's capability registry section, or the project's existing separate registry if one exists, with each new capability
 
 ---
 

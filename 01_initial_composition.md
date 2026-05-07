@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
@@ -12,12 +12,15 @@ Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
 - `protocols/_README.md`
-- all canonical protocol files under `protocols/` required by this framework version
+- all canonical protocol files under `protocols/`, excluding `protocols/_README.md`
+- all canonical agent template files under `agents/`, excluding `agents/_README.md`
 - `.ai/docs/project_specification.md`
 
 If `.ai/docs/project_specification.md` is missing, stop and require `00_project_profile.md` first.
 
 If any framework source is missing, stop and ask the user to provide it.
+
+Use `protocols/_README.md` only as an inventory index. Derive capabilities from canonical protocol frontmatter, not from the index.
 
 ---
 
@@ -31,8 +34,7 @@ The result must be correct enough to stand on its own.
 You must also:
 - use `.ai/docs/project_specification.md` as the authoritative profile source
 - ask only for profile clarification when the profile has gaps that block composition
-- derive required capabilities from protocol frontmatter, not from memorized protocol names
-- keep generated project skills standalone and project-local
+- keep generated project capabilities standalone and project-local
 
 ---
 
@@ -43,8 +45,8 @@ Work in exactly 3 phases:
 2. Discussion
 3. Composition
 
-During Discussion, follow `protocols/brainstorm.md` exactly.
-During Composition, do not return to discussion.
+During Discussion, use `protocols/brainstorm.md` as the governing protocol for high-impact design choices.
+During Composition, do not return to Phase 2 brainstorming unless a new high-impact design decision is discovered. Pause only for explicit approval or clarification gates required by `IMPLEMENTATION.md`.
 
 ---
 
@@ -111,7 +113,7 @@ Identify repeated behavior that may justify shared project conventions:
 
 Identify repeated non-trivial task types that may justify pipelines.
 
-For each candidate, decide whether it is:
+For each candidate, classify provisionally whether it is:
 - a direct task that needs no pipeline
 - an atomic skill
 - a pipeline with distinct ordered steps, validation, or review gates
@@ -122,11 +124,20 @@ Do not decide what to create yet.
 
 - read every canonical protocol under `protocols/`, excluding `protocols/_README.md`
 - treat protocol frontmatter as authoritative
+- verify every protocol has `version`, `project`, `url`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
 - determine which protocol triggers are present
 - determine which optional protocols may be justified by project needs and present triggers
 - identify any cross-capability enforcement declared by the protocols
 
-### H. Structural Risk Inventory
+### H. Agent Template Inventory
+
+- read every canonical agent template under `agents/`, excluding `agents/_README.md`
+- treat agent template frontmatter as authoritative
+- verify every agent template has `version`, `project`, `url`, `name`, `description`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
+- determine which agent template triggers are present
+- identify mandatory framework agents that must be copied into the generated AI landscape
+
+### I. Structural Risk Inventory
 
 Explicitly identify:
 - duplicated skills or near-duplicate names
@@ -159,7 +170,7 @@ Do not edit or create files in Phase 1.
 
 Resolve only the high-impact decisions identified in Phase 1.
 
-Follow `protocols/brainstorm.md` exactly. Never mix discussion with execution.
+Follow `protocols/brainstorm.md` for question format, stopping behavior, decision summary, and confirmation.
 
 Ask only what is actually needed to complete a correct design. Do not repeat profile questions that `.ai/docs/project_specification.md` already answers.
 
@@ -190,11 +201,12 @@ Begin only after the user confirms the decision summary.
 Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor, plus §Capability Triggers for this stage.
 
 Stage-specific reminders:
-- verify the chosen tool's native entrypoint convention against current official docs during composition
+- verify the chosen tool's native entrypoint convention against current official docs during composition; if current official docs cannot be accessed or the entrypoint cannot be verified, stop and ask the user for an authoritative source or approval to defer that tool-specific composition
 - use `pipeline` terminology consistently
 - tool-specific adapters must be explicit mandatory shims, not passive references; each adapter must name the canonical root contract, require the tool to load and follow it before project work, state that the root contract wins on conflict, and stop if the root contract is unavailable
 - if repeated software task types such as feature implementation, task review, or anything else have distinct ordered steps, create separate pipelines for them instead of representing them only as skills
 - before any risky change (splitting monolithic files, moving artifacts into `.ai/`, renaming, merging, deleting, replacing tool entrypoints, choosing between multiple valid implementation contracts), stop and ask the user — name what changes, why, and the compliant target state
+- if composition uncovers a new high-impact design decision, stop composition, report the blocker, reopen Phase 2 discussion under `protocols/brainstorm.md`, and resume composition only after a confirmed decision summary
 
 ### Layer Purity
 
@@ -216,6 +228,18 @@ If this precondition cannot be met, the capability is not yet a pipeline — kee
 Derive required capabilities from protocol frontmatter per `IMPLEMENTATION.md` §Framework Protocol Contract.
 
 Use the protocol filename basename as the default capability name only when the project does not already have an exact equivalent. An existing capability is exact only when responsibility matches, mandatory protocol coverage matches, and no contradiction exists. If only close, treat as non-equivalent and ask the user before splitting, merging, replacing, or duplicating.
+
+### Agent-Template-Derived Capabilities
+
+Derive required project-local agents from agent template frontmatter per `IMPLEMENTATION.md` §Framework Agent Template Contract.
+
+Copy every mandatory agent template whose `requires_when` trigger is present into the target AI landscape. The `any AI landscape` trigger is present for every generated instruction system.
+
+Keep copied agents on demand. Root contracts, managers, and adapters may route to them, but must not inline their full instructions.
+
+If target-tool agent formatting requires adaptation, preserve the template content verbatim except for the minimum wrapper or metadata reshaping needed by that tool.
+
+If the target landscape will not ship the framework authority files referenced by a template, adapt those references to equivalent project-local authority while preserving the template's role, constraints, and output contract.
 
 ### Scope Boundaries
 
@@ -248,6 +272,11 @@ When composition is complete, provide:
 - what is intentionally kept simple
 - what can be added later if the project grows
 
+### 5. Validation Performed
+- concrete checks completed
+- checks skipped or deferred, with reason
+- residual risks, if any
+
 ---
 
 ## Quality Bar
@@ -262,6 +291,5 @@ The final system must:
 - avoid unnecessary abstraction
 - preserve good existing project capabilities where possible
 - keep routing centralized in the correct layer
-- derive capabilities from protocol metadata rather than a hardcoded list
 - pass the Layer Purity tests: no execution in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
 - contain no pipeline whose skills do not yet exist

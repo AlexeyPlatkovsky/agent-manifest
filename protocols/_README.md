@@ -1,5 +1,5 @@
 ---
-version: 2.1.0
+version: 2.1.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/_README.md
 ---
@@ -13,21 +13,19 @@ They are not copied into projects and are not referenced by project runtime file
 
 ## How To Use Protocols
 
-- Treat each protocol file as the canonical source for that behavior at framework design time.
-- Derive capabilities from protocol frontmatter, not from memorized protocol names.
-- Use `implementation` and `requires_when` as the authoritative applicability metadata.
-- Generate standalone project skills from protocol mandatory rules plus minimal project-specific adaptation.
-- Do not make generated project skills depend on `protocols/` files or framework-only paths.
+This file is an index and must not participate in capability derivation.
+
+Use `IMPLEMENTATION.md` §Framework Protocol Contract as the authority for protocol metadata, derivation, and generated project capability rules.
 
 ## Current Protocols
 
 ### `brainstorm.md`
 
-Structured discussion behavior for open design and architecture decisions.
+Structured discussion behavior for open design, setup, and profile decisions with meaningful trade-offs.
 
 ### `task_complete.md`
 
-Closure reporting for non-trivial work.
+Closure reporting for non-trivial routed work.
 
 ### `manager.md`
 
