@@ -18,7 +18,7 @@ This file is an index and is not an agent template or derivation input.
 - Write `requires_when` entries as human-readable trigger phrases with spaces, matching protocol metadata style.
 - Copy mandatory matching templates into the project-local agent layer.
 - Copy optional matching templates only when their trigger is present and the project genuinely needs them.
-- Keep copied agents on demand; root contracts and adapters should route to them rather than inline their full instructions.
+- Keep copied agents on demand; root contracts and adapters must route to them rather than inline their full instructions.
 
 ## Current Agents
 

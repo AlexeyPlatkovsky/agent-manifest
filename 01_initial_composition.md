@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
@@ -290,6 +290,6 @@ The final system must:
 - avoid competing authorities
 - avoid unnecessary abstraction
 - preserve good existing project capabilities where possible
-- keep routing centralized in the correct layer
-- pass the Layer Purity tests: no execution in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
+- keep routing centralized in the root contract or manager-equivalent artifact
+- pass the Layer Purity tests: no embedded execution procedure in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
 - contain no pipeline whose skills do not yet exist

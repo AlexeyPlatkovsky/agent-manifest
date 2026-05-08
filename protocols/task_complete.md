@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/task_complete.md
 implementation: mandatory
@@ -49,7 +49,7 @@ It does not apply:
 
 ## 1. Centralized Exit Gate
 
-Assume the routing layer appended `task-complete` as the final step of non-trivial routed work.
+Assume the root contract or manager-equivalent appended `task-complete` as the final step of non-trivial routed work.
 
 Do not self-route, reopen routing, or make pipelines and execution skills repeat that enforcement rule.
 

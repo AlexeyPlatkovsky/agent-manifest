@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/brainstorm.md
 implementation: mandatory
@@ -68,13 +68,13 @@ Options must be:
 - actionable
 - specific enough to compare
 
-For factual setup or profile fields, include or allow a free-form correction path when the listed options may not fit the user's actual role, tool, path, or project fact.
+For factual setup or profile fields, always provide a free-form correction path so the user can supply the actual role, tool, path, or project fact when the listed options are incomplete or inaccurate.
 
 ## 3. Always Highlight Trade-Offs
 
 State what each option optimizes for, what it sacrifices, and what risks or bottlenecks it carries.
 
-Do not present options as equally valid when they are not.
+Do not present options as equally valid when user-stated requirements, framework constraints, risk, context weight, or operational feasibility make one option materially stronger or weaker.
 
 For setup or profile clarification, keep trade-off notes brief and practical. Explain the likely impact of each option without expanding factual profile capture into broad design analysis.
 

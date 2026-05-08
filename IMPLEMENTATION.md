@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -23,9 +23,6 @@ The framework has five source types:
 - `NN_name.md` files define framework stages.
 - `protocols/*.md` define framework protocols used by stages.
 - `agents/*.md`, excluding `agents/_README.md`, define framework agent templates used by generated landscapes.
-
-Framework protocols are not project runtime files. They are inputs for generating or reviewing project-local capabilities.
-Framework agent templates are copied into project-local instruction systems when their metadata applies.
 
 ---
 
@@ -60,7 +57,7 @@ If `.ai/docs/project_specification.md` is missing, stages 01-04 must stop and re
 
 ### Brainstorming
 
-When a stage uses brainstorming, it must cite `protocols/brainstorm.md` and follow it exactly. Stages must not restate brainstorm protocol rules. A stage may name only the stage-specific scope of the conversation and the topics in scope.
+When a stage uses brainstorming, cite `protocols/brainstorm.md` and follow it exactly. Do not restate its rules; name only the stage-specific scope and topics.
 
 ### Composition Anchor
 
@@ -68,7 +65,7 @@ When a stage enters a composition, implementation, or fix-application phase, it 
 
 ### Phase Discipline
 
-Stages must not modify files during inventory, audit, discovery, discussion, brainstorm, clarification, reconciliation, or proposal phases. File modifications belong only in the stage's composition or implementation phase, and only after explicit user approval when the stage requires it.
+Stages must not modify files during inventory, audit, discovery, discussion, brainstorm, clarification, reconciliation, or proposal phases. File modifications belong only in the stage's composition or implementation phase, and only after explicit user approval.
 
 ---
 
@@ -149,7 +146,7 @@ Rules:
 - create a pipeline when a repeated task type is non-trivial and has a distinct ordered execution path
 - do not collapse distinct workflows into one generic pipeline when their steps, validation, or review gates differ
 
-For software projects, common pipeline candidates include feature implementation, code review, and code refactoring. Create these only when the project profile or repository evidence shows they are real recurring work, but explicitly test them during initial composition for software repositories.
+For software projects, common pipeline candidates include feature implementation, code review, and code refactoring. Create these only when the project profile or repository evidence shows they are real recurring work, but explicitly evaluate whether they are needed during initial composition for software repositories.
 
 ## Agents
 
@@ -175,10 +172,9 @@ Rules:
 - skills and agents reference conventions instead of copying them
 - in multi-tool or AI-agnostic projects, store shared conventions under `.ai/conventions`
 - use one file per convention area, such as `.ai/conventions/code.md` or `.ai/conventions/testing.md`
+- a referenced convention is mandatory for the referencing skill or agent
 
-Consistency between skills is an emergent property of sharing the same convention source.
-Common behavior must live in one place to prevent drift.
-When a skill or agent references a convention, that convention is mandatory for that skill or agent.
+Shared conventions prevent drift; consistency across skills follows automatically.
 
 ## Reference Docs
 
@@ -187,7 +183,7 @@ Reference docs hold reusable project knowledge.
 Rules:
 - use docs for facts such as architecture, commands, domain context, and repository structure
 - keep docs on demand, not always loaded
-- do not use docs to enforce behavior that belongs in the root contract, a skill, a pipeline, an agent, or a convention
+- docs inform but do not enforce behavior
 
 ## Layer Purity
 
@@ -197,7 +193,7 @@ Tests:
 - pipeline body = ordered references to skills, agents, or single trivial commands; no embedded execution procedure, no "how to" prose, no standards, no DSL or coding rules, no checklists that belong in a skill or convention
 - skill body = one atomic execution capability; may cite conventions and reference docs, but does not sequence sibling skills and does not restate standards already owned by a convention
 - convention body = shared standards only; no classification, routing, sequencing, or execution; no task procedure
-- root contract / manager body = routing and gates only; no execution bodies
+- root contract body (always-loaded) and manager-equivalent body (on-demand): routing and gates only; no execution bodies
 
 If a layer is about to absorb content that belongs elsewhere, place the content in the correct layer first. A pipeline whose body could be deleted without losing execution detail because the detail lives only there is a skill mislabeled as a pipeline.
 
@@ -324,7 +320,7 @@ Validation is mandatory for non-trivial routed work:
 - validation should be automated and repeatable where possible
 - validation is a required check unless a project explicitly creates a concrete validation skill, pipeline step, or convention
 - `task-complete` is the required closure skill for non-trivial routed work
-- `task-complete` enforcement should be centralized in the routing layer, not repeated across execution skills
+- `task-complete` enforcement should be centralized in the root contract or manager-equivalent artifact, not repeated across execution skills
 
 ### 6. Ask Before You Cut
 
@@ -363,7 +359,7 @@ Each protocol body must define:
 - purpose
 - mandatory rules that implementations must preserve
 - allowed project-specific adaptations
-- output contracts, when applicable
+- output contracts, when other capabilities or validation depend on this one's result
 
 ## Capability Derivation
 
@@ -381,7 +377,7 @@ Generated project capabilities derived from protocols must:
 - include minimal project-specific adaptation
 - avoid references to framework files, protocol files, or framework-only paths
 
-When a protocol derives a skill in a multi-tool or AI-agnostic project, use the framework-standard skill format defined above. When a protocol derives a manager-equivalent routing capability, keep it in the routing layer rather than formatting it as a normal execution skill.
+When a protocol derives a skill in a multi-tool or AI-agnostic project, use the framework-standard skill format defined above. When a protocol derives a manager-equivalent routing capability, keep it as a standalone routing artifact — not stored under `.ai/skills/` and not formatted as an execution skill. Place it alongside the root contract or at the project root unless the project already has an established location for routing artifacts.
 
 ---
 
