@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -113,7 +113,7 @@ run @04_tool_adoption.md
 
 **What happens:**
 - Inventories the tool's runtime surface, demos, and foreign instruction artifacts.
-- Reconciles foreign skills into standalone project skills, wrapped libraries, references, or discards.
+- Reconciles foreign capabilities into standalone project artifacts, wrapped libraries, references, or discards.
 - Enforces cleanup of demo content and broken imports before completion.
 
 **Outcome:** the external tool is cleanly integrated, with no leftover demo noise or conflicting instructions.
@@ -132,17 +132,6 @@ run @04_tool_adoption.md
 - `02_review.md` — audits an instruction system against the framework
 - `03_capability_expansion.md` — expands a correct baseline with new capabilities
 - `04_tool_adoption.md` — adopts an external tool or framework into an existing instruction system
-
----
-
-## Framework Reference
-
-The framework's principles and mechanics live in two primary files:
-
-- [MANIFEST.md](MANIFEST.md) — values and principles
-- [IMPLEMENTATION.md](IMPLEMENTATION.md) — layers, gates, capability triggers, protocol contract, and operating rules
-
-Stages, protocols, and agent templates are also canonical framework inputs. Read the two files above for the full model; the stage files, protocol files, and agent templates apply it.
 
 ---
 

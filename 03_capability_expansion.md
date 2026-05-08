@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_expansion.md
 ---
@@ -156,7 +156,7 @@ Stage-specific rules:
 - for every present mandatory protocol trigger, reuse an exact existing project capability or materialize the required standalone project capability before any optional addition
 - for every present mandatory agent template trigger, reuse an exact existing project-local agent or copy the required template before accepting new instruction artifacts
 - if an existing capability or agent is close but non-equivalent, stop and ask whether to split, preserve, replace, or add another artifact
-- use the instruction-evaluator agent to review new or changed instruction artifacts before final acceptance after copying or verifying that required agent in the target landscape
+- verify the project-local instruction-evaluator agent exists, then use it to review new or changed instruction artifacts before final acceptance
 - preserve existing good artifacts unless the user approved changes
 - update the root contract's capability registry section, or the project's existing separate registry if one exists, with each new capability
 

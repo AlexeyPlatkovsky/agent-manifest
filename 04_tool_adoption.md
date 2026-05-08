@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/04_tool_adoption.md
 ---
@@ -54,7 +54,7 @@ During Composition, do not return to reconciliation or discussion. Pause only fo
 
 ## Phase 1 — Inventory
 
-Read the external tool as it arrives and the current instruction system.
+Read the external tool as provided and the current instruction system.
 
 Identify:
 - the tool's runtime surface: libraries, binaries, configuration files actually required to use it
@@ -125,9 +125,9 @@ Before declaring integration complete, verify:
 - all imports resolve and the project compiles or type-checks cleanly
 - no foreign skill, pipeline, agent, convention, rule, contract, or prompt file remains inside the project instruction directories
 - the approved runtime surface is the only thing retained from the vendor bundle
-- the capability registry and routing layer list every new project capability
+- the root contract's capability registry lists every new project capability
 - every required framework agent is present as a project-local on-demand agent
-- the routing layer or manager-equivalent enforces `task-complete` for non-trivial routed work
+- the root contract or manager-equivalent enforces `task-complete` for non-trivial routed work
 
 Phase 4 is verification-only unless the required fix is already covered by prior Phase 3 approval. If any check fails and the fix is not covered by prior approval, stop, name the failure and risk, and ask for approval for a new composition/fix pass.
 

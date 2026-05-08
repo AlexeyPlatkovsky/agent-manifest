@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.1.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/manager.md
 implementation: mandatory
@@ -40,7 +40,7 @@ The manager-equivalent applies when:
 
 It does not apply:
 - to trivial tasks
-- to projects that still fit direct routing
+- when the task fits direct execution without routing
 - to purely factual questions with no execution path
 
 ---
@@ -60,7 +60,7 @@ Before non-trivial work begins, the manager must explicitly classify:
 - risk
 - whether the task crosses domains or systems
 
-If the task is actually trivial, the manager should say so and release it for direct execution.
+If the task is actually trivial, the manager must say so and release it for direct execution.
 
 ## 3. Name the Concrete Next Capability
 
@@ -75,7 +75,7 @@ That decision must identify:
 
 The manager is responsible for appending `task-complete` as the final step of non-trivial routed work.
 
-Execution skills and pipelines should not repeat that responsibility.
+The manager must centralize this responsibility rather than requiring execution skills or pipelines to repeat it.
 
 ## 5. Escalate by Risk
 
