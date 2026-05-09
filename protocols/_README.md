@@ -1,5 +1,5 @@
 ---
-version: 2.4.0
+version: 2.5.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/_README.md
 ---
@@ -27,6 +27,10 @@ Structured discussion behavior for open design, setup, and profile decisions wit
 ### `task_complete.md`
 
 Closure reporting for non-trivial routed work.
+
+### `documentation_maintenance.md`
+
+Post-change documentation maintenance after feature implementation, refactoring, and non-trivial bug fixes.
 
 ### `manager.md`
 

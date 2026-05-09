@@ -1,5 +1,5 @@
 ---
-version: 2.4.0
+version: 2.5.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/conventions/reference-docs.md
 ---
@@ -17,9 +17,17 @@ They inform work but do not enforce behavior.
 
 # Reference Doc Structure
 
-## 1. Use Purposeful Subfolders
+## 1. Identify Authoritative Doc Roots
 
-Store reference docs under `.ai/docs`.
+The framework-standard shared location for generated reference docs is `.ai/docs`.
+
+Projects may also keep authoritative docs in other folders, such as `docs/`, `documentation/`, product-specific directories, or tool-specific documentation roots.
+
+When a project uses a non-standard documentation root, record or preserve that root in the project profile, root contract, or relevant docs index.
+
+Do not move existing project docs into `.ai/docs` unless the user explicitly approves that structural refactor.
+
+## 2. Use Purposeful Subfolders
 
 Use subfolders when a doc set has multiple domains, systems, products, APIs, workflows, or source families.
 
@@ -31,9 +39,11 @@ Examples:
 
 Do not flatten unrelated topics into one large document when stable subfolders would make selective loading easier.
 
-## 2. Maintain A Docs Index
+## 3. Maintain A Docs Index
 
 Every generated or reorganized `.ai/docs` tree must include `.ai/docs/README.md`.
+
+Non-standard authoritative documentation roots should have an equivalent index when the doc set is large enough to require selective loading.
 
 The index must identify:
 - each doc or doc family
@@ -44,7 +54,7 @@ The index must identify:
 The index is a lookup aid.
 It is not a root contract, routing artifact, policy layer, or source of behavioral rules.
 
-## 3. Split Into Stable Sections
+## 4. Split Into Stable Sections
 
 Large reference docs must be split into stable files or stable sections.
 
@@ -58,9 +68,9 @@ For API docs, each endpoint or closely related endpoint group should have a stab
 
 Prefer headings, IDs, and file names that remain stable across wording changes.
 
-## 4. Read Narrowly First
+## 5. Read Narrowly First
 
-Agents should inspect `.ai/docs/README.md` before reading large reference docs unless the needed file or section is already known.
+Agents should inspect the relevant docs index before reading large reference docs unless the needed file or section is already known.
 
 When a task needs reference knowledge, agents should:
 - identify the smallest relevant doc, section, or line range
@@ -74,7 +84,7 @@ Full-doc reads are justified for:
 - index repair
 - tasks where cross-section dependencies are the subject of the work
 
-## 5. Keep Docs Factual
+## 6. Keep Docs Factual
 
 Reference docs may contain:
 - architecture facts

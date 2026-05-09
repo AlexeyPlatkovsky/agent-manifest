@@ -1,5 +1,5 @@
 ---
-version: 2.4.0
+version: 2.5.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -368,6 +368,7 @@ Use these triggers:
 - multiple AI tools or AI-agnostic portability need: root contract plus thin adapters
 - open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
 - non-trivial routed work: explicit validation check and task-complete capability
+- feature implementation, refactoring, or non-trivial bug fix that changes project behavior, structure, commands, contracts, workflows, domain facts, or known failure modes: documentation maintenance capability
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
 - repeated multi-step workflow or repeated non-trivial task type with distinct steps: pipeline
 - repeated task type: skill
