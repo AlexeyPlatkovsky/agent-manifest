@@ -1,5 +1,5 @@
 ---
-version: 2.1.2
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_expansion.md
 ---
@@ -11,6 +11,7 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
+- all framework convention files under `conventions/`
 - `protocols/_README.md`
 - frontmatter for all canonical protocol files under `protocols/`, excluding `protocols/_README.md`; full bodies only for triggered protocols
 - frontmatter for all canonical agent template files under `agents/`, excluding `agents/_README.md`; full bodies only for triggered templates
@@ -21,7 +22,7 @@ If `.ai/docs/project_specification.md` is missing, stop and require `00_project_
 
 If other required context is missing, stop and ask for it.
 
-Use `protocols/_README.md` only as an inventory index. Derive capabilities from canonical protocol frontmatter, not from the index.
+Use `protocols/_README.md` only as an inventory index. Derive capabilities using `conventions/capability-derivation.md`.
 
 ---
 

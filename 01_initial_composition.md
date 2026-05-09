@@ -1,5 +1,5 @@
 ---
-version: 2.1.2
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
@@ -11,6 +11,7 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_com
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
+- all framework convention files under `conventions/`
 - `protocols/_README.md`
 - all canonical protocol files under `protocols/`, excluding `protocols/_README.md`
 - all canonical agent template files under `agents/`, excluding `agents/_README.md`
@@ -20,7 +21,7 @@ If `.ai/docs/project_specification.md` is missing, stop and require `00_project_
 
 If any framework source is missing, stop and ask the user to provide it.
 
-Use `protocols/_README.md` only as an inventory index. Derive capabilities from canonical protocol frontmatter, not from the index.
+Use `protocols/_README.md` only as an inventory index. Derive capabilities using `conventions/capability-derivation.md`.
 
 ---
 
@@ -123,8 +124,7 @@ Do not decide what to create yet.
 ### G. Protocol Inventory
 
 - read every canonical protocol under `protocols/`, excluding `protocols/_README.md`
-- treat protocol frontmatter as authoritative
-- verify every protocol has `version`, `project`, `url`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
+- apply `conventions/framework-metadata.md`
 - determine which protocol triggers are present
 - determine which optional protocols may be justified by project needs and present triggers
 - identify any cross-capability enforcement declared by the protocols
@@ -132,8 +132,7 @@ Do not decide what to create yet.
 ### H. Agent Template Inventory
 
 - read every canonical agent template under `agents/`, excluding `agents/_README.md`
-- treat agent template frontmatter as authoritative
-- verify every agent template has `version`, `project`, `url`, `name`, `description`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
+- apply `conventions/framework-metadata.md`
 - determine which agent template triggers are present
 - identify mandatory framework agents that must be copied into the generated AI landscape
 
@@ -203,14 +202,14 @@ Apply `IMPLEMENTATION.md` §Stage Standards §Composition Anchor, plus §Capabil
 Stage-specific reminders:
 - verify the chosen tool's native entrypoint convention against current official docs during composition; if current official docs cannot be accessed or the entrypoint cannot be verified, stop and ask the user for an authoritative source or approval to defer that tool-specific composition
 - use `pipeline` terminology consistently
-- tool-specific adapters must be explicit mandatory shims, not passive references; each adapter must name the canonical root contract, require the tool to load and follow it before project work, state that the root contract wins on conflict, and stop if the root contract is unavailable
+- apply `conventions/tool-adapters.md` to every tool-specific entry file
 - if repeated software task types such as feature implementation, task review, or anything else have distinct ordered steps, create separate pipelines for them instead of representing them only as skills
 - before any risky change (splitting monolithic files, moving artifacts into `.ai/`, renaming, merging, deleting, replacing tool entrypoints, choosing between multiple valid implementation contracts), stop and ask the user — name what changes, why, and the compliant target state
 - if composition uncovers a new high-impact design decision, stop composition, report the blocker, reopen Phase 2 discussion under `protocols/brainstorm.md`, and resume composition only after a confirmed decision summary
 
 ### Layer Purity
 
-Apply `IMPLEMENTATION.md` §Layer Purity to every file written in this stage.
+Apply `conventions/layer-purity.md` to every file written in this stage.
 
 ### Skill Extraction Precondition For Pipelines
 
@@ -225,21 +224,13 @@ If this precondition cannot be met, the capability is not yet a pipeline — kee
 
 ### Protocol-Derived Capabilities
 
-Derive required capabilities from protocol frontmatter per `IMPLEMENTATION.md` §Framework Protocol Contract.
+Derive required capabilities from protocol frontmatter per `conventions/capability-derivation.md`.
 
 Use the protocol filename basename as the default capability name only when the project does not already have an exact equivalent. An existing capability is exact only when responsibility matches, mandatory protocol coverage matches, and no contradiction exists. If only close, treat as non-equivalent and ask the user before splitting, merging, replacing, or duplicating.
 
 ### Agent-Template-Derived Capabilities
 
-Derive required project-local agents from agent template frontmatter per `IMPLEMENTATION.md` §Framework Agent Template Contract.
-
-Copy every mandatory agent template whose `requires_when` trigger is present into the target AI landscape. The `any AI landscape` trigger is present for every generated instruction system.
-
-Keep copied agents on demand. Root contracts, managers, and adapters may route to them, but must not inline their full instructions.
-
-If target-tool agent formatting requires adaptation, preserve the template content verbatim except for the minimum wrapper or metadata reshaping needed by that tool.
-
-If the target landscape will not ship the framework authority files referenced by a template, adapt those references to equivalent project-local authority while preserving the template's role, constraints, and output contract.
+Derive required project-local agents from agent template frontmatter per `conventions/capability-derivation.md`.
 
 ### Scope Boundaries
 
@@ -291,5 +282,5 @@ The final system must:
 - avoid unnecessary abstraction
 - preserve good existing project capabilities where possible
 - keep routing centralized in the root contract or manager-equivalent artifact
-- pass the Layer Purity tests: no embedded execution procedure in pipelines, no sequencing in skills, no procedures in conventions, no execution in the root contract
+- pass `conventions/layer-purity.md`
 - contain no pipeline whose skills do not yet exist

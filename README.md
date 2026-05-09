@@ -1,5 +1,5 @@
 ---
-version: 2.1.2
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/README.md
 ---
@@ -124,6 +124,7 @@ run @04_tool_adoption.md
 
 - `MANIFEST.md` — framework values and principles
 - `IMPLEMENTATION.md` — framework mechanics and operational rules
+- `conventions/*.md` — shared framework standards used by multiple framework artifacts
 - `protocols/_README.md` — protocol index
 - `protocols/*.md` — canonical protocol definitions used by stages
 - `agents/*.md` — canonical agent templates copied into generated landscapes when their metadata applies (`agents/_README.md` is the index)

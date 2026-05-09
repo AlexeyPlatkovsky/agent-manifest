@@ -1,5 +1,5 @@
 ---
-version: 2.1.2
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -11,6 +11,7 @@ url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 Before starting, ensure the following files are available in this session:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
+- all framework convention files under `conventions/`
 - frontmatter for all canonical protocol files under `protocols/`, excluding `protocols/_README.md`; full bodies only for triggered, required, or directly conflicting protocols
 - frontmatter for all canonical agent template files under `agents/`, excluding `agents/_README.md`; full bodies only for triggered, required, or directly conflicting templates
 - `.ai/docs/project_specification.md`
@@ -63,14 +64,12 @@ Determine which root contract model applies.
 Compare the detected model against `.ai/docs/project_specification.md`.
 
 For single-tool projects:
-- verify that the tool's official native entrypoint exists and acts as the full operational contract
-- verify the native entrypoint against the tool's current official docs when validating native entrypoint or adapter structure; if current official docs cannot be checked, report the uncertainty or stop when it blocks the audit
+- apply `conventions/tool-adapters.md` to the native entrypoint
 - verify that supporting artifacts follow the selected tool's native structure
 
 For multi-tool or AI-agnostic projects:
 - verify that `AGENTS.md` exists and acts as the root operational contract
-- verify that supported tool-specific entry files are thin adapters to `AGENTS.md`
-- verify that adapters use explicit mandatory language, name the exact root contract path, require the tool to load and follow it before project work, state that `AGENTS.md` wins on conflict, and stop if it is unavailable
+- apply `conventions/tool-adapters.md` to supported tool-specific entry files
 - verify that shared skills use the framework-standard format `.ai/skills/<skill_name>/SKILL.md`
 - verify that each shared skill uses Claude-style YAML frontmatter with at least `name` and `description`
 - verify that shared project conventions, when present, live in the project conventions layer
@@ -94,18 +93,16 @@ Audit-specific red flags:
 ### Protocol Inventory and Applicability
 
 - read frontmatter for every canonical protocol under `protocols/`, excluding `protocols/_README.md`; read full bodies only for triggered, required, or directly conflicting protocols
-- treat protocol frontmatter as authoritative
-- verify every protocol has `version`, `project`, `url`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
+- apply `conventions/framework-metadata.md`
 - determine which protocol triggers are present
-- derive required capabilities from `implementation` and `requires_when`
+- derive required capabilities using `conventions/capability-derivation.md`
 
 ### Agent Template Inventory and Applicability
 
 - read frontmatter for every canonical agent template under `agents/`, excluding `agents/_README.md`; read full bodies only for triggered, required, or directly conflicting templates
-- treat agent template frontmatter as authoritative
+- apply `conventions/framework-metadata.md`
 - determine which agent template triggers are present
-- derive required project-local agents from `implementation` and `requires_when`
-- verify every agent template has `version`, `project`, `url`, `name`, `description`, `implementation`, `requires_when`, and human-readable trigger phrases with spaces rather than slug-style underscores
+- derive required project-local agents using `conventions/capability-derivation.md`
 
 ### Protocol Coverage
 
@@ -140,13 +137,7 @@ Flag concrete violations, especially:
 
 ### Layer Purity
 
-Audit every artifact against `IMPLEMENTATION.md` §Layer Purity. Flag any cross-layer leakage as a major violation.
-
-Audit-specific red flags:
-- a pipeline whose body could be deleted without losing execution detail because the detail lives only there (the pipeline is acting as a skill)
-- a pipeline that references skills which do not exist (no callable target for the sequence)
-- a pipeline or skill that restates content already in a convention or reference doc
-- a project where pipelines exist but the skill layer is empty or near-empty — strong signal that pipelines absorbed execution
+Audit every artifact against `conventions/layer-purity.md`. Flag any cross-layer leakage as a major violation.
 
 ### Imported Capability Adoption
 
@@ -202,7 +193,7 @@ Prioritize:
 - critical routing failures
 - incorrect root contract model
 - duplicated or blurred responsibilities
-- layer purity failures (pipelines containing execution, skills sequencing siblings, conventions holding procedures, root contract executing)
+- layer purity failures
 - protocol coverage failures
 - agent template coverage failures
 - imported-framework adoption failures such as demo residue, broken compilation, or competing orchestration

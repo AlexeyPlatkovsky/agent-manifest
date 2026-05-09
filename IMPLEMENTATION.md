@@ -1,5 +1,5 @@
 ---
-version: 2.1.2
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -16,13 +16,24 @@ This document defines how the agent-manifest framework realizes the values and p
 
 # Framework Sources
 
-The framework has five source types:
+The framework has six source types:
 
 - `MANIFEST.md` defines values and principles.
 - `IMPLEMENTATION.md` defines framework mechanics.
+- `conventions/*.md` define shared framework standards used by multiple stages, protocols, or agent templates.
 - `NN_name.md` files define framework stages.
 - `protocols/*.md` define framework protocols used by stages.
 - `agents/*.md`, excluding `agents/_README.md`, define framework agent templates used by generated landscapes.
+
+## Framework Conventions
+
+Framework conventions are shared standards for framework artifacts.
+
+Rules:
+- use a convention only when at least two framework artifacts need the same standard
+- conventions define standards, not routing, sequencing, validation gates, or execution procedure
+- stages, protocols, and agent templates reference conventions instead of restating them
+- use one convention file per concern
 
 ---
 
@@ -40,7 +51,7 @@ Current stages:
 Stage rules:
 - `00_project_profile.md` must run before any other stage
 - stages 01-04 must stop if `.ai/docs/project_specification.md` is missing
-- stages apply `MANIFEST.md`, `IMPLEMENTATION.md`, framework protocols, and the project specification together
+- stages apply `MANIFEST.md`, `IMPLEMENTATION.md`, framework conventions, framework protocols, applicable agent templates, and the project specification together
 - stage files are not project runtime artifacts
 
 ## Stage Standards
@@ -61,7 +72,7 @@ When a stage uses brainstorming, cite `protocols/brainstorm.md` and follow it ex
 
 ### Composition Anchor
 
-When a stage enters a composition, implementation, or fix-application phase, it must apply this document's §Project Landscape (including §Layer Purity), §Principle Implementation, §Framework Protocol Contract, §Framework Agent Template Contract, and §Capability Triggers. Stage-specific composition rules supplement, not replace, these anchors.
+When a stage enters a composition, implementation, or fix-application phase, it must apply this document's §Project Landscape, §Principle Implementation, §Framework Protocol Contract, §Framework Agent Template Contract, §Capability Triggers, and all relevant `conventions/*.md`. Stage-specific composition rules supplement, not replace, these anchors.
 
 ### Phase Discipline
 
@@ -88,28 +99,7 @@ Rules:
 
 The root contract is the always-loaded policy layer. It classifies tasks, enforces gates, defines constraints, and routes work. It does not execute task procedures.
 
-For single-tool projects:
-- the selected tool's official native entrypoint may hold the full operational contract
-- the native entrypoint must be verified against current official documentation during composition
-- supporting artifacts should use the selected tool's native structure by default
-- `AGENTS.md` is not required
-
-For multi-tool or AI-agnostic projects:
-- `AGENTS.md` is the canonical root operational contract
-- every tool-specific entry file must be a thin adapter
-- each adapter must explicitly instruct the tool to load and follow `AGENTS.md` before doing project work
-- each adapter must use imperative language, name the exact canonical file path, and state that `AGENTS.md` wins over the adapter if there is any conflict
-- each adapter must stop the tool if `AGENTS.md` is unavailable instead of letting the tool proceed from memory or inference
-- no tool-specific file may become a second source of truth
-
-A thin adapter is not a vague pointer. It should be short, but it must still be operationally complete for that tool. Avoid adapter language such as "see", "refer to", or "follow if needed" when the adapter is meant to impose a mandatory root contract.
-
-Minimum adapter content:
-- state that the file is only an adapter for the named tool
-- instruct the tool to read `AGENTS.md` before starting any project task
-- instruct the tool to follow every applicable rule in `AGENTS.md`
-- state that `AGENTS.md` overrides the adapter on conflict
-- require the tool to stop and ask for `AGENTS.md` if it cannot read it
+Use `conventions/tool-adapters.md` for single-tool and multi-tool root contract models, native entrypoint verification, and thin adapter requirements.
 
 Shared multi-tool storage uses:
 - `.ai/agents`
@@ -182,18 +172,17 @@ Reference docs hold reusable project knowledge.
 
 Rules:
 - use docs for facts such as architecture, commands, domain context, and repository structure
+- structure docs for selective loading with `.ai/docs/README.md`, purposeful subfolders, and stable section targets
 - keep docs on demand, not always loaded
 - docs inform but do not enforce behavior
+
+Apply `conventions/reference-docs.md`.
 
 ## Layer Purity
 
 Every artifact must stay inside the responsibility boundary of its layer.
 
-Tests:
-- pipeline body = ordered references to skills, agents, or single trivial commands; no embedded execution procedure, no "how to" prose, no standards, no DSL or coding rules, no checklists that belong in a skill or convention
-- skill body = one atomic execution capability; may cite conventions and reference docs, but does not sequence sibling skills and does not restate standards already owned by a convention
-- convention body = shared standards only; no classification, routing, sequencing, or execution; no task procedure
-- root contract body (always-loaded) and manager-equivalent body (on-demand): routing and gates only; no execution bodies
+Apply `conventions/layer-purity.md`.
 
 If a layer is about to absorb content that belongs elsewhere, place the content in the correct layer first. A pipeline whose body could be deleted without losing execution detail because the detail lives only there is a skill mislabeled as a pipeline.
 
@@ -313,6 +302,8 @@ Compliant pattern:
 - if trivial: proceed directly and state the classification
 - if non-trivial: stop, load the concrete routing capability, and do not implement until routing resolves
 - if unsure: treat as non-trivial
+- classification must be stated out loud before any file is created, edited, or deleted; a silent mental check does not satisfy the gate
+- when a conversation begins as discussion or design and the user signals to proceed ("go ahead", "do it", "implement it", "fix it", or equivalent), treat that signal as a fresh routing gate trigger, not as permission to skip classification
 
 Validation is mandatory for non-trivial routed work:
 - every non-trivial pipeline must include at least one explicit validation step
@@ -344,16 +335,7 @@ When asking, explain:
 
 Protocols in `protocols/` are canonical framework inputs. They are not project runtime files.
 
-Every protocol must declare structured frontmatter:
-- `version`
-- `project`
-- `url`
-- `implementation: mandatory | optional`
-- `requires_when: [...]`
-
-`requires_when` entries are human-readable trigger phrases. Write them with spaces rather than slug-style underscores.
-
-Protocol frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
+Every protocol must follow `conventions/framework-metadata.md`.
 
 Each protocol body must define:
 - purpose
@@ -363,21 +345,7 @@ Each protocol body must define:
 
 ## Capability Derivation
 
-Capability derivation must come from canonical protocol metadata.
-
-Rules:
-- only protocols whose `requires_when` trigger is present may require implementation
-- `protocols/_README.md` is an index of available protocols and must not participate in capability derivation
-- protocols marked `implementation: mandatory` define required project capabilities when their trigger is present
-- protocols marked `implementation: optional` may be implemented only when their trigger is present and the project genuinely needs them
-
-Generated project capabilities derived from protocols must:
-- be standalone project artifacts
-- include the protocol's mandatory behavior
-- include minimal project-specific adaptation
-- avoid references to framework files, protocol files, or framework-only paths
-
-When a protocol derives a skill in a multi-tool or AI-agnostic project, use the framework-standard skill format defined above. When a protocol derives a manager-equivalent routing capability, keep it as a standalone routing artifact — not stored under `.ai/skills/` and not formatted as an execution skill. Place it alongside the root contract or at the project root unless the project already has an established location for routing artifacts.
+Apply `conventions/capability-derivation.md`.
 
 ---
 
@@ -385,28 +353,9 @@ When a protocol derives a skill in a multi-tool or AI-agnostic project, use the 
 
 Agent templates in `agents/`, excluding `agents/_README.md`, are canonical framework inputs for specialized project-local agents.
 
-Every agent template must declare structured frontmatter:
-- `version`
-- `project`
-- `url`
-- `name`
-- `description`
-- `implementation: mandatory | optional`
-- `requires_when: [...]`
+Every agent template must follow `conventions/framework-metadata.md`.
 
-`requires_when` entries are human-readable trigger phrases. Write them the same way as protocol triggers, with spaces rather than slug-style underscores.
-
-Agent template frontmatter is authoritative for derivation and review. Prompt logic must not infer applicability from prose when metadata is present.
-
-Rules:
-- templates marked `implementation: mandatory` define required project-local agents when their `requires_when` trigger is present
-- templates marked `implementation: optional` may be copied only when their trigger is present and the project genuinely needs them
-- `any AI landscape` is the trigger for agents that must be included in every generated project instruction system
-- copied agents must remain on demand; root contracts and adapters route to them but do not inline their full instructions
-- copied mandatory agents must preserve the template content verbatim when the generated landscape ships the same authority files the template references
-- if the generated landscape does not ship the framework authority files, adapt those references to equivalent project-local authority while preserving the template's role, constraints, and output contract
-- target-tool formatting may be adapted only as much as needed to make the agent usable in that AI landscape
-- generated project agents must avoid references to framework files, template files, or framework-only paths unless those files are intentionally shipped as project-local authority
+Apply `conventions/capability-derivation.md` for agent template derivation and generated project agent requirements.
 
 ---
 
@@ -419,6 +368,7 @@ Use these triggers:
 - multiple AI tools or AI-agnostic portability need: root contract plus thin adapters
 - open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
 - non-trivial routed work: explicit validation check and task-complete capability
+- feature implementation, refactoring, or non-trivial bug fix that changes project behavior, structure, commands, contracts, workflows, domain facts, or known failure modes: documentation maintenance capability
 - routing must choose between multiple skills, pipelines, or agents: manager-equivalent capability
 - repeated multi-step workflow or repeated non-trivial task type with distinct steps: pipeline
 - repeated task type: skill

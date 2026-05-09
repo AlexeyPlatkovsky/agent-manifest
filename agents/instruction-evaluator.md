@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/instruction-evaluator.md
 name: instruction-evaluator
@@ -31,7 +31,7 @@ This agent performs isolated review only. It does not modify files.
 ## Required Context
 
 Before reviewing, read:
-- for framework-repository reviews: `MANIFEST.md` and `IMPLEMENTATION.md`
+- for framework-repository reviews: `MANIFEST.md`, `IMPLEMENTATION.md`, and relevant `conventions/*.md`
 - for generated-landscape reviews: the equivalent project-local root contract, conventions, and authority docs that define the instruction system
 - the target artifacts
 - directly related artifacts needed to check conflicts
@@ -49,13 +49,7 @@ For each artifact, evaluate:
 - Is the artifact type correct for the responsibility?
 
 2. Layer Purity
-- Root contract: routing and gates only
-- Adapter: thin mandatory shim only
-- Skill: atomic execution only
-- Pipeline: sequencing only
-- Agent: specialized role or isolated context only
-- Convention: shared standards only
-- Reference doc: reusable facts only
+- Apply `conventions/layer-purity.md`, or the equivalent project-local standard in generated landscapes.
 
 3. Authority and Duplication
 - Does it duplicate root policy?

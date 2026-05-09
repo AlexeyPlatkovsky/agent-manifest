@@ -1,5 +1,5 @@
 ---
-version: 2.1.1
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/_README.md
 ---
@@ -14,11 +14,8 @@ This file is an index and is not an agent template or derivation input.
 ## How To Use Agent Templates
 
 - Treat each agent file as the canonical source for that specialized role at framework design time.
-- Use `implementation` and `requires_when` as the authoritative applicability metadata.
-- Write `requires_when` entries as human-readable trigger phrases with spaces, matching protocol metadata style.
-- Copy mandatory matching templates into the project-local agent layer.
-- Copy optional matching templates only when their trigger is present and the project genuinely needs them.
-- Keep copied agents on demand; root contracts and adapters must route to them rather than inline their full instructions.
+- Use `conventions/framework-metadata.md` for metadata rules.
+- Use `conventions/capability-derivation.md` for derivation and copied-agent rules.
 
 ## Current Agents
 
