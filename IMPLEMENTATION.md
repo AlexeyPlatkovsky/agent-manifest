@@ -1,5 +1,5 @@
 ---
-version: 2.3.0
+version: 2.4.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -172,8 +172,11 @@ Reference docs hold reusable project knowledge.
 
 Rules:
 - use docs for facts such as architecture, commands, domain context, and repository structure
+- structure docs for selective loading with `.ai/docs/README.md`, purposeful subfolders, and stable section targets
 - keep docs on demand, not always loaded
 - docs inform but do not enforce behavior
+
+Apply `conventions/reference-docs.md`.
 
 ## Layer Purity
 
