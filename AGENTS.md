@@ -2,16 +2,21 @@
 
 Use this skill whenever a task changes the `agent-manifest` framework itself.
 
+This file is not part of the Agent Manifesto framework. Its only purpose is to maintain correct project version bumping.
+Do not treat it as a framework source when discussing or designing framework changes. Apply it only when a task requires a project version bump.
+
 This repository is versioned as a single unit. The following files must always share the same `version` value in YAML frontmatter:
 - `MANIFEST.md`
 - `IMPLEMENTATION.md`
 - `README.md`
+- `conventions/*.md`
 - `00_project_profile.md`
 - `01_initial_composition.md`
 - `02_review.md`
 - `03_capability_expansion.md`
 - `04_tool_adoption.md`
 - `protocols/*.md`
+- `agents/*.md`
 
 ## Rules
 
