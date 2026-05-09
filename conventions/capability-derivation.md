@@ -1,5 +1,5 @@
 ---
-version: 2.5.0
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/conventions/capability-derivation.md
 ---

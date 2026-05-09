@@ -1,5 +1,5 @@
 ---
-version: 2.5.0
+version: 2.5.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/documentation_maintenance.md
 implementation: mandatory
@@ -17,6 +17,14 @@ This protocol defines canonical documentation maintenance behavior after project
 
 It is a framework input.
 Project skills derived from it must be standalone project artifacts.
+
+---
+
+# Related Convention
+
+This protocol applies `conventions/reference-docs.md` as the canonical framework standard for reference doc structure, selective loading, doc roots, and context usage reporting.
+
+Project-local skills derived from this protocol must reference the generated or existing project-local equivalent, not the framework file path, unless the framework convention is intentionally shipped as project-local authority.
 
 ---
 
