@@ -1,5 +1,5 @@
 ---
-version: 2.5.1
+version: 2.6.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/00_project_profile.md
 ---

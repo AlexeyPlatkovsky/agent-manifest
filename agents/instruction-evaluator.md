@@ -1,5 +1,5 @@
 ---
-version: 2.5.1
+version: 2.6.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/instruction-evaluator.md
 name: instruction-evaluator
@@ -73,6 +73,19 @@ For each artifact, evaluate:
 - Do referenced files exist?
 - Do referenced capabilities exist?
 - Are risky changes implied without approval?
+
+7. Substantive Coverage
+- Does the artifact cover the core concerns implied by its name, description, triggers, required inputs, and output contract?
+- Does it include baseline principles appropriate to its declared responsibility before adding narrow tool-specific, framework-specific, or domain-specific checks?
+- Would a structurally valid artifact still fail its declared responsibility because important content categories or failure modes are missing?
+- For review, audit, validation, or quality artifacts, identify at least one plausible bad artifact that should fail under the declared responsibility. If the artifact would not catch it, flag the missing criterion.
+- Flag broad names such as quality, review, testing, security, documentation, maintenance, or validation when the body only covers a narrow subset without making that narrower scope explicit.
+
+Skill-specific coverage checks:
+- Verify that a skill's procedure or checklist is sufficient for the responsibility it claims.
+- Flag a skill that has correct frontmatter, one responsibility, and clean layer fit but undercovers the practical work required by that responsibility.
+- For broad skills, check that general principles are represented or referenced through the correct convention before specialized implementation details.
+- Do not require one universal checklist for all skills. Evaluate sufficiency against the skill's declared domain and the project authority it references.
 
 ## Parallel Review Mode
 
