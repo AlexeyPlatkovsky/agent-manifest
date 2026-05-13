@@ -1,5 +1,5 @@
 ---
-version: 2.7.0
+version: 2.7.1
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/conventions/reference-docs.md
 ---
