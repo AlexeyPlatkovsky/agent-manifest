@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/04_tool_adoption.md
 ---
@@ -114,6 +114,7 @@ Stage-specific rules:
 - translate retained foreign capabilities into standalone project artifacts under the correct project layer
 - do not keep the tool's foreign instruction bundle inside the project instruction system
 - route new capabilities through the existing manager-equivalent when the project has one
+- apply `conventions/traceability.md` to every translated capability that gates downstream non-trivial routed work
 - update the applicable root contract and capability registry with each new capability
 - after creating or updating project-local instruction artifacts, verify the project-local instruction-evaluator agent exists, then use it to review those artifacts before final acceptance
 

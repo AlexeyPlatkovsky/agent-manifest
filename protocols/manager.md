@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/manager.md
 implementation: mandatory
@@ -24,8 +24,11 @@ Any project manager-equivalent routing capability derived from this protocol mus
 - stay purely responsible for routing and orchestration
 - classify non-trivial work before execution begins
 - name the selected existing pipeline or immediate next concrete capability
+- name the expected visible output artifact for each non-trivial routed handoff
+- require the expected output artifact before advancing across a non-trivial routed handoff
 - append documentation maintenance before `task-complete` when its trigger applies
 - append `task-complete` to non-trivial routed work
+- verify required planned output artifacts before invoking `task-complete`
 - escalate safeguards as task risk increases
 - stop and surface ambiguity instead of guessing
 
@@ -75,27 +78,44 @@ That decision must identify:
 - which existing pipeline or immediate next skill/agent is selected
 - what validation or review gate applies
 - whether reference docs must be loaded
+- the expected visible output artifact label for each non-trivial routed handoff
 
-## 4. Centralize Post-Change Documentation Maintenance
+The routing decision itself must be emitted as a visible manager output artifact.
+
+## 4. Check Routed Handoffs
+
+At each non-trivial routed handoff, the manager must inspect the previous step's output artifact and explicitly select the next planned step.
+
+Do not advance across a non-trivial routed handoff when the expected output artifact is absent.
+
+Raw tool output, command success, or a private recollection of work performed does not satisfy a routed handoff's output artifact contract.
+
+Reload the manager-equivalent instructions when the next step is ambiguous, the plan changed, or the conversation context no longer contains the routing plan.
+
+## 5. Centralize Post-Change Documentation Maintenance
 
 When documentation maintenance applies, the manager is responsible for placing it after the substantive project change and before `task-complete`.
 
 The manager must not make execution skills repeat this enforcement rule.
 
-## 5. Centralize Task Completion
+## 6. Centralize Task Completion
 
 The manager is responsible for appending `task-complete` as the final step of non-trivial routed work.
 
 The manager must centralize this responsibility rather than requiring execution skills or pipelines to repeat it.
 
-## 6. Escalate by Risk
+Before invoking `task-complete`, the manager must verify every required planned output artifact is present in the conversation.
+
+For each required planned artifact, the manager must reference its artifact label or transcript location when the tool exposes one. If any required artifact is missing, return to the missing step or report the missing artifact as a blocker.
+
+## 7. Escalate by Risk
 
 Examples:
 - low or medium risk non-trivial work: pipeline plus validation
 - high-risk work: pipeline plus stronger review
 - system-level work: strongest available routing path
 
-## 7. Stop on Missing Policy
+## 8. Stop on Missing Policy
 
 If a safe routing decision depends on missing or conflicting policy:
 - stop
@@ -112,3 +132,8 @@ At routing time, produce a short execution plan that includes:
 - validation and review requirements
 - documentation maintenance step when its trigger applies
 - explicit final `task-complete` step for non-trivial routed work
+- expected visible output artifact label for each non-trivial routed handoff
+
+The plan must begin with:
+
+`Manager: <capability-name> - output below`

@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/_README.md
 ---
@@ -17,6 +17,7 @@ This file is an index and must not participate in capability derivation.
 
 Use `conventions/framework-metadata.md` for protocol metadata rules.
 Use `conventions/capability-derivation.md` for derivation and generated project capability rules.
+Use `conventions/traceability.md` for protocol output contracts that gate downstream work.
 
 ## Current Protocols
 

@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/documentation_maintenance.md
 implementation: mandatory
@@ -39,6 +39,7 @@ Any project skill derived from this protocol must:
 - update affected docs when the needed documentation change is clear and in scope
 - report when documentation does not need changes
 - report when documentation should change but cannot be updated safely
+- emit a visible output artifact that downstream completion can cite
 
 Projects may adapt the skill to repository-specific doc roots, doc tooling, review requirements, and naming.
 
@@ -120,6 +121,10 @@ Blocked reports must name:
 # Output Contract
 
 At the end of the documentation maintenance step, produce a concise documentation maintenance report.
+
+The artifact must begin with the project-local capability name:
+
+`Skill: <documentation-maintenance-capability-name> - output below`
 
 Recommended format:
 

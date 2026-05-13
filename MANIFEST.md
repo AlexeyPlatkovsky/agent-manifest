@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/MANIFEST.md
 ---
@@ -109,6 +109,7 @@ Assumptions, success criteria, uncertainty, and stopping conditions should be st
 
 **Prefer:**
 - Declared assumptions and visible success criteria
+- Output artifacts that prove gated steps happened
 - Ambiguity surfaced before action
 - Blocking conditions with clear next steps when they fire
 
@@ -116,6 +117,7 @@ Assumptions, success criteria, uncertainty, and stopping conditions should be st
 - Soft language for hard requirements
 - Rules that only advise where they should gate
 - Critical checks that can be skipped silently
+- Compliance that depends on private memory instead of transcript evidence
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/instruction-evaluator.md
 name: instruction-evaluator
@@ -62,6 +62,7 @@ For each artifact, evaluate:
 - Clear stopping conditions
 - Clear output contract
 - Clear validation expectations where applicable
+- Stable visible output artifact for non-trivial routed handoffs
 - Conditional language is precise: for every instruction of the form "do X when Y", "do not do X when Y", or similar `if`/`unless`/`where applicable` phrasing, confirm that Y is either self-evident from immediate context or explicitly defined. Flag conditionals whose judgment criteria are left to inference, including vague qualifiers such as "when they are not", "if appropriate", "unless necessary", or "where applicable".
 
 5. Context Weight
@@ -86,6 +87,12 @@ Skill-specific coverage checks:
 - Flag a skill that has correct frontmatter, one responsibility, and clean layer fit but undercovers the practical work required by that responsibility.
 - For broad skills, check that general principles are represented or referenced through the correct convention before specialized implementation details.
 - Do not require one universal checklist for all skills. Evaluate sufficiency against the skill's declared domain and the project authority it references.
+
+Traceability checks:
+- Verify that non-trivial routed handoffs emit a stable, grep-able output artifact.
+- Flag any non-trivial routed capability whose output contract can be satisfied by raw tool output alone.
+- For manager-equivalent artifacts, verify that each non-trivial routed handoff must produce its artifact before the next step advances.
+- For `task-complete` or equivalent closure artifacts, verify that each required planned routed handoff must be referenced by output artifact before closure.
 
 ## Parallel Review Mode
 

@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/task_complete.md
 implementation: mandatory
@@ -25,6 +25,8 @@ Any project skill derived from this protocol must:
 - preserve the exact three-column closure table
 - report actual execution, not an idealized plan
 - make skipped or changed steps visible
+- reference the visible output artifact for each required planned routed handoff
+- refuse closure when a required planned output artifact is missing
 - avoid reopening routing or redesigning the pipeline after the fact
 
 Projects may add minimal repository-specific adaptation around wording or examples.
@@ -69,14 +71,20 @@ Every executed step must appear as a row in the table.
 
 If a planned step was skipped, include it and explain why in `Comment`.
 
+Every planned routed step must appear even if it was blocked before execution.
+
 ## 4. Comment Rules
 
-Leave `Comment` blank unless:
+For planned routed handoffs, `Comment` must reference the step's visible output artifact label or transcript location when the tool exposes one.
+
+Also use `Comment` when:
 - a step was skipped
 - execution deviated from the plan
 - the user should notice something incomplete or unusual
 
 Skipped steps must always include a comment.
+
+If a required output artifact is missing, do not declare completion. Report closure as blocked and name the missing artifact so the manager-equivalent can return to the missing step.
 
 ## 5. Closure, Not Re-Planning
 
@@ -88,3 +96,7 @@ It does not invent new steps or reopen orchestration.
 # Output Contract
 
 At the end of non-trivial routed work, produce the closure table before declaring completion.
+
+The artifact must begin with the project-local capability name:
+
+`Skill: <task-complete-capability-name> - output below`

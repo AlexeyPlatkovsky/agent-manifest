@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -122,6 +122,7 @@ Rules:
 - no cross-skill routing
 - no duplicated root policy
 - standalone project-local behavior
+- a visible output contract when the skill's result gates another step in non-trivial routed work
 
 ## Pipelines
 
@@ -132,6 +133,7 @@ Rules:
 - reference skills or agents
 - do not redefine skill behavior
 - include validation for non-trivial work
+- require each non-trivial routed handoff's visible output artifact before the next step treats it as complete
 - use one file per pipeline when more than one pipeline exists or when a pipeline is substantial
 - create a pipeline when a repeated task type is non-trivial and has a distinct ordered execution path
 - do not collapse distinct workflows into one generic pipeline when their steps, validation, or review gates differ
@@ -177,6 +179,12 @@ Rules:
 - docs inform but do not enforce behavior
 
 Apply `conventions/reference-docs.md`.
+
+## Traceability
+
+Routed execution must be auditable from visible conversation artifacts, not inferred from private agent state.
+
+Apply `conventions/traceability.md`.
 
 ## Layer Purity
 
@@ -301,6 +309,7 @@ Compliant pattern:
 - classify the task first
 - if trivial: proceed directly and state the classification
 - if non-trivial: stop, load the concrete routing capability, and do not implement until routing resolves
+- loading the routing capability is not enough; non-trivial work may begin only after the routing capability emits its visible output artifact
 - if unsure: treat as non-trivial
 - classification must be stated out loud before any file is created, edited, or deleted; a silent mental check does not satisfy the gate
 - when a conversation begins as discussion or design and the user signals to proceed ("go ahead", "do it", "implement it", "fix it", or equivalent), treat that signal as a fresh routing gate trigger, not as permission to skip classification
@@ -310,6 +319,8 @@ Validation is mandatory for non-trivial routed work:
 - stronger review loops apply only for higher-risk work
 - validation should be automated and repeatable where possible
 - validation is a required check unless a project explicitly creates a concrete validation skill, pipeline step, or convention
+- raw command output does not satisfy a validation gate unless the validation capability emits its visible output artifact
+- validation artifacts must state pass, fail, skipped, or blocked for each declared validation gate
 - `task-complete` is the required closure skill for non-trivial routed work
 - `task-complete` enforcement should be centralized in the root contract or manager-equivalent artifact, not repeated across execution skills
 
@@ -342,6 +353,8 @@ Each protocol body must define:
 - mandatory rules that implementations must preserve
 - allowed project-specific adaptations
 - output contracts, when other capabilities or validation depend on this one's result
+
+Output contracts that gate downstream non-trivial routed work must follow `conventions/traceability.md`.
 
 ## Capability Derivation
 
