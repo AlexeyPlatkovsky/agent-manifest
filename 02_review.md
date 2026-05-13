@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -161,6 +161,22 @@ Check for:
 - does every non-trivial pipeline include explicit validation
 - is `task-complete` enforced for non-trivial routed work
 - are stronger review loops reserved for higher-risk work
+- do validation steps emit visible output artifacts instead of relying on raw command output
+- do validation artifacts state pass, fail, skipped, or blocked for each declared validation gate
+- does the manager-equivalent require a visible output artifact before advancing across each non-trivial routed handoff
+- does `task-complete` require artifact references for each required planned routed handoff before closure
+
+### Traceability
+
+Apply `conventions/traceability.md`.
+
+Verify that non-trivial routed handoffs, manager decisions, validation steps, documentation maintenance, agent acceptance reviews, and task completion define grep-able output artifacts.
+
+Flag as a major violation when:
+- a non-trivial routed handoff can be treated as complete without emitting its artifact
+- raw tool output can substitute for a skill or validation output contract
+- the manager-equivalent can advance across routed handoffs from memory
+- task completion can self-attest that planned routed handoffs ran without referencing their artifacts
 
 ---
 
@@ -191,6 +207,7 @@ Provide:
 List findings by severity with file references.
 Prioritize:
 - critical routing failures
+- missing or unenforceable output artifacts for non-trivial routed work
 - incorrect root contract model
 - duplicated or blurred responsibilities
 - layer purity failures

@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
@@ -210,6 +210,10 @@ Stage-specific reminders:
 ### Layer Purity
 
 Apply `conventions/layer-purity.md` to every file written in this stage.
+
+### Traceability
+
+Apply `conventions/traceability.md` to generated non-trivial routed handoffs, manager-equivalents, validation gates, documentation maintenance capabilities, acceptance-review agents, and completion capabilities.
 
 ### Skill Extraction Precondition For Pipelines
 

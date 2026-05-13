@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/protocols/brainstorm.md
 implementation: mandatory
@@ -30,6 +30,7 @@ Any project skill derived from this protocol must:
 - keep brainstorming separate from execution
 - end the brainstorming phase with a decision summary before execution begins
 - wait for user confirmation of the decision summary before execution begins
+- emit a visible decision-summary artifact before execution begins
 
 The generated project skill may add minimal project-specific adaptation, examples, or terminology.
 It must not weaken these rules.
@@ -121,3 +122,7 @@ At the end of a brainstorming phase, produce a decision summary that includes:
 - any caveats or constraints noted by the user
 
 Execution may begin only after the user confirms that summary.
+
+The decision summary must begin with the project-local capability name:
+
+`Skill: <brainstorm-capability-name> - output below`

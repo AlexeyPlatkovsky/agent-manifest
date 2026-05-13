@@ -1,5 +1,5 @@
 ---
-version: 2.6.0
+version: 2.7.0
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/conventions/layer-purity.md
 ---
@@ -18,6 +18,7 @@ This convention defines responsibility boundaries for instruction-system artifac
 - Skill body: one atomic execution capability; may cite conventions and reference docs, but does not sequence sibling skills and does not restate standards already owned by a convention.
 - Agent body: specialized role behavior or isolated context; no duplicated root policy, convention text, or pipeline sequencing.
 - Convention body: shared standards only; no classification, routing, sequencing, validation gates, or task procedure.
+- Traceability convention body: shared artifact and transcript standards only; no routing decisions or execution procedure.
 - Reference doc body: reusable facts only; no binding behavior.
 
 ## Failure Signals
@@ -28,4 +29,3 @@ Flag cross-layer leakage when:
 - a pipeline references skills that do not exist
 - a pipeline or skill restates content already owned by a convention or reference doc
 - a project has pipelines but an empty or near-empty skill layer
-
