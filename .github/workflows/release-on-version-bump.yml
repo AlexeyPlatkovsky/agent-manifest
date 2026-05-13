@@ -13,7 +13,9 @@ on:
       - 02_review.md
       - 03_capability_expansion.md
       - 04_tool_adoption.md
+      - conventions/*.md
       - protocols/*.md
+      - agents/*.md
 
 permissions:
   contents: write
@@ -94,7 +96,9 @@ jobs:
             02_review.md
             03_capability_expansion.md
             04_tool_adoption.md
+            conventions
             protocols
+            agents
           )
 
           for path in "${archive_paths[@]}"; do
