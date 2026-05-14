@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/_README.md
 ---
@@ -18,6 +18,10 @@ This file is an index and is not an agent template or derivation input.
 - Use `conventions/capability-derivation.md` for derivation and copied-agent rules.
 
 ## Current Agents
+
+### `artifact-acceptance-tester.md`
+
+Scenario-based acceptance test agent for new or materially changed instruction artifacts before they are accepted.
 
 ### `instruction-evaluator.md`
 

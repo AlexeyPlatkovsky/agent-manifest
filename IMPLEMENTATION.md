@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/IMPLEMENTATION.md
 ---
@@ -151,6 +151,7 @@ Rules:
 - use agents for isolation, specialization, or parallel responsibility, not decoration
 - copy mandatory framework agent templates into every generated landscape where their trigger applies
 - preserve the template's responsibility and output contract when adapting to a tool-specific agent format
+- use the artifact acceptance tester after materially changing runtime instruction artifacts and before accepting them
 
 ## Conventions
 
@@ -378,6 +379,7 @@ Prefer the smallest coherent system that satisfies the triggers actually present
 
 Use these triggers:
 - any AI landscape: instruction-evaluator agent
+- new or materially changed skills, pipelines, agents, manager-equivalent routing, validation gates, or output contracts: artifact-acceptance-tester agent
 - multiple AI tools or AI-agnostic portability need: root contract plus thin adapters
 - open design decisions or setup/profile clarification choices with trade-offs: brainstorming capability
 - non-trivial routed work: explicit validation check and task-complete capability

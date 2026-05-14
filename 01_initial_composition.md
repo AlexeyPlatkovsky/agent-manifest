@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/01_initial_composition.md
 ---
@@ -236,6 +236,13 @@ Use the protocol filename basename as the default capability name only when the 
 
 Derive required project-local agents from agent template frontmatter per `conventions/capability-derivation.md`.
 
+### Instruction Artifact Acceptance
+
+Before final acceptance, verify the project-local instruction-evaluator and artifact-acceptance-tester agents exist when their triggers apply.
+
+Use `instruction-evaluator` to review new or changed instruction artifacts.
+Use `artifact-acceptance-tester` to run 9 scenario tests for each new or materially changed skill, pipeline, agent, manager-equivalent routing artifact, validation gate, or output contract.
+
 ### Scope Boundaries
 
 If multiple AI tools are detected but the user selected only some of them:
@@ -287,4 +294,5 @@ The final system must:
 - preserve good existing project capabilities where possible
 - keep routing centralized in the root contract or manager-equivalent artifact
 - pass `conventions/layer-purity.md`
+- pass instruction artifact evaluation and acceptance testing when their triggers apply
 - contain no pipeline whose skills do not yet exist
