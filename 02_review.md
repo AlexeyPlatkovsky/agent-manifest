@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/02_review.md
 ---
@@ -122,6 +122,7 @@ For each required framework agent template, verify:
 - the agent remains on demand instead of being inlined into an always-loaded root contract or adapter
 - the root contract or manager-equivalent can route applicable work to it
 - for `instruction-evaluator`, instruction-artifact review work routes to it
+- for `artifact-acceptance-tester`, new or materially changed runtime instruction artifacts route to it before final acceptance
 
 Flag as a major violation if a required framework agent is missing or if its full instructions are copied into always-loaded context.
 
@@ -165,6 +166,7 @@ Check for:
 - do validation artifacts state pass, fail, skipped, or blocked for each declared validation gate
 - does the manager-equivalent require a visible output artifact before advancing across each non-trivial routed handoff
 - does `task-complete` require artifact references for each required planned routed handoff before closure
+- are new or materially changed skills, pipelines, agents, manager-equivalent routing artifacts, validation gates, and output contracts acceptance-tested before final acceptance
 
 ### Traceability
 

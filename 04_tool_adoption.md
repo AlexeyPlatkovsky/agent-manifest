@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/04_tool_adoption.md
 ---
@@ -117,6 +117,7 @@ Stage-specific rules:
 - apply `conventions/traceability.md` to every translated capability that gates downstream non-trivial routed work
 - update the applicable root contract and capability registry with each new capability
 - after creating or updating project-local instruction artifacts, verify the project-local instruction-evaluator agent exists, then use it to review those artifacts before final acceptance
+- verify the project-local artifact-acceptance-tester agent exists when its trigger applies, then use it to run 9 scenario tests for each new or materially changed runtime instruction artifact before final acceptance
 
 ---
 

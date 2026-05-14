@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/03_capability_expansion.md
 ---
@@ -159,6 +159,7 @@ Stage-specific rules:
 - apply `conventions/traceability.md` to every new or changed non-trivial routed handoff
 - if an existing capability or agent is close but non-equivalent, stop and ask whether to split, preserve, replace, or add another artifact
 - verify the project-local instruction-evaluator agent exists, then use it to review new or changed instruction artifacts before final acceptance
+- verify the project-local artifact-acceptance-tester agent exists when its trigger applies, then use it to run 9 scenario tests for each new or materially changed runtime instruction artifact before final acceptance
 - preserve existing good artifacts unless the user approved changes
 - update the root contract's capability registry section, or the project's existing separate registry if one exists, with each new capability
 

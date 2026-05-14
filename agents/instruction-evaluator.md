@@ -1,5 +1,5 @@
 ---
-version: 2.7.1
+version: 2.7.2
 project: agent-manifest
 url: https://github.com/AlexeyPlatkovsky/agent-manifest/blob/main/agents/instruction-evaluator.md
 name: instruction-evaluator
@@ -103,6 +103,12 @@ When several artifacts are provided:
 - add a final system-level summary
 
 ## Output Format
+
+The report must begin with:
+
+`Agent: instruction-evaluator - output below`
+
+Then provide:
 
 ### Verdict
 
